@@ -285,12 +285,12 @@ export default function CheckoutPage() {
 
   if (orderId) {
     return (
-      <main className="bg-[#f5f0e8] min-h-screen px-8 py-12 md:px-16 md:py-16">
+      <main className="bg-[#f5f0e8] min-h-screen px-4 py-8 sm:px-8 sm:py-12 md:px-16 md:py-16">
         <div className="mx-auto max-w-3xl">
           <div className="relative bg-[#fbf3e0] p-8 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
             <div className="absolute inset-1.5 border-3 border-dashed border-[#93a267] pointer-events-none" />
             <div className="relative z-10">
-              <h1 className="font-heading text-4xl text-black mb-3">Order Placed</h1>
+              <h1 className="font-heading text-3xl md:text-4xl text-black mb-3">Order Placed</h1>
               <p className="font-(family-name:--font-body) text-lg text-black mb-6">
                 Thank you. Your order <strong>#{orderId}</strong> has been created successfully.
                 <br />
@@ -360,9 +360,9 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="bg-[#f5f0e8] min-h-screen px-8 py-12 md:px-16 md:py-16">
+    <main className="bg-[#f5f0e8] min-h-screen px-4 py-8 sm:px-8 sm:py-12 md:px-16 md:py-16">
       <div className="mx-auto max-w-6xl">
-        <h1 className="font-heading text-5xl text-black mb-10">Checkout</h1>
+        <h1 className="font-heading text-4xl md:text-5xl text-black mb-6 md:mb-10">Checkout</h1>
 
         {items.length === 0 ? (
           <div className="relative bg-[#fbf3e0] p-8 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
@@ -380,7 +380,7 @@ export default function CheckoutPage() {
             </div>
           </div>
         ) : (
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+          <div className="flex flex-col lg:grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
             <form onSubmit={handleSubmit} className="space-y-6">
               <section className="relative bg-[#fbf3e0] p-6 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
                 <div className="absolute inset-1.5 border-3 border-dashed border-[#93a267] pointer-events-none" />
@@ -405,7 +405,7 @@ export default function CheckoutPage() {
                   ) : (
                     <>
                       <div className="rounded-2xl border border-black/10 bg-white/45 p-4 sm:p-5">
-                        <div className="flex items-center justify-between gap-4 flex-wrap">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 flex-wrap">
                           <p className="font-(family-name:--font-body) text-base text-black/80">
                             Email
                           </p>
@@ -489,7 +489,7 @@ export default function CheckoutPage() {
                 <div className="absolute inset-1.5 border-3 border-dashed border-[#93a267] pointer-events-none" />
                 <div className="relative z-10">
                   <h2 className="font-heading text-3xl text-black mb-5">Billing Details</h2>
-                  <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
                     <input
                       required
                       placeholder="First Name"
@@ -572,7 +572,7 @@ export default function CheckoutPage() {
                   {!sameAsBilling && (
                     <>
                       <h2 className="font-heading text-3xl text-black mb-5">Shipping Details</h2>
-                      <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
                         <input
                           required
                           placeholder="First Name"
@@ -657,7 +657,7 @@ export default function CheckoutPage() {
                   {items.map((item) => (
                     <div key={item.id} className="flex items-start justify-between gap-3">
                       <div className="font-(family-name:--font-body) text-base text-black min-w-0">
-                        <p className="truncate">{item.name}</p>
+                        <p className="break-words">{item.name}</p>
                         <p className="text-black/70">Qty: {item.quantity}</p>
                       </div>
                       <p className="font-(family-name:--font-body) text-base text-black shrink-0">

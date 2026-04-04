@@ -38,9 +38,9 @@ function ProductCard({ product }: { product: StoreProduct }) {
       className="relative block bg-[#fbf3e0] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] overflow-hidden hover:shadow-[0px_6px_16px_0px_rgba(0,0,0,0.18)] transition-shadow"
     >
       {/* Dashed inner border overlay */}
-      <div className="absolute inset-1.5 border-3 border-dashed border-[#93a267] pointer-events-none z-10" />
+      <div className="absolute inset-1 sm:inset-1.5 border-3 border-dashed border-[#93a267] pointer-events-none z-10" />
 
-      <div className="p-3.5">
+      <div className="p-2 sm:p-3.5">
         {/* Product image */}
         <div className="border border-[#d2bc70] overflow-hidden">
           {image ? (
@@ -55,16 +55,16 @@ function ProductCard({ product }: { product: StoreProduct }) {
         </div>
 
         {/* Name */}
-        <p className="font-(family-name:--font-body) text-lg text-black mt-2.5 truncate">
+        <p className="font-(family-name:--font-body) text-base sm:text-lg text-black mt-2.5 truncate">
           {product.name}
         </p>
 
         {/* Pricing */}
         <div className="flex items-center gap-2 mt-0.5 mb-1.5">
-          <span className="text-lg text-black font-normal">
+          <span className="text-base sm:text-lg text-black font-normal">
             ₹{salePrice}
           </span>
-            <span className="relative text-lg text-[#666]">
+            <span className="relative text-base sm:text-lg text-[#666]">
               {regularPrice}
               <span className="absolute left-0 top-1/2 w-full border-t border-[#666]" />
             </span>
@@ -76,9 +76,9 @@ function ProductCard({ product }: { product: StoreProduct }) {
 
 function CategorySection({ name, products }: { name: string; products: StoreProduct[] }) {
   return (
-    <section aria-label={name} className="mb-30">
-      <h2 className="font-heading text-4xl text-black mb-6">{name}</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8">
+    <section aria-label={name} className="mb-16 md:mb-30">
+      <h2 className="font-heading text-3xl md:text-4xl text-black mb-4 md:mb-6">{name}</h2>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-8">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
@@ -111,7 +111,7 @@ export default async function ShopPage({
   const categories = Array.from(categoryMap.entries());
 
   return (
-    <main className="bg-[#f5f0e8] min-h-screen px-8 py-12 md:px-16 md:py-16">
+    <main className="bg-[#f5f0e8] min-h-screen px-4 sm:px-8 py-8 md:px-16 md:py-16">
       <div className="mx-auto max-w-6xl">
         {query && (
           <div className="mb-8">

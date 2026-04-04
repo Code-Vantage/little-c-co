@@ -30,24 +30,24 @@ export default async function Instagram() {
   return (
     <section
       aria-label="Follow us on Instagram"
-      className="bg-[#f5f0e8] px-8 py-16 md:px-16 md:py-20"
+      className="bg-[#f5f0e8] px-6 py-12 md:px-16 md:py-20"
     >
       <div className="mx-auto max-w-6xl">
         {/* Heading */}
-        <h2 className="font-heading text-5xl text-black mb-10">
+        <h2 className="font-heading text-4xl md:text-5xl text-black mb-8 md:mb-10 text-center md:text-left">
           Follow us on Instagram
         </h2>
 
         {/* 3-photo grid */}
         {posts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-12">
-            {posts.map((post) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-10 md:mb-12">
+            {posts.map((post, i) => (
               <a
                 key={post.id}
                 href={post.permalink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block overflow-hidden group"
+                className={`block overflow-hidden group ${i > 0 ? "hidden sm:block" : ""}`}
               >
                 <img
                   src={post.media_url}
@@ -59,9 +59,9 @@ export default async function Instagram() {
           </div>
         ) : (
           // Fallback skeleton while token isn't configured
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-10 md:mb-12">
             {[0, 1, 2].map((i) => (
-              <div key={i} className="w-full aspect-square bg-[#e8e0d0]" />
+              <div key={i} className="w-full aspect-square bg-[#e8e0d0] hidden sm:block lg:block first:block" />     
             ))}
           </div>
         )}
@@ -72,7 +72,7 @@ export default async function Instagram() {
             href={INSTAGRAM_PROFILE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-black text-white font-(family-name:--font-body) text-lg px-14 py-3 rounded-full hover:bg-black/80 transition-colors"
+            className="bg-black text-white font-(family-name:--font-body) text-base md:text-lg px-10 md:px-14 py-3 rounded-full hover:bg-black/80 transition-colors w-full sm:w-auto text-center"
           >
             View Page
           </a>

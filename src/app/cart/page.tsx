@@ -23,9 +23,9 @@ export default function CartPage() {
   );
 
   return (
-    <main className="bg-[#f5f0e8] min-h-screen px-8 py-12 md:px-16 md:py-16">
+    <main className="bg-[#f5f0e8] min-h-screen px-4 py-8 sm:px-8 sm:py-12 md:px-16 md:py-16">
       <div className="mx-auto max-w-6xl">
-        <h1 className="font-heading text-5xl text-black mb-10">Your Cart</h1>
+        <h1 className="font-heading text-4xl md:text-5xl text-black mb-6 md:mb-10">Your Cart</h1>
 
         {items.length === 0 ? (
           <div className="relative bg-[#fbf3e0] p-8 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
@@ -43,7 +43,7 @@ export default function CartPage() {
             </div>
           </div>
         ) : (
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="flex flex-col lg:grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
             <div className="space-y-4">
               {items.map((item) => (
                 <div
@@ -51,8 +51,8 @@ export default function CartPage() {
                   className="relative bg-[#fbf3e0] p-4 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"
                 >
                   <div className="absolute inset-1.5 border-3 border-dashed border-[#93a267] pointer-events-none" />
-                  <div className="relative z-10 flex flex-col sm:flex-row sm:items-center gap-4">
-                    <a href={`/products/${item.slug}`} className="w-24 shrink-0 border border-[#d2bc70] overflow-hidden">
+                  <div className="relative z-10 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+                    <a href={`/products/${item.slug}`} className="w-20 sm:w-24 shrink-0 border border-[#d2bc70] overflow-hidden self-start">
                       {item.image ? (
                         <img src={item.image} alt={item.name} className="w-full aspect-square object-cover" />
                       ) : (
@@ -60,10 +60,10 @@ export default function CartPage() {
                       )}
                     </a>
 
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 flex flex-col sm:block">
                       <a
                         href={`/products/${item.slug}`}
-                        className="font-(family-name:--font-body) text-lg text-black hover:underline block truncate"
+                        className="font-(family-name:--font-body) text-lg text-black hover:underline block break-words"
                       >
                         {item.name}
                       </a>
@@ -72,7 +72,7 @@ export default function CartPage() {
                       </p>
                     </div>
 
-                    <div className="flex items-center border border-black h-11.5 w-fit">
+                    <div className="flex items-center border border-black h-11 h-11.5 w-fit sm:mt-0 mt-2">
                       <button
                         type="button"
                         onClick={() => setItemQuantity(item.id, item.quantity - 1)}
@@ -94,7 +94,7 @@ export default function CartPage() {
                       </button>
                     </div>
 
-                    <div className="sm:text-right">
+                    <div className="sm:text-right flex items-center justify-between sm:block mt-2 sm:mt-0">
                       <p className="font-(family-name:--font-body) text-lg text-black">
                         {formatPrice(item.price * item.quantity)}
                       </p>

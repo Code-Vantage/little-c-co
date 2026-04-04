@@ -318,10 +318,10 @@ function AccountPageContent() {
   }
 
   return (
-    <main className="bg-[#f5f0e8] min-h-screen px-8 py-12 md:px-16 md:py-16">
+    <main className="bg-[#f5f0e8] min-h-screen px-4 py-8 sm:px-8 sm:py-12 md:px-16 md:py-16">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col items-center justify-center mb-12 mt-6">
-          <h1 className="font-(family-name:--font-body) text-4xl text-black mb-4">
+          <h1 className="font-(family-name:--font-body) text-3xl sm:text-4xl text-black mb-4">
             {authState === "signedOut" ? (authStep === "login" ? "Login" : authStep === "register" ? "Create Account" : "Account") : "My Account"}
           </h1>
           {authState === "signedIn" && (
@@ -480,19 +480,19 @@ function AccountPageContent() {
           )}
 
           {authState === "signedIn" && (
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-8 lg:gap-10">
 
-              <div className="grid gap-12 lg:grid-cols-[1fr_320px]">
+              <div className="grid gap-10 lg:gap-12 lg:grid-cols-[1fr_320px]">
                 {/* Orders Section */}
-                <section>
-                  <h3 className="font-(family-name:--font-body) text-xl text-black mb-6">Order History</h3>
+                <section className="min-w-0">
+                  <h3 className="font-(family-name:--font-body) text-xl text-black mb-4 md:mb-6">Order History</h3>
                   {loading ? (
                     <p className="font-(family-name:--font-body) text-base text-black/70">Loading orders...</p>
                   ) : orders.length === 0 ? (
                     <p className="font-(family-name:--font-body) text-base text-black/70">You haven't placed any orders yet.</p>
                   ) : (
                     <div className="overflow-x-auto">
-                      <table className="w-full text-left font-(family-name:--font-body) border-collapse">
+                      <table className="w-full min-w-[600px] text-left font-(family-name:--font-body) border-collapse">
                         <thead>
                           <tr className="border-b border-black/15 text-sm mb-4">
                             <th className="pb-4 font-normal text-black font-semibold">Order</th>
@@ -536,7 +536,7 @@ function AccountPageContent() {
 
                 {/* Account Details Section */}
                 <aside className="border-t lg:border-t-0 lg:border-l border-black/10 pt-10 lg:pt-0 lg:pl-12">
-                  <h3 className="font-(family-name:--font-body) text-xl text-black mb-6">Account Details</h3>
+                  <h3 className="font-(family-name:--font-body) text-xl text-black mb-4 md:mb-6">Account Details</h3>
                   {loading || !profile ? (
                     <p className="font-(family-name:--font-body) text-base text-black/70">Loading profile...</p>
                   ) : (

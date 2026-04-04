@@ -53,19 +53,19 @@ export default async function BestSellers() {
   const featured = products.slice(0, 6);
 
   return (
-    <section aria-label="Best Sellers" className="bg-[#f5f0e8] px-8 py-16 md:px-16 md:py-20">
+    <section aria-label="Best Sellers" className="bg-[#f5f0e8] px-6 py-16 md:px-16 md:py-20">
       <div className="mx-auto max-w-6xl">
         {/* Heading with decorative curl */}
-        <div className="flex items-center gap-4 mb-12">
-          <h2 className="font-heading text-5xl text-black whitespace-nowrap">
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-10 md:mb-12">
+          <h2 className="font-heading text-4xl md:text-5xl text-black whitespace-nowrap text-center md:text-left">   
             Best Sellers
           </h2>
           {/* Hand-drawn curl line */}
-          <img src="/bestseller_line.svg" alt="" />
+          {/* <img src="/bestseller_line.svg" alt="" /> */}
         </div>
 
         {/* 3-column grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-14"> 
           {featured.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

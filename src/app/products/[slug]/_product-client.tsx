@@ -130,21 +130,21 @@ export default function ProductDetailClient({
   return (
     <main className="bg-[#f5f0e8] min-h-screen">
       {/* ── Product section ─────────────────────────────────────────── */}
-      <div className="mx-auto max-w-6xl px-8 py-12 md:px-16 md:py-16">
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-8 sm:py-12 md:px-16 md:py-16">
         <div className="flex flex-col md:flex-row gap-10 lg:gap-14 items-start">
 
           {/* Left: thumbnails + main image */}
-          <div className="flex gap-3 w-full md:w-[48%] shrink-0">
+          <div className="flex flex-col-reverse md:flex-row gap-3 w-full md:w-[48%] shrink-0">
             {/* Thumbnail column */}
             {thumbnails.length > 0 && (
-              <div className="flex flex-col gap-2.5">
+              <div className="flex flex-row md:flex-col gap-2.5 overflow-x-auto pb-2 md:pb-0">
                 {thumbnails.map((thumb, i) => (
                   <button
                     key={i}
                     type="button"
                     onClick={() => setSelectedImageIndex(i)}
                     aria-label={`Show image ${i + 1}`}
-                    className={`w-18 h-18 overflow-hidden shrink-0 border cursor-pointer transition-colors ${
+                    className={`w-16 h-16 md:w-18 md:h-18 overflow-hidden shrink-0 border cursor-pointer transition-colors ${
                       selectedImageIndex === i ? "border-black" : "border-black/10"
                     }`}
                   >
@@ -194,13 +194,13 @@ export default function ProductDetailClient({
               <label className="block font-(family-name:--font-body) text-sm text-black mb-1.5">
                 Color
               </label>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-3">
                 <div className="relative">
                   <select
                     value={color}
                     onChange={(e) => setColor(e.target.value)}
                     disabled={colorOptions.length === 0}
-                    className={`appearance-none font-(family-name:--font-body) text-sm text-black bg-[#f2f2f2] border border-black h-11.5 w-52 px-4 pr-8 ${
+                    className={`appearance-none font-(family-name:--font-body) text-sm text-black bg-[#f2f2f2] border border-black h-11.5 w-full sm:w-52 px-4 pr-8 ${
                       colorOptions.length === 0 ? "cursor-not-allowed opacity-70" : "cursor-pointer"
                     }`}
                   >
@@ -289,7 +289,7 @@ export default function ProductDetailClient({
               type="button"
               onClick={handleAddToCart}
               disabled={cartButtonState === "adding"}
-              className={`mt-5 w-full text-white font-(family-name:--font-body) text-xl h-14 transition-colors ${
+              className={`mt-6 sm:mt-5 w-full text-white font-(family-name:--font-body) text-xl h-14 transition-colors ${
                 cartButtonState === "adding"
                   ? "bg-black/75 cursor-progress"
                   : "bg-black cursor-pointer hover:bg-[#1a1a1a]"
@@ -366,12 +366,12 @@ export default function ProductDetailClient({
 
       {/* ── You may also like ─────────────────────────────────────────── */}
       {related.length > 0 && (
-        <div className="bg-[#f5f0e8] px-8 pb-16 md:px-16 md:pb-20">
+        <div className="bg-[#f5f0e8] px-4 pb-8 sm:px-8 sm:pb-16 md:px-16 md:pb-20">
           <div className="mx-auto max-w-6xl">
             <h2 className="font-(family-name:--font-body) text-3xl font-bold text-black mb-8">
               You may also like
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6 sm:gap-x-8 sm:gap-y-8">
               {related.slice(0, 4).map((p) => (
                 <RelatedProductCard key={p.id} product={p} />
               ))}
