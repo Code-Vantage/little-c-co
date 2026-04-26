@@ -131,7 +131,7 @@ export default function Header() {
           isMobileMenuOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0 pointer-events-none border-t-0 border-transparent shadow-none"
         }`}
       >
-        <div className="flex flex-col gap-6 px-5 py-6">
+        <div className="flex flex-col gap-6 bg-[var(--background)] px-5 py-6">
           <form
             action="/shop"
             method="get"
