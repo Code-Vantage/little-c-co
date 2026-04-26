@@ -1,5 +1,6 @@
 import { createCustomerSessionCookie } from "@/lib/customer-session";
 import { linkGuestOrdersToCustomer } from "@/lib/customer-order-linking";
+import { authenticateWordPressUser } from "@/lib/account-auth";
 import { isWooConfigured, wooRequest } from "@/lib/woocommerce";
 import { randomBytes } from "crypto";
 
@@ -40,45 +41,8 @@ export async function POST(request: Request) {
   }
 
   try {
-    const siteUrl = process.env.WOOCOMMERCE_SITE_URL?.replace(/\/$/, "");
-    if (!siteUrl) {
-      return Response.json({ error: "WOOCOMMERCE_SITE_URL is not configured" }, { status: 503 });
-    }
-
-    const jwtResponse = await fetch(`${siteUrl}/index.php?rest_route=/simple-jwt-login/v1/auth`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-      cache: "no-store",
-    });
-
-    const jwtData = await jwtResponse.json() as { success?: boolean; data?: { jwt?: string; user?: { email?: string; display_name?: string } }; message?: string; error?: string };
-
-    if (!jwtResponse.ok || !jwtData.success || !jwtData.data?.jwt) {
-      if (jwtResponse.status === 404) {
-        return Response.json(
-          {
-            error:
-              "Password login is not enabled on WordPress. Install and configure the Simple JWT Login plugin.",
-          },
-          { status: 501 },
-        );
-      }
-
-      return Response.json(
-        {
-          error: jwtData.data?.jwt === undefined ? (jwtData.message || jwtData.error || "Invalid email or password") : "Invalid email or password",
-        },
-        { status: 401 },
-      );
-    }
-
-    const authenticatedEmail = (jwtData.data.user?.email || email).trim().toLowerCase();
+    const authenticatedUser = await authenticateWordPressUser(email, password);
+    const authenticatedEmail = authenticatedUser.email;
 
     const matches = await wooRequest<CustomerMatch[]>(
       `/wp-json/wc/v3/customers?email=${encodeURIComponent(authenticatedEmail)}`,
@@ -86,7 +50,7 @@ export async function POST(request: Request) {
 
     let customer = matches[0];
     if (!customer) {
-      const displayName = jwtData.data.user?.display_name || "";
+      const displayName = authenticatedUser.displayName;
       const [firstName = "", ...rest] = displayName.trim().split(/\s+/);
       const lastName = rest.join(" ");
 
@@ -118,6 +82,17 @@ export async function POST(request: Request) {
     response.headers.append("Set-Cookie", createCustomerSessionCookie(customer.id));
     return response;
   } catch (error) {
+    if (error instanceof Error && error.message.includes("Invalid email or password")) {
+      return Response.json({ error: error.message }, { status: 401 });
+    }
+
+    if (
+      error instanceof Error &&
+      error.message.includes("Password login is not enabled on WordPress")
+    ) {
+      return Response.json({ error: error.message }, { status: 501 });
+    }
+
     return Response.json(
       {
         error: error instanceof Error ? error.message : "Failed to login",

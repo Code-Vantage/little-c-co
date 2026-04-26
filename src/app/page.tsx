@@ -1,7 +1,8 @@
 export const dynamic = "force-dynamic";
 import Image from "next/image";
+import CategoriesStrip from "@/components/categories-strip";
 import About from "@/components/about";
-import BestSellers from "@/components/best-sellers";
+import EmailSignup from "@/components/email-signup";
 import LiveEvents from "@/components/live-events";
 import Instagram from "@/components/instagram";
 
@@ -18,9 +19,10 @@ export default function HomePage() {
           className="w-full h-auto block"
         />
       </section>
+      <CategoriesStrip />
       <About />
-      <BestSellers />
       <LiveEvents />
+      <EmailSignup />
       <Instagram />
     </main>
   );

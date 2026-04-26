@@ -23,13 +23,12 @@ export default function CartPage() {
   );
 
   return (
-    <main className="bg-[#f5f0e8] min-h-screen px-4 py-8 sm:px-8 sm:py-12 md:px-16 md:py-16">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="font-heading text-4xl md:text-5xl text-black mb-6 md:mb-10">Your Cart</h1>
+    <main className="min-h-screen px-4 py-8 sm:px-8 sm:py-12 md:px-16 md:py-16">
+      <div className="mx-auto max-w-7xl">
+        <h1 className="font-(family-name:--font-body) text-4xl md:text-5xl text-black mb-6 md:mb-10">Your Cart</h1>
 
         {items.length === 0 ? (
-          <div className="relative bg-[#fbf3e0] p-8 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-            <div className="absolute inset-1.5 border-3 border-dashed border-[#93a267] pointer-events-none" />
+          <div className="relative p-8">
             <div className="relative z-10">
               <p className="font-(family-name:--font-body) text-xl text-black mb-4">
                 Your cart is empty.
@@ -48,9 +47,8 @@ export default function CartPage() {
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="relative bg-[#fbf3e0] p-4 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"
+                  className="relative p-4"
                 >
-                  <div className="absolute inset-1.5 border-3 border-dashed border-[#93a267] pointer-events-none" />
                   <div className="relative z-10 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
                     <a href={`/products/${item.slug}`} className="w-20 sm:w-24 shrink-0 border border-[#d2bc70] overflow-hidden self-start">
                       {item.image ? (
@@ -111,10 +109,9 @@ export default function CartPage() {
               ))}
             </div>
 
-            <aside className="relative bg-[#fbf3e0] p-6 h-fit shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-              <div className="absolute inset-1.5 border-3 border-dashed border-[#93a267] pointer-events-none" />
+            <aside className="relative p-6 h-fit">
               <div className="relative z-10">
-                <h2 className="font-heading text-3xl text-black mb-5">Summary</h2>
+                <h2 className="font-(family-name:--font-body) text-3xl text-black mb-5">Summary</h2>
 
                 <div className="space-y-2 mb-5">
                   <div className="flex items-center justify-between font-(family-name:--font-body) text-base text-black">

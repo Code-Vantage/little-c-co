@@ -1,5 +1,9 @@
 import { isWooConfigured, wooRequest } from "@/lib/woocommerce";
 
+type WooCustomerMatch = {
+  id: number;
+};
+
 export async function POST(request: Request) {
   let payload: { email?: string };
 
@@ -20,7 +24,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const matches = await wooRequest<any[]>(
+    const matches = await wooRequest<WooCustomerMatch[]>(
       `/wp-json/wc/v3/customers?email=${encodeURIComponent(email)}`,
     );
 

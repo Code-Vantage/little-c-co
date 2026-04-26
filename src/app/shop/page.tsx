@@ -35,39 +35,40 @@ function ProductCard({ product }: { product: StoreProduct }) {
   return (
     <a
       href={`/products/${product.slug}`}
-      className="relative block bg-[#fbf3e0] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] overflow-hidden hover:shadow-[0px_6px_16px_0px_rgba(0,0,0,0.18)] transition-shadow"
+      className="group flex h-full flex-col overflow-hidden border border-[#d8d1c7] bg-[#fffdf9] shadow-[0px_12px_28px_rgba(15,23,42,0.07)] transition-all duration-300 hover:-translate-y-1 hover:border-[#cfc5b7] hover:shadow-[0px_20px_40px_rgba(15,23,42,0.12)]"
     >
-      {/* Dashed inner border overlay */}
-      <div className="absolute inset-1 sm:inset-1.5 border-3 border-dashed border-[#93a267] pointer-events-none z-10" />
-
-      <div className="p-2 sm:p-3.5">
+      <div className="flex h-full flex-col">
         {/* Product image */}
-        <div className="border border-[#d2bc70] overflow-hidden">
+        <div className="bg-white p-2 sm:p-3">
           {image ? (
-            <img
-              src={image.src}
-              alt={image.alt || product.name}
-              className="w-full aspect-square object-cover"
-            />
+            <div className="flex aspect-[4/5] items-center justify-center overflow-hidden bg-white">
+              <img
+                src={image.src}
+                alt={image.alt || product.name}
+                className="h-full max-w-full object-contain transition-transform duration-700 group-hover:scale-[1.02]"
+              />
+            </div>
           ) : (
-            <div className="w-full aspect-square bg-[#f0e6c8]" />
+            <div className="aspect-[4/5] w-full bg-[#f3ede2]" />
           )}
         </div>
 
-        {/* Name */}
-        <p className="font-(family-name:--font-body) text-base sm:text-lg text-black mt-2.5 truncate">
-          {product.name}
-        </p>
+        <div className="flex flex-1 flex-col justify-between border-t border-black/8 px-2.5 pb-2.5 pt-3 sm:px-4 sm:pb-4 sm:pt-4">
+          <div>
+            <p className="line-clamp-2 min-h-[3.2rem] font-(family-name:--font-body) text-base leading-6 text-[#181411] sm:min-h-[3.4rem] sm:text-[1.05rem] sm:leading-7">
+              {product.name}
+            </p>
+          </div>
 
-        {/* Pricing */}
-        <div className="flex items-center gap-2 mt-0.5 mb-1.5">
-          <span className="text-base sm:text-lg text-black font-normal">
-            ₹{salePrice}
-          </span>
-            <span className="relative text-base sm:text-lg text-[#666]">
-              {regularPrice}
-              <span className="absolute left-0 top-1/2 w-full border-t border-[#666]" />
+          <div className="mt-3 sm:mt-4 flex items-end gap-2">
+            <span className="font-(family-name:--font-body) text-lg leading-none text-[#181411] sm:text-[1.35rem]">
+              ₹{salePrice}
             </span>
+            <span className="relative mb-0.5 pb-0.5 font-(family-name:--font-body) text-[0.78rem] text-black/40 sm:text-[0.92rem]">
+              ₹{regularPrice}
+              <span className="absolute left-0 top-1/2 w-full border-t border-black/30" />
+            </span>
+          </div>
         </div>
       </div>
     </a>
@@ -76,11 +77,22 @@ function ProductCard({ product }: { product: StoreProduct }) {
 
 function CategorySection({ name, products }: { name: string; products: StoreProduct[] }) {
   return (
-    <section aria-label={name} className="mb-16 md:mb-30">
-      <h2 className="font-heading text-3xl md:text-4xl text-black mb-4 md:mb-6">{name}</h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-8">
+    <section aria-label={name} className="mb-14 border-t border-black/10 pt-6 md:mb-18 md:pt-8">
+      <div className="mb-5 flex flex-col gap-2 md:mb-7 md:flex-row md:items-end md:justify-between">
+        <div>
+          <h2 className="mt-1 font-(family-name:--font-body) text-[1.8rem] leading-tight text-black md:text-[2.2rem]">
+            {name}
+          </h2>
+        </div>
+        <p className="font-(family-name:--font-body) text-sm text-black/50">
+          {products.length} item{products.length === 1 ? "" : "s"}
+        </p>
+      </div>
+      <div className="grid grid-cols-2 justify-items-center gap-x-5 gap-y-7 md:grid-cols-4 md:gap-x-7 md:gap-y-9 lg:gap-x-10 lg:gap-y-12">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <div key={product.id} className="w-full max-w-[16.5rem] sm:max-w-[17.5rem] lg:max-w-[20rem]">
+            <ProductCard product={product} />
+          </div>
         ))}
       </div>
     </section>
@@ -111,25 +123,36 @@ export default async function ShopPage({
   const categories = Array.from(categoryMap.entries());
 
   return (
-    <main className="bg-[#f5f0e8] min-h-screen px-4 sm:px-8 py-8 md:px-16 md:py-16">
-      <div className="mx-auto max-w-6xl">
-        {query && (
-          <div className="mb-8">
-            <h1 className="font-heading text-4xl text-black">Search Results</h1>
-            <p className="mt-2 font-(family-name:--font-body) text-base text-black/70">
-              Showing results for &quot;{query}&quot;.
-            </p>
-          </div>
+    <main className="min-h-screen px-4 sm:px-8 py-8 md:px-16 md:py-16">
+      <div className="mx-auto max-w-7xl">
+      <div className="mb-10 max-w-3xl md:mb-12">
+        <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.32em] text-black/45">
+          {query ? "Search" : "Shop"}
+        </p>
+        {query ? (
+          <h1 className="mt-3 font-(family-name:--font-body) text-[2.35rem] leading-tight text-black md:text-[3.2rem]">
+            Search <span className="font-(family-name:--font-heading)">results</span>
+          </h1>
+        ) : (
+          <h1 className="mt-3 font-(family-name:--font-body) text-[2.35rem] leading-tight text-black md:text-[3.2rem]">
+            Browse the <span className="font-(family-name:--font-heading)">collection</span>
+          </h1>
         )}
+        <p className="mt-3 font-(family-name:--font-body) text-[1rem] leading-7 text-black/70 md:text-[1.08rem]">
+          {query
+              ? `Showing results for "${query}".`
+              : "Explore handcrafted pieces across gifting, keepsakes, stationery, and event details."}
+          </p>
+        </div>
 
         {categories.length > 0 ? (
           categories.map(([name, items]) => (
             <CategorySection key={name} name={name} products={items} />
           ))
         ) : (
-          <section aria-label="No products found" className="mb-8">
-            <h2 className="font-heading text-3xl text-black">No products found</h2>
-            <p className="mt-2 font-(family-name:--font-body) text-base text-black/70">
+          <section aria-label="No products found" className="mb-8 border-t border-black/10 pt-6 md:pt-8">
+            <h2 className="font-(family-name:--font-body) text-[1.8rem] leading-tight text-black md:text-[2.2rem]">No products found</h2>
+            <p className="mt-3 font-(family-name:--font-body) text-base text-black/70">
               Try a different search term or browse all products.
             </p>
             <a

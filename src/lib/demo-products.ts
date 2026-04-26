@@ -140,7 +140,7 @@ export const demoProducts: StoreProduct[] = [
     ],
   },
 
-  // ── Hot Foiling ──────────────────────────────────────────────────────────────
+  // ── Heat foiling ─────────────────────────────────────────────────────────────
   {
     id: 301,
     name: "Gold Foil Wedding Card",
@@ -150,7 +150,7 @@ export const demoProducts: StoreProduct[] = [
     price: "1500.00",
     regularPrice: "1800.00",
     stockStatus: "instock",
-    categories: ["Hot Foiling"],
+    categories: ["Heat foiling"],
     images: [
       {
         src: "https://images.unsplash.com/photo-1521369909029-2afed882baee?auto=format&fit=crop&w=600&q=80",
@@ -167,7 +167,7 @@ export const demoProducts: StoreProduct[] = [
     price: "600.00",
     regularPrice: "600.00",
     stockStatus: "instock",
-    categories: ["Hot Foiling"],
+    categories: ["Heat foiling"],
     images: [
       {
         src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
@@ -184,7 +184,7 @@ export const demoProducts: StoreProduct[] = [
     price: "1100.00",
     regularPrice: "1400.00",
     stockStatus: "instock",
-    categories: ["Hot Foiling"],
+    categories: ["Heat foiling"],
     images: [
       {
         src: "https://images.unsplash.com/photo-1510771463146-e89e6e86560e?auto=format&fit=crop&w=600&q=80",
@@ -201,7 +201,7 @@ export const demoProducts: StoreProduct[] = [
     price: "1000.00",
     regularPrice: "1000.00",
     stockStatus: "instock",
-    categories: ["Hot Foiling"],
+    categories: ["Heat foiling"],
     images: [
       {
         src: "https://images.unsplash.com/photo-1529736576495-1ed4a29ca6e7?auto=format&fit=crop&w=600&q=80",
@@ -276,6 +276,74 @@ export const demoProducts: StoreProduct[] = [
       {
         src: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=600&q=80",
         alt: "Engraved Glass Paperweight",
+      },
+    ],
+  },
+  {
+    id: 501,
+    name: "Gold Leaf Keepsake Frame",
+    slug: "gold-leaf-keepsake-frame",
+    description: "Custom keepsake frame finished with hand-applied gold leaf details.",
+    shortDescription: "Soft shimmer, bespoke finish.",
+    price: "1600.00",
+    regularPrice: "1900.00",
+    stockStatus: "instock",
+    categories: ["Leafing"],
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80",
+        alt: "Gold Leaf Keepsake Frame",
+      },
+    ],
+  },
+  {
+    id: 502,
+    name: "Leafed Name Place Card",
+    slug: "leafed-name-place-card",
+    description: "Elegant handwritten place card accented with metallic leafing.",
+    shortDescription: "A gilded welcome at the table.",
+    price: "450.00",
+    regularPrice: "600.00",
+    stockStatus: "instock",
+    categories: ["Leafing"],
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1510070009289-b5bc34383727?auto=format&fit=crop&w=600&q=80",
+        alt: "Leafed Name Place Card",
+      },
+    ],
+  },
+  {
+    id: 503,
+    name: "Gilded Monogram Panel",
+    slug: "gilded-monogram-panel",
+    description: "Statement monogram artwork finished with hand-laid metallic detailing.",
+    shortDescription: "Classic initials with a luminous finish.",
+    price: "1300.00",
+    regularPrice: "1600.00",
+    stockStatus: "instock",
+    categories: ["Leafing"],
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
+        alt: "Gilded Monogram Panel",
+      },
+    ],
+  },
+  {
+    id: 504,
+    name: "Leafed Celebration Sign",
+    slug: "leafed-celebration-sign",
+    description: "Celebration sign with soft metallic leafing for an elevated event detail.",
+    shortDescription: "Made to catch the light beautifully.",
+    price: "1800.00",
+    regularPrice: "2100.00",
+    stockStatus: "instock",
+    categories: ["Leafing"],
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80",
+        alt: "Leafed Celebration Sign",
       },
     ],
   },

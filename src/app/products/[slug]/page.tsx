@@ -18,5 +18,5 @@ export default async function ProductPage({
 
   const related = allProducts.filter((p) => p.slug !== product.slug).slice(0, 8);
 
-  return <ProductDetailClient product={product} related={related} />;
+  return <ProductDetailClient key={product.id} product={product} related={related} />;
 }
