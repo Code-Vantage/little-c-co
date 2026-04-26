@@ -1,6 +1,8 @@
+import Reveal from "@/components/reveal";
+
 export default function About() {
   return (
-    <section id="about" aria-label="About" className="overflow-hidden px-6 py-14 md:py-18 scroll-mt-28">
+    <Reveal as="section" id="about" aria-label="About" className="overflow-hidden px-6 py-14 md:py-18 scroll-mt-28" delay={80}>
       <div className="relative mx-auto flex max-w-7xl flex-col items-center gap-10 md:flex-row md:items-center md:gap-16">
 
         {/* Mobile Title (Displays above video on small screens) */}
@@ -28,7 +30,7 @@ export default function About() {
           />
 
           {/* Polaroid frame */}
-          <div className="relative bg-[#fff9f1] p-3 md:p-4 pt-4 md:pt-5 pb-16 md:pb-20 shadow-[0px_0px_38px_0px_rgba(0,0,0,0.36)] z-20 w-full md:w-[25rem] lg:w-[28rem]">
+          <div className="lift-card relative z-20 w-full bg-[#fff9f1] p-3 pb-16 pt-4 shadow-[0px_0px_38px_0px_rgba(0,0,0,0.36)] md:w-[25rem] md:p-4 md:pb-20 md:pt-5 lg:w-[28rem]">
             {/* Dashed inner border with subtle shadow */}
             {/* <div className="absolute inset-1 border-2 border-dashed border-[#93a267] pointer-events-none z-10" /> */}
 
@@ -39,7 +41,7 @@ export default function About() {
                 muted
                 loop
                 playsInline
-                className="w-full object-cover mb-[-10%]"
+                className="media-soft mb-[-10%] w-full object-cover"
               >
                 <source src="/founder.webm" type="video/webm" />
               </video>
@@ -75,6 +77,6 @@ export default function About() {
         </div>
 
       </div>
-    </section>
+    </Reveal>
   );
 }

@@ -27,12 +27,12 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="relative z-50 w-full shadow-[0px_5px_7px_0px_rgba(0,0,0,0.14)]">
+    <header className="relative z-50 w-full bg-[rgba(252,250,247,0.92)] shadow-[0px_5px_7px_0px_rgba(0,0,0,0.14)] backdrop-blur-sm">
       <div className="mx-auto flex max-w-360 items-center justify-between px-4 py-3 lg:justify-start lg:gap-7 lg:px-8 lg:py-2">
         
         {/* Mobile Hamburger Button */}
         <button 
-          className="cursor-pointer p-1 text-black lg:hidden"
+          className="button-soft cursor-pointer p-1 text-black lg:hidden"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -89,7 +89,7 @@ export default function Header() {
             <div className="group relative">
               <Link
                 href="/services"
-                className="inline-flex items-center gap-1 font-(family-name:--font-body) text-[1.02rem] text-black whitespace-nowrap transition-opacity hover:opacity-70"
+                className="inline-flex items-center gap-1 whitespace-nowrap font-(family-name:--font-body) text-[1.02rem] text-black transition-opacity hover:opacity-70"
               >
                 Services
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -110,10 +110,10 @@ export default function Header() {
                 </div>
               </div>
             </div>
-            <Link href="/shop" className="font-(family-name:--font-body) text-[1.02rem] text-black whitespace-nowrap transition-opacity hover:opacity-70">
+            <Link href="/shop" className="whitespace-nowrap font-(family-name:--font-body) text-[1.02rem] text-black transition-opacity hover:opacity-70">
               Shop
             </Link>
-            <Link href="/#about" className="font-(family-name:--font-body) text-[1.02rem] text-black whitespace-nowrap transition-opacity hover:opacity-70">
+            <Link href="/#about" className="whitespace-nowrap font-(family-name:--font-body) text-[1.02rem] text-black transition-opacity hover:opacity-70">
               About
             </Link>
           </nav>

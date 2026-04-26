@@ -33,7 +33,7 @@ export default function RootLayout({
     >
       <body suppressHydrationWarning className="min-h-full bg-[var(--background)] text-[var(--foreground)]">
         <Header />
-        {children}
+        <div className="page-enter">{children}</div>
         <Footer />
       </body>
     </html>

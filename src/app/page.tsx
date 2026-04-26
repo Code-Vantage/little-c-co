@@ -5,20 +5,21 @@ import About from "@/components/about";
 import EmailSignup from "@/components/email-signup";
 import LiveEvents from "@/components/live-events";
 import Instagram from "@/components/instagram";
+import Reveal from "@/components/reveal";
 
 export default function HomePage() {
   return (
     <main>
-      <section aria-label="Hero">
+      <Reveal as="section" aria-label="Hero">
         <Image
           src="/moodboard.png"
           alt="Elegant, timeless handmade creations by little c co."
           width={1920}
           height={1080}
           priority
-          className="w-full h-auto block"
+          className="block h-auto w-full"
         />
-      </section>
+      </Reveal>
       <CategoriesStrip />
       <About />
       <LiveEvents />

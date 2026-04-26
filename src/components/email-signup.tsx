@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Reveal from "@/components/reveal";
 
 export default function EmailSignup() {
   const [email, setEmail] = useState("");
@@ -20,8 +21,8 @@ export default function EmailSignup() {
   }
 
   return (
-    <section aria-label="Email signup" className="px-6 py-14 md:px-16 md:py-18">
-      <div className="mx-auto max-w-4xl border border-black/10 bg-white/45 px-6 py-10 text-center shadow-[0px_14px_34px_rgba(15,23,42,0.06)] sm:px-8 md:px-12">
+    <Reveal as="section" aria-label="Email signup" className="px-6 py-14 md:px-16 md:py-18" delay={120}>
+      <div className="lift-card mx-auto max-w-4xl border border-black/10 bg-white/45 px-6 py-10 text-center shadow-[0px_14px_34px_rgba(15,23,42,0.06)] sm:px-8 md:px-12">
         <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.32em] text-black/45">
           Stay Connected
         </p>
@@ -46,12 +47,12 @@ export default function EmailSignup() {
           />
           <button
             type="submit"
-            className="inline-flex h-12 items-center justify-center bg-black px-6 font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-white transition-colors hover:bg-[#1a1a1a]"
+            className="button-soft inline-flex h-12 items-center justify-center bg-black px-6 font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-white transition-colors hover:bg-[#1a1a1a]"
           >
             Subscribe
           </button>
         </form>
       </div>
-    </section>
+    </Reveal>
   );
 }

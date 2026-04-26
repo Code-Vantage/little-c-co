@@ -12,7 +12,7 @@ function RelatedProductCard({ product }: { product: StoreProduct }) {
   return (
     <a
       href={`/products/${product.slug}`}
-      className="group flex h-full flex-col overflow-hidden border border-[#d8d1c7] bg-[#fffdf9] shadow-[0px_12px_28px_rgba(15,23,42,0.07)] transition-all duration-300 hover:-translate-y-1 hover:border-[#cfc5b7] hover:shadow-[0px_20px_40px_rgba(15,23,42,0.12)]"
+      className="lift-card group flex h-full flex-col overflow-hidden border border-[#d8d1c7] bg-[#fffdf9] shadow-[0px_12px_28px_rgba(15,23,42,0.07)] transition-all duration-300 hover:border-[#cfc5b7] hover:shadow-[0px_20px_40px_rgba(15,23,42,0.12)]"
     >
       <div className="flex h-full flex-col">
         <div className="bg-white p-2.5 sm:p-3">
@@ -301,23 +301,63 @@ export default function ProductDetailClient({
                   type="button"
                   onClick={handleAddToCart}
                   disabled={cartButtonState === "adding"}
-                  className={`mt-2 inline-flex h-14 w-full items-center justify-center font-(family-name:--font-body) text-[0.98rem] uppercase tracking-[0.18em] text-white transition-colors ${
-                    cartButtonState === "adding"
-                      ? "cursor-progress bg-black/75"
-                      : "cursor-pointer bg-black hover:bg-[#1a1a1a]"
+                  className={`relative mt-2 inline-flex h-14 w-full items-center justify-center overflow-hidden border font-(family-name:--font-body) text-[0.98rem] uppercase tracking-[0.18em] text-white transition-[background-color,border-color,transform] duration-300 ${
+                    cartButtonState === "added"
+                      ? "border-[#1f3b2d] bg-[#1f3b2d]"
+                      : cartButtonState === "adding"
+                        ? "cursor-progress border-black/75 bg-black/75"
+                        : "cursor-pointer border-black bg-black hover:-translate-y-0.5 hover:bg-[#1a1a1a]"
                   }`}
                 >
-                  {cartButtonState === "adding"
-                    ? "Adding..."
-                    : cartButtonState === "added"
-                      ? "Added To Cart"
-                      : "Add To Cart"}
+                  <span
+                    className={`absolute inset-0 bg-white/10 transition-opacity duration-300 ${
+                      cartButtonState === "adding" ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                  <span className="relative z-10 flex items-center gap-2.5">
+                    {cartButtonState === "adding" && (
+                      <svg
+                        className="h-4 w-4 animate-spin"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeOpacity="0.28" strokeWidth="2" />
+                        <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
+                    )}
+                    {cartButtonState === "added" && (
+                      <svg
+                        className="h-4 w-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                    <span>
+                      {cartButtonState === "adding"
+                        ? "Adding..."
+                        : cartButtonState === "added"
+                          ? "Added To Cart"
+                          : "Add To Cart"}
+                    </span>
+                  </span>
                 </button>
-                <p className="min-h-5 text-sm font-(family-name:--font-body) text-black/60">
-                  {cartButtonState === "added"
-                    ? `Added to cart. ${cartItemCount} item${cartItemCount === 1 ? "" : "s"} in cart.`
-                    : ""}
-                </p>
+                <div
+                  aria-live="polite"
+                  className={`flex min-h-6 items-center gap-2 text-sm font-(family-name:--font-body) transition-all duration-300 ${
+                    cartButtonState === "added"
+                      ? "translate-y-0 opacity-100 text-[#1f3b2d]"
+                      : "translate-y-1 opacity-0 text-black/60"
+                  }`}
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                  <span>
+                    Added to cart. {cartItemCount} item{cartItemCount === 1 ? "" : "s"} in cart.
+                  </span>
+                </div>
               </div>
             </div>
 

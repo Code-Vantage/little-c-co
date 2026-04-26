@@ -35,7 +35,7 @@ function ProductCard({ product }: { product: StoreProduct }) {
   return (
     <a
       href={`/products/${product.slug}`}
-      className="group flex h-full flex-col overflow-hidden border border-[#d8d1c7] bg-[#fffdf9] shadow-[0px_12px_28px_rgba(15,23,42,0.07)] transition-all duration-300 hover:-translate-y-1 hover:border-[#cfc5b7] hover:shadow-[0px_20px_40px_rgba(15,23,42,0.12)]"
+      className="lift-card group flex h-full flex-col overflow-hidden border border-[#d8d1c7] bg-[#fffdf9] shadow-[0px_12px_28px_rgba(15,23,42,0.07)] transition-all duration-300 hover:border-[#cfc5b7] hover:shadow-[0px_20px_40px_rgba(15,23,42,0.12)]"
     >
       <div className="flex h-full flex-col">
         {/* Product image */}
@@ -157,7 +157,7 @@ export default async function ShopPage({
             </p>
             <a
               href="/shop"
-              className="mt-4 inline-flex h-11 items-center justify-center bg-black px-5 text-white font-(family-name:--font-body) text-base hover:bg-[#1a1a1a] transition-colors"
+              className="button-soft mt-4 inline-flex h-11 items-center justify-center bg-black px-5 text-white font-(family-name:--font-body) text-base hover:bg-[#1a1a1a] transition-colors"
             >
               View all products
             </a>

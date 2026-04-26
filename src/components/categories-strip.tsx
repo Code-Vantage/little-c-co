@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Reveal from "@/components/reveal";
 
 const categories = [
   {
@@ -35,7 +36,7 @@ const categories = [
 
 export default function CategoriesStrip() {
   return (
-    <section aria-label="Categories" className="px-4 py-14 sm:px-6 md:py-16">
+    <Reveal as="section" aria-label="Categories" className="px-4 py-14 sm:px-6 md:py-16" delay={60}>
       <div className="w-full">
         <div className="mb-6 text-center sm:mb-8">
           <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.35em] text-black/45">
@@ -51,7 +52,7 @@ export default function CategoriesStrip() {
             {categories.map((category) => (
               <div
                 key={category.name}
-                className="flex w-28 flex-none flex-col items-center text-center sm:w-31 lg:w-34"
+                className="lift-card flex w-28 flex-none flex-col items-center text-center sm:w-31 lg:w-34"
               >
                 <div className="relative flex h-28 w-full items-center justify-center overflow-hidden sm:h-31 lg:h-34">
                   <Image
@@ -60,7 +61,7 @@ export default function CategoriesStrip() {
                     width={280}
                     height={280}
                     sizes="(min-width: 1280px) 136px, (min-width: 640px) 124px, 112px"
-                    className="h-full w-full object-contain p-0.5 drop-shadow-[0_8px_14px_rgba(0,0,0,0.07)]"
+                    className="media-soft h-full w-full object-contain p-0.5 drop-shadow-[0_8px_14px_rgba(0,0,0,0.07)]"
                     priority={category.name === "Cake knife & server"}
                   />
                 </div>
@@ -72,6 +73,6 @@ export default function CategoriesStrip() {
           </div>
         </div>
       </div>
-    </section>
+    </Reveal>
   );
 }

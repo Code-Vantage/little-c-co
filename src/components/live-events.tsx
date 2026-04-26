@@ -1,8 +1,12 @@
+import Reveal from "@/components/reveal";
+
 export default function LiveEvents() {
   return (
-    <section
+    <Reveal
+      as="section"
       aria-label="Live Events"
-      className="px-6 py-14 md:px-16 md:py-18 overflow-hidden"     
+      className="overflow-hidden px-6 py-14 md:px-16 md:py-18"
+      delay={100}
     >
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-6xl text-center">
@@ -17,11 +21,11 @@ export default function LiveEvents() {
           </p>
         </div>
 
-        <div className="mt-10 md:mt-12 overflow-hidden shadow-[0px_18px_40px_rgba(0,0,0,0.16)]">
+        <div className="lift-card mt-10 overflow-hidden shadow-[0px_18px_40px_rgba(0,0,0,0.16)] md:mt-12">
           <img
             src="/events-bg.jpeg"
             alt="Live calligraphy event setup"
-            className="block h-[18rem] w-full object-cover sm:h-[22rem] md:h-[28rem] lg:h-[36rem]"
+            className="media-soft block h-[18rem] w-full object-cover sm:h-[22rem] md:h-[28rem] lg:h-[36rem]"
           />
         </div>
 
@@ -40,6 +44,6 @@ export default function LiveEvents() {
           </p>
         </div>
       </div>
-    </section>
+    </Reveal>
   );
 }

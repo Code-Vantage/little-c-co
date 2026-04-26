@@ -1,3 +1,5 @@
+import Reveal from "@/components/reveal";
+
 const INSTAGRAM_PROFILE_URL = "https://www.instagram.com/littlecmakes/";
 
 interface InstagramPost {
@@ -28,7 +30,7 @@ export default async function Instagram() {
   const posts = await getPosts();
 
   return (
-    <section aria-label="Follow us on Instagram" className="px-6 py-14 md:px-16 md:py-18">
+    <Reveal as="section" aria-label="Follow us on Instagram" className="px-6 py-14 md:px-16 md:py-18" delay={140}>
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="max-w-3xl text-center md:text-left">
@@ -47,7 +49,7 @@ export default async function Instagram() {
               href={INSTAGRAM_PROFILE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-11 items-center justify-center border border-black/15 px-5 font-(family-name:--font-body) text-sm text-black transition-colors hover:border-black hover:bg-black hover:text-white"
+              className="button-soft inline-flex h-11 items-center justify-center border border-black/15 px-5 font-(family-name:--font-body) text-sm text-black transition-colors hover:border-black hover:bg-black hover:text-white"
             >
               View Instagram
             </a>
@@ -62,7 +64,7 @@ export default async function Instagram() {
                 href={post.permalink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`group block overflow-hidden transition-transform duration-300 hover:-translate-y-0.5 ${i > 0 ? "hidden sm:block" : ""}`}
+                className={`lift-card group block overflow-hidden ${i > 0 ? "hidden sm:block" : ""}`}
               >
                 <div className="overflow-hidden bg-[#f3ede2]">
                   <img
@@ -87,6 +89,6 @@ export default async function Instagram() {
           </div>
         )}
       </div>
-    </section>
+    </Reveal>
   );
 }

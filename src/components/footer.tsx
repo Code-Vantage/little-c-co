@@ -27,7 +27,7 @@ export default function Footer() {
           <img
             src="/littlecco_logo.png"
             alt="Little c.co Art Makes"
-            className="h-28 w-auto sm:h-32"
+            className="media-soft h-28 w-auto sm:h-32"
           />
           <p className="mt-4 max-w-md font-(family-name:--font-body) text-[0.98rem] leading-7 text-black/70">
             Bespoke calligraphy, engraving, foiling, and keepsakes made for celebrations, gifting, and thoughtful details.

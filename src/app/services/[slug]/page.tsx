@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProducts } from "@/lib/products";
-import { getServiceBySlug, services } from "@/lib/services";
+import { getServiceBySlug } from "@/lib/services";
+import Reveal from "@/components/reveal";
 
-export async function generateStaticParams() {
-  return services.map((service) => ({ slug: service.slug }));
-}
+export const dynamic = "force-dynamic";
 
 function ProductCard({
   product,
@@ -19,7 +18,7 @@ function ProductCard({
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group flex h-full flex-col overflow-hidden border border-[#d8d1c7] bg-[#fffdf9] shadow-[0px_12px_28px_rgba(15,23,42,0.07)] transition-all duration-300 hover:-translate-y-1 hover:border-[#cfc5b7] hover:shadow-[0px_20px_40px_rgba(15,23,42,0.12)]"
+      className="lift-card group flex h-full flex-col overflow-hidden border border-[#d8d1c7] bg-[#fffdf9] shadow-[0px_12px_28px_rgba(15,23,42,0.07)] transition-all duration-300 hover:border-[#cfc5b7] hover:shadow-[0px_20px_40px_rgba(15,23,42,0.12)]"
     >
       <div className="flex h-full flex-col">
         <div className="bg-white p-2.5 sm:p-3">
@@ -73,7 +72,7 @@ export default async function ServiceDetailPage({
 
   return (
     <main className="min-h-screen">
-      <section className="border-b border-black/10 bg-[#f7f2ea]">
+      <Reveal as="section" className="border-b border-black/10 bg-[#f7f2ea]">
         <div className="grid md:min-h-[22rem] md:grid-cols-[minmax(0,0.74fr)_minmax(26rem,1.26fr)] md:items-stretch lg:min-h-[24rem]">
           <div className="min-h-[12rem] overflow-hidden bg-[#f4ede1] md:min-h-full">
             <img
@@ -116,9 +115,9 @@ export default async function ServiceDetailPage({
             </div>
           </div>
         </div>
-        </section>
+      </Reveal>
 
-      <div className="px-6 py-10 sm:px-8 md:px-16 md:py-16">
+      <Reveal as="div" className="px-6 py-10 sm:px-8 md:px-16 md:py-16" delay={80}>
         <div className="mx-auto max-w-7xl">
           {matchingProducts.length > 0 ? (
           <section>
@@ -157,7 +156,7 @@ export default async function ServiceDetailPage({
           </section>
         )}
         </div>
-      </div>
+      </Reveal>
     </main>
   );
 }

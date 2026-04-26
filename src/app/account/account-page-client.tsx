@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Reveal from "@/components/reveal";
 
 type AccountAddress = {
   first_name: string;
@@ -36,7 +37,6 @@ type AccountOrder = {
 
 type AuthState = "checking" | "signedOut" | "signedIn";
 type AccountSection =
-  | "overview"
   | "profile"
   | "orders"
   | "addresses"
@@ -48,18 +48,16 @@ type BannerState = {
 };
 
 const sectionLabels: Record<AccountSection, string> = {
-  overview: "Overview",
-  profile: "Personal Information",
-  orders: "Order Management",
+  profile: "Profile",
+  orders: "Orders",
   addresses: "Addresses",
-  password: "Change Password",
+  password: "Password",
   delete: "Delete Account",
 };
 
 const accountSections: AccountSection[] = [
-  "overview",
-  "profile",
   "orders",
+  "profile",
   "addresses",
   "password",
   "delete",
@@ -112,22 +110,10 @@ function createProfileDraft(profile?: AccountProfile | null) {
   };
 }
 
-function getFullName(profile: AccountProfile | null) {
-  const fullName = [profile?.first_name, profile?.last_name].filter(Boolean).join(" ").trim();
-  return fullName || "Your Account";
-}
-
 function getInitials(profile: AccountProfile | null) {
   const first = profile?.first_name?.charAt(0) ?? "";
   const last = profile?.last_name?.charAt(0) ?? "";
   return `${first}${last}`.trim() || "LC";
-}
-
-function countSavedAddresses(profile: AccountProfile | null) {
-  if (!profile) return 0;
-  return [profile.billing?.address_1, profile.shipping?.address_1].filter(
-    (value) => Boolean(value?.trim()),
-  ).length;
 }
 
 function formatCurrency(amount: string | number) {
@@ -210,14 +196,16 @@ function AccountField({
 }) {
   return (
     <label className="flex flex-col gap-2">
-      <span className="font-(family-name:--font-body) text-sm text-black/75">{label}</span>
+      <span className="font-(family-name:--font-body) text-sm uppercase tracking-[0.16em] text-black/48">
+        {label}
+      </span>
       <input
         type={type}
         value={value}
         autoComplete={autoComplete}
         placeholder={placeholder}
         onChange={(event) => onChange(event.target.value)}
-        className="input h-12 rounded-2xl border-black/10 bg-white/90"
+        className="input h-12 rounded-none border-black/12 bg-transparent px-4"
       />
     </label>
   );
@@ -228,51 +216,33 @@ function SectionCard({
   description,
   children,
   tone = "default",
+  delay = 0,
 }: {
   title: string;
   description?: string;
   children: React.ReactNode;
   tone?: "default" | "danger";
+  delay?: number;
 }) {
   const toneClasses =
     tone === "danger"
-      ? "border-rose-200 bg-[#fff7f5]"
-      : "border-black/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(249,243,232,0.96))]";
+      ? "border-rose-200 bg-[#fffaf8]"
+      : "border-black/10 bg-transparent";
 
   return (
-    <section className={`rounded-[28px] border p-6 sm:p-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)] ${toneClasses}`}>
-      <div className="border-b border-black/8 pb-5">
-        <h2 className="font-(family-name:--font-body) text-2xl text-black sm:text-3xl">
+    <Reveal as="section" className={`border p-6 sm:p-8 ${toneClasses}`} delay={delay}>
+      <div className="border-b border-black/10 pb-5">
+        <h2 className="font-(family-name:--font-body) text-[1.75rem] leading-tight text-black sm:text-[2rem]">
           {title}
         </h2>
         {description && (
-          <p className="mt-3 max-w-3xl font-(family-name:--font-body) text-sm leading-6 text-black/65 sm:text-base">
+          <p className="mt-3 max-w-3xl font-(family-name:--font-body) text-sm leading-7 text-black/65 sm:text-base">
             {description}
           </p>
         )}
       </div>
       <div className="pt-6">{children}</div>
-    </section>
-  );
-}
-
-function StatCard({
-  label,
-  value,
-  hint,
-}: {
-  label: string;
-  value: string;
-  hint: string;
-}) {
-  return (
-    <article className="rounded-[24px] border border-black/8 bg-white/80 p-5 shadow-[0_14px_40px_rgba(15,23,42,0.04)]">
-      <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.22em] text-black/45">
-        {label}
-      </p>
-      <p className="mt-3 font-(family-name:--font-body) text-3xl text-black">{value}</p>
-      <p className="mt-2 font-(family-name:--font-body) text-sm text-black/60">{hint}</p>
-    </article>
+    </Reveal>
   );
 }
 
@@ -283,7 +253,7 @@ export default function AccountPageClient() {
 
   const [authState, setAuthState] = useState<AuthState>("checking");
   const [authStep, setAuthStep] = useState<"email" | "login" | "register">("email");
-  const [activeSection, setActiveSection] = useState<AccountSection>("overview");
+  const [activeSection, setActiveSection] = useState<AccountSection>("orders");
   const [checkingEmail, setCheckingEmail] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loggingIn, setLoggingIn] = useState(false);
@@ -449,7 +419,7 @@ export default function AccountPageClient() {
         type: "success",
         text: `Welcome${data.first_name ? `, ${data.first_name}` : ""}. Your account is ready.`,
       });
-      setActiveSection("overview");
+      setActiveSection("orders");
 
       if (redirectPath) {
         router.push(redirectPath);
@@ -507,7 +477,7 @@ export default function AccountPageClient() {
         type: "success",
         text: `Welcome${data.first_name ? `, ${data.first_name}` : ""}. Your account has been created.`,
       });
-      setActiveSection("overview");
+      setActiveSection("orders");
 
       if (redirectPath) {
         router.push(redirectPath);
@@ -570,7 +540,7 @@ export default function AccountPageClient() {
     await fetch("/api/account/logout", { method: "POST" });
     setAuthState("signedOut");
     setAuthStep("email");
-    setActiveSection("overview");
+    setActiveSection("orders");
     clearSignedInState();
     setBanner({ type: "success", text: "You have been logged out." });
   }
@@ -739,7 +709,7 @@ export default function AccountPageClient() {
       clearSignedInState();
       setAuthState("signedOut");
       setAuthStep("email");
-      setActiveSection("overview");
+      setActiveSection("orders");
       setEmailInput("");
       setPasswordInput("");
       setBanner({ type: "success", text: data.message || "Your account has been deleted." });
@@ -754,45 +724,30 @@ export default function AccountPageClient() {
     }
   }
 
-  const totalSpent = orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
-  const latestOrder = orders[0];
-  const savedAddressCount = countSavedAddresses(profile);
+  if (authState === "checking") {
+    return <main className="min-h-screen" aria-hidden="true" />;
+  }
 
   return (
     <main className="min-h-screen px-4 py-8 sm:px-8 sm:py-12 lg:px-12">
-      <div className="mx-auto max-w-360">
-        <section className="mb-8 overflow-hidden rounded-[34px] border border-black/8 bg-[linear-gradient(135deg,rgba(255,255,255,0.82),rgba(246,239,226,0.92))] px-6 py-8 shadow-[0_24px_80px_rgba(15,23,42,0.08)] sm:px-8 lg:px-10 lg:py-10">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-3xl">
-              <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.28em] text-black/45">
-                Customer Account
-              </p>
-              <h1 className="mt-3 font-(family-name:--font-body) text-4xl text-black sm:text-5xl">
-                {authState === "signedIn" ? "Account Center" : "Manage Your Account"}
-              </h1>
-              <p className="mt-4 max-w-2xl font-(family-name:--font-body) text-base leading-7 text-black/65 sm:text-lg">
-                Keep your profile up to date, review orders, manage saved addresses, and control your account settings from one place.
-              </p>
-            </div>
-            {authState === "signedIn" && profile && (
-              <div className="rounded-[26px] border border-black/8 bg-white/70 px-5 py-4 shadow-[0_12px_30px_rgba(15,23,42,0.05)]">
-                <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.2em] text-black/45">
-                  Signed in as
-                </p>
-                <p className="mt-2 font-(family-name:--font-body) text-2xl text-black">
-                  {getFullName(profile)}
-                </p>
-                <p className="mt-1 font-(family-name:--font-body) text-sm text-black/60">
-                  {profile.email}
-                </p>
-              </div>
-            )}
+      <div className="mx-auto max-w-7xl">
+        <Reveal as="section" className="mb-8 border-b border-black/10 pb-8 sm:pb-10">
+          <div className="max-w-3xl">
+            <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.28em] text-black/45">
+              Customer Account
+            </p>
+            <h1 className="mt-3 font-(family-name:--font-body) text-[2.5rem] leading-tight text-black sm:text-[3.2rem]">
+              {authState === "signedIn" ? "Your Account" : "Manage Your Account"}
+            </h1>
+            <p className="mt-4 max-w-2xl font-(family-name:--font-body) text-base leading-7 text-black/65 sm:text-lg">
+              Review orders, update saved details, and manage account settings.
+            </p>
           </div>
-        </section>
+        </Reveal>
 
         {banner && (
           <div
-            className={`mb-6 rounded-2xl border px-4 py-3 font-(family-name:--font-body) text-sm sm:text-base ${
+            className={`mb-6 border px-4 py-3 font-(family-name:--font-body) text-sm sm:text-base ${
               banner.type === "error"
                 ? "border-rose-200 bg-rose-50 text-rose-700"
                 : "border-emerald-200 bg-emerald-50 text-emerald-700"
@@ -802,41 +757,8 @@ export default function AccountPageClient() {
           </div>
         )}
 
-        {authState === "checking" && (
-          <SectionCard
-            title="Checking your session"
-            description="We’re confirming whether you already have an active account session."
-          >
-            <div className="flex items-center gap-3 font-(family-name:--font-body) text-black/65">
-              <div className="h-3 w-3 animate-pulse rounded-full bg-[#93a267]" />
-              <p>Loading account data...</p>
-            </div>
-          </SectionCard>
-        )}
-
         {authState === "signedOut" && (
-          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-            <SectionCard
-              title="A more complete customer experience"
-              description="Your account gives you a professional self-service area for faster checkout, order visibility, saved addresses, and better control over your profile."
-            >
-              <div className="grid gap-4 sm:grid-cols-2">
-                {[
-                  ["Order visibility", "Review your order history, payment status, and fulfillment progress in one place."],
-                  ["Saved details", "Store billing and shipping information for a smoother repeat checkout experience."],
-                  ["Account security", "Update your password, recover access, and manage the life cycle of your account."],
-                  ["Linked purchases", "Orders made with the same email can be connected to your account for easier tracking."],
-                ].map(([title, text]) => (
-                  <div key={title} className="rounded-[24px] border border-black/8 bg-white/70 p-5">
-                    <h3 className="font-(family-name:--font-body) text-xl text-black">{title}</h3>
-                    <p className="mt-2 font-(family-name:--font-body) text-sm leading-6 text-black/65">
-                      {text}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </SectionCard>
-
+          <div className="mx-auto max-w-xl">
             <SectionCard
               title={
                 authStep === "login"
@@ -845,7 +767,8 @@ export default function AccountPageClient() {
                     ? "Create your account"
                     : "Start with your email"
               }
-              description="Use the same email address you place orders with so your purchase history can be connected automatically."
+              description="Use the same email address you order with so your purchase history can be connected automatically."
+              delay={60}
             >
               <div className="flex flex-col gap-4">
                 {authStep === "email" && (
@@ -856,12 +779,12 @@ export default function AccountPageClient() {
                       autoComplete="email"
                       value={emailInput}
                       onChange={setEmailInput}
-                      placeholder="you@example.com"
+                      placeholder="Enter your email address"
                     />
                     <button
                       type="submit"
                       disabled={checkingEmail}
-                      className={`h-12 rounded-full px-6 font-(family-name:--font-body) text-base text-white transition ${
+                      className={`h-12 border px-6 font-(family-name:--font-body) text-base text-white transition ${
                         checkingEmail ? "cursor-progress bg-black/60" : "cursor-pointer bg-black hover:bg-black/85"
                       }`}
                     >
@@ -872,7 +795,7 @@ export default function AccountPageClient() {
 
                 {authStep === "login" && (
                   <form onSubmit={loginWithEmail} className="flex flex-col gap-4">
-                    <div className="rounded-2xl border border-black/8 bg-white/75 px-4 py-3 font-(family-name:--font-body) text-sm text-black/65">
+                    <div className="border border-black/10 px-4 py-3 font-(family-name:--font-body) text-sm text-black/65">
                       Signing in as <strong className="text-black">{emailInput}</strong>
                       <button
                         type="button"
@@ -897,7 +820,7 @@ export default function AccountPageClient() {
                     <button
                       type="submit"
                       disabled={loggingIn}
-                      className={`h-12 rounded-full px-6 font-(family-name:--font-body) text-base text-white transition ${
+                      className={`h-12 border px-6 font-(family-name:--font-body) text-base text-white transition ${
                         loggingIn ? "cursor-progress bg-black/60" : "cursor-pointer bg-black hover:bg-black/85"
                       }`}
                     >
@@ -918,7 +841,7 @@ export default function AccountPageClient() {
 
                 {authStep === "register" && (
                   <form onSubmit={registerWithEmail} className="flex flex-col gap-4">
-                    <div className="rounded-2xl border border-black/8 bg-white/75 px-4 py-3 font-(family-name:--font-body) text-sm text-black/65">
+                    <div className="border border-black/10 px-4 py-3 font-(family-name:--font-body) text-sm text-black/65">
                       Creating an account for <strong className="text-black">{emailInput}</strong>
                       <button
                         type="button"
@@ -959,7 +882,7 @@ export default function AccountPageClient() {
                     <button
                       type="submit"
                       disabled={loggingIn}
-                      className={`h-12 rounded-full px-6 font-(family-name:--font-body) text-base text-white transition ${
+                      className={`h-12 border px-6 font-(family-name:--font-body) text-base text-white transition ${
                         loggingIn ? "cursor-progress bg-black/60" : "cursor-pointer bg-black hover:bg-black/85"
                       }`}
                     >
@@ -976,18 +899,18 @@ export default function AccountPageClient() {
         )}
 
         {authState === "signedIn" && profile && (
-          <div className="grid gap-6 lg:grid-cols-[290px_minmax(0,1fr)]">
-            <aside className="rounded-[30px] border border-black/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(244,235,219,0.98))] p-5 shadow-[0_22px_65px_rgba(15,23,42,0.06)] lg:sticky lg:top-28 lg:self-start">
-              <div className="rounded-[26px] bg-black px-5 py-5 text-white shadow-[0_18px_40px_rgba(15,23,42,0.22)]">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/15 bg-white/10 font-(family-name:--font-body) text-2xl">
+          <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+            <Reveal as="aside" className="border border-black/10 p-4 lg:sticky lg:top-28 lg:self-start">
+              <div className="border border-black/10 px-4 py-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-black font-(family-name:--font-body) text-[1.25rem] leading-none tracking-[0.05em] text-white">
                     {getInitials(profile)}
                   </div>
                   <div className="min-w-0">
-                    <p className="font-(family-name:--font-body) text-2xl leading-none">
+                    <p className="font-(family-name:--font-body) text-[1.75rem] leading-none text-black">
                       {profile.first_name || "Account"}
                     </p>
-                    <p className="mt-2 truncate font-(family-name:--font-body) text-sm text-white/70">
+                    <p className="mt-1 truncate font-(family-name:--font-body) text-[0.95rem] text-black/60">
                       {profile.email}
                     </p>
                   </div>
@@ -1003,132 +926,31 @@ export default function AccountPageClient() {
                     key={section}
                     type="button"
                     onClick={() => setActiveSection(section)}
-                    className={`min-w-max rounded-full px-4 py-3 text-left font-(family-name:--font-body) text-sm transition lg:w-full lg:rounded-2xl ${
+                    className={`button-soft min-w-max border px-4 py-3 text-left font-(family-name:--font-body) text-sm transition lg:w-full ${
                       activeSection === section
-                        ? "bg-[#20201c] text-white shadow-[0_12px_30px_rgba(15,23,42,0.14)]"
-                        : "bg-white/70 text-black/70 hover:bg-white hover:text-black"
+                        ? "border-black bg-black text-white"
+                        : "border-black/10 text-black/70 hover:border-black/20 hover:text-black"
                     }`}
                   >
                     {sectionLabels[section]}
                   </button>
                 ))}
               </nav>
-
-              <div className="mt-6 rounded-[24px] border border-black/8 bg-white/65 p-4">
-                <p className="font-(family-name:--font-body) text-sm leading-6 text-black/65">
-                  Your account is active and connected to the current session.
-                </p>
-                <button
-                  type="button"
-                  onClick={logout}
-                  className="mt-4 cursor-pointer font-(family-name:--font-body) text-sm text-black underline underline-offset-4 hover:text-black/70"
-                >
-                  Log out
-                </button>
-              </div>
-            </aside>
+              <button
+                type="button"
+                onClick={logout}
+                className="mt-6 cursor-pointer font-(family-name:--font-body) text-sm text-black underline underline-offset-4 hover:text-black/70"
+              >
+                Log out
+              </button>
+            </Reveal>
 
             <div className="min-w-0 space-y-6">
-              {activeSection === "overview" && (
-                <>
-                  <SectionCard
-                    title={`Welcome back${profile.first_name ? `, ${profile.first_name}` : ""}`}
-                    description="Review your latest activity, saved details, and account status from this overview dashboard."
-                  >
-                    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
-                      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                        <StatCard label="Orders" value={String(orders.length)} hint="Linked order history" />
-                        <StatCard label="Saved Addresses" value={String(savedAddressCount)} hint="Billing and shipping details on file" />
-                        <StatCard label="Total Spent" value={formatCurrency(totalSpent)} hint="Based on linked orders" />
-                        <StatCard
-                          label="Latest Order"
-                          value={latestOrder ? `#${latestOrder.id}` : "None"}
-                          hint={latestOrder ? formatOrderDate(latestOrder.date_created) : "No recent order"}
-                        />
-                      </div>
-                      <div className="rounded-[24px] border border-black/8 bg-white/78 p-5">
-                        <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.22em] text-black/45">
-                          Quick Actions
-                        </p>
-                        <div className="mt-4 flex flex-col gap-3">
-                          <button type="button" onClick={() => setActiveSection("orders")} className="rounded-full bg-black px-4 py-3 text-left font-(family-name:--font-body) text-sm text-white hover:bg-black/85">
-                            Review order history
-                          </button>
-                          <button type="button" onClick={() => setActiveSection("addresses")} className="rounded-full border border-black/10 bg-white px-4 py-3 text-left font-(family-name:--font-body) text-sm text-black hover:bg-black/3">
-                            Manage saved addresses
-                          </button>
-                          <button type="button" onClick={() => setActiveSection("profile")} className="rounded-full border border-black/10 bg-white px-4 py-3 text-left font-(family-name:--font-body) text-sm text-black hover:bg-black/3">
-                            Update personal details
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </SectionCard>
-
-                  <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
-                    <SectionCard title="Latest activity" description="Your most recent linked purchases appear here for quick reference.">
-                      {orders.length === 0 ? (
-                        <div className="rounded-[24px] bg-white/60 p-6">
-                          <p className="font-(family-name:--font-body) text-base text-black/65">
-                            You have not placed any linked orders yet.
-                          </p>
-                          <Link href="/shop" className="mt-4 inline-flex rounded-full bg-black px-5 py-3 font-(family-name:--font-body) text-sm text-white hover:bg-black/85">
-                            Browse products
-                          </Link>
-                        </div>
-                      ) : (
-                        <div className="space-y-4">
-                          {orders.slice(0, 3).map((order) => (
-                            <article key={order.id} className="flex flex-col gap-4 rounded-[24px] border border-black/8 bg-white/76 p-5 sm:flex-row sm:items-center sm:justify-between">
-                              <div>
-                                <p className="font-(family-name:--font-body) text-2xl text-black">#{order.id}</p>
-                                <p className="mt-1 font-(family-name:--font-body) text-sm text-black/60">
-                                  {formatOrderDate(order.date_created)}
-                                </p>
-                              </div>
-                              <div className="flex flex-wrap items-center gap-3 sm:justify-end">
-                                <span className={`rounded-full border px-3 py-1 font-(family-name:--font-body) text-xs uppercase tracking-[0.16em] ${getStatusBadgeClasses(order.status)}`}>
-                                  {order.status.replace("-", " ")}
-                                </span>
-                                <p className="font-(family-name:--font-body) text-sm text-black/60">
-                                  {formatCurrency(order.total)}
-                                </p>
-                              </div>
-                            </article>
-                          ))}
-                        </div>
-                      )}
-                    </SectionCard>
-
-                    <SectionCard title="Account snapshot" description="A quick view of the details currently stored on your account.">
-                      <div className="space-y-5 rounded-[24px] border border-black/8 bg-white/76 p-5">
-                        <div>
-                          <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.2em] text-black/45">Contact</p>
-                          <p className="mt-2 font-(family-name:--font-body) text-base text-black">{getFullName(profile)}</p>
-                          <p className="mt-1 font-(family-name:--font-body) text-sm leading-6 text-black/60">{profile.email}</p>
-                        </div>
-                        <div>
-                          <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.2em] text-black/45">Billing address</p>
-                          <p className="mt-2 font-(family-name:--font-body) text-sm leading-6 text-black/60">
-                            {formatAddressSummary(profile.billing, "No billing address saved yet.")}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.2em] text-black/45">Shipping address</p>
-                          <p className="mt-2 font-(family-name:--font-body) text-sm leading-6 text-black/60">
-                            {formatAddressSummary(profile.shipping, "No shipping address saved yet.")}
-                          </p>
-                        </div>
-                      </div>
-                    </SectionCard>
-                  </div>
-                </>
-              )}
-
               {activeSection === "profile" && (
                 <SectionCard
-                  title="Manage your account details"
-                  description="Update the name and email address connected to your customer account."
+                  title="Profile"
+                  description="Update the name and email address connected to your account."
+                  delay={80}
                 >
                   <form onSubmit={savePersonalInformation} className="space-y-6">
                     <div className="grid gap-4 sm:grid-cols-2">
@@ -1158,7 +980,7 @@ export default function AccountPageClient() {
                       <button
                         type="submit"
                         disabled={savingProfile}
-                        className={`rounded-full px-6 py-3 font-(family-name:--font-body) text-sm text-white transition ${
+                        className={`button-soft border px-6 py-3 font-(family-name:--font-body) text-sm text-white transition ${
                           savingProfile ? "cursor-progress bg-black/60" : "cursor-pointer bg-black hover:bg-black/85"
                         }`}
                       >
@@ -1167,7 +989,7 @@ export default function AccountPageClient() {
                       <button
                         type="button"
                         onClick={() => setProfileDraft(createProfileDraft(profile))}
-                        className="rounded-full border border-black/10 bg-white px-6 py-3 font-(family-name:--font-body) text-sm text-black hover:bg-black/3"
+                        className="button-soft border border-black/10 px-6 py-3 font-(family-name:--font-body) text-sm text-black hover:bg-black/3"
                       >
                         Reset
                       </button>
@@ -1178,36 +1000,24 @@ export default function AccountPageClient() {
 
               {activeSection === "orders" && (
                 <SectionCard
-                  title="Review and track your orders"
-                  description="See the orders connected to this account, along with payment and fulfillment status."
+                  title="Orders"
+                  description="View the orders connected to this account."
+                  delay={80}
                 >
-                  <div className="mb-6 grid gap-4 sm:grid-cols-3">
-                    <StatCard label="Total Orders" value={String(orders.length)} hint="All linked orders" />
-                    <StatCard
-                      label="Open Orders"
-                      value={String(
-                        orders.filter((order) => !["completed", "cancelled", "refunded"].includes(order.status)).length,
-                      )}
-                      hint="Orders still in progress"
-                    />
-                    <StatCard
-                      label="Completed"
-                      value={String(orders.filter((order) => order.status === "completed").length)}
-                      hint="Successfully fulfilled"
-                    />
-                  </div>
-
                   {loading ? (
                     <p className="font-(family-name:--font-body) text-base text-black/60">Loading orders...</p>
                   ) : orders.length === 0 ? (
-                    <div className="rounded-[24px] bg-white/70 p-6">
+                    <div className="border border-black/10 p-6">
                       <p className="font-(family-name:--font-body) text-base text-black/65">
                         No orders have been linked to this account yet.
                       </p>
+                      <Link href="/shop" className="button-soft mt-4 inline-flex border border-black bg-black px-5 py-3 font-(family-name:--font-body) text-sm text-white hover:bg-black/85">
+                        Browse products
+                      </Link>
                     </div>
                   ) : (
                     <>
-                      <div className="hidden overflow-hidden rounded-[24px] border border-black/8 bg-white/82 lg:block">
+                      <div className="hidden overflow-hidden border border-black/10 lg:block">
                         <table className="w-full border-collapse text-left font-(family-name:--font-body)">
                           <thead className="bg-black/[0.03] text-sm text-black/65">
                             <tr>
@@ -1240,7 +1050,7 @@ export default function AccountPageClient() {
 
                       <div className="grid gap-4 lg:hidden">
                         {orders.map((order) => (
-                          <article key={order.id} className="rounded-[24px] border border-black/8 bg-white/78 p-5">
+                          <article key={order.id} className="border border-black/10 p-5">
                             <div className="flex items-start justify-between gap-3">
                               <div>
                                 <p className="font-(family-name:--font-body) text-2xl text-black">#{order.id}</p>
@@ -1275,12 +1085,13 @@ export default function AccountPageClient() {
 
               {activeSection === "addresses" && (
                 <SectionCard
-                  title="Manage billing and shipping addresses"
-                  description="Keep your saved address book current so future checkouts and order records stay accurate."
+                  title="Addresses"
+                  description="Update your billing and shipping details."
+                  delay={80}
                 >
                   <form onSubmit={saveAddresses} className="space-y-8">
                     <div className="grid gap-6 xl:grid-cols-2">
-                      <div className="rounded-[24px] border border-black/8 bg-white/76 p-5">
+                      <div className="border border-black/10 p-5">
                         <h3 className="font-(family-name:--font-body) text-2xl text-black">Billing Address</h3>
                         <div className="mt-5 grid gap-4">
                           <div className="grid gap-4 sm:grid-cols-2">
@@ -1305,7 +1116,7 @@ export default function AccountPageClient() {
                         </div>
                       </div>
 
-                      <div className="rounded-[24px] border border-black/8 bg-white/76 p-5">
+                      <div className="border border-black/10 p-5">
                         <h3 className="font-(family-name:--font-body) text-2xl text-black">Shipping Address</h3>
                         <div className="mt-5 grid gap-4">
                           <div className="grid gap-4 sm:grid-cols-2">
@@ -1331,7 +1142,7 @@ export default function AccountPageClient() {
                       <button
                         type="submit"
                         disabled={savingAddresses}
-                        className={`rounded-full px-6 py-3 font-(family-name:--font-body) text-sm text-white transition ${
+                        className={`button-soft border px-6 py-3 font-(family-name:--font-body) text-sm text-white transition ${
                           savingAddresses ? "cursor-progress bg-black/60" : "cursor-pointer bg-black hover:bg-black/85"
                         }`}
                       >
@@ -1343,7 +1154,7 @@ export default function AccountPageClient() {
                           setBillingDraft(normalizeAddress(profile.billing));
                           setShippingDraft(normalizeAddress(profile.shipping));
                         }}
-                        className="rounded-full border border-black/10 bg-white px-6 py-3 font-(family-name:--font-body) text-sm text-black hover:bg-black/3"
+                        className="button-soft border border-black/10 px-6 py-3 font-(family-name:--font-body) text-sm text-black hover:bg-black/3"
                       >
                         Reset
                       </button>
@@ -1354,8 +1165,9 @@ export default function AccountPageClient() {
 
               {activeSection === "password" && (
                 <SectionCard
-                  title="Change your password"
-                  description="Use a strong password with at least eight characters. You’ll need your current password to confirm the change."
+                  title="Password"
+                  description="Update your password using your current one to confirm the change."
+                  delay={80}
                 >
                   <form onSubmit={updatePassword} className="max-w-2xl space-y-5">
                     <AccountField
@@ -1384,10 +1196,10 @@ export default function AccountPageClient() {
                     <button
                       type="submit"
                       disabled={changingPassword}
-                      className={`rounded-full px-6 py-3 font-(family-name:--font-body) text-sm text-white transition ${
-                        changingPassword ? "cursor-progress bg-black/60" : "cursor-pointer bg-black hover:bg-black/85"
-                      }`}
-                    >
+                        className={`button-soft border px-6 py-3 font-(family-name:--font-body) text-sm text-white transition ${
+                          changingPassword ? "cursor-progress bg-black/60" : "cursor-pointer bg-black hover:bg-black/85"
+                        }`}
+                      >
                       {changingPassword ? "Updating..." : "Update Password"}
                     </button>
                   </form>
@@ -1399,6 +1211,7 @@ export default function AccountPageClient() {
                   title="Delete your account"
                   description="Deleting your account is permanent and should only be used when you are sure you no longer want access to this customer profile."
                   tone="danger"
+                  delay={80}
                 >
                   <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
                     <form onSubmit={deleteAccount} className="space-y-5">
@@ -1407,7 +1220,7 @@ export default function AccountPageClient() {
                       <button
                         type="submit"
                         disabled={deletingAccount}
-                        className={`rounded-full px-6 py-3 font-(family-name:--font-body) text-sm text-white transition ${
+                        className={`button-soft border px-6 py-3 font-(family-name:--font-body) text-sm text-white transition ${
                           deletingAccount ? "cursor-progress bg-rose-300" : "cursor-pointer bg-rose-600 hover:bg-rose-700"
                         }`}
                       >
@@ -1415,7 +1228,7 @@ export default function AccountPageClient() {
                       </button>
                     </form>
 
-                    <div className="rounded-[24px] border border-rose-200 bg-white/75 p-5">
+                    <div className="border border-rose-200 p-5">
                       <ul className="space-y-3 font-(family-name:--font-body) text-sm leading-6 text-black/65">
                         <li>Your account session will be removed immediately.</li>
                         <li>Stored account details will no longer be accessible from this profile.</li>
