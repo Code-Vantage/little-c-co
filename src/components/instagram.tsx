@@ -41,7 +41,7 @@ export default async function Instagram() {
               Glimpses of recent work
             </h2>
             <p className="mt-3 max-w-2xl font-(family-name:--font-body) text-[1rem] leading-7 text-black/72 md:text-[1.08rem]">
-              A collection of finished pieces, event details, and small moments from the studio.
+              A collection of finished pieces, event details, and small moments.
             </p>
           </div>
           <div className="flex justify-center md:block">

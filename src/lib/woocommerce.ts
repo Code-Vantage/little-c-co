@@ -8,6 +8,14 @@ export function isWooConfigured() {
   return Boolean(baseUrl && consumerKey && consumerSecret);
 }
 
+export function getWooSiteUrl() {
+  if (!baseUrl) {
+    throw new Error("WOOCOMMERCE_SITE_URL is not configured.");
+  }
+
+  return baseUrl;
+}
+
 function getBasicAuthHeader() {
   if (!consumerKey || !consumerSecret) {
     return "";

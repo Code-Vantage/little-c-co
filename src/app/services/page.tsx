@@ -13,7 +13,7 @@ export default function ServicesIndexPage() {
             Crafted details for thoughtful occasions
           </h1>
           <p className="mt-4 font-(family-name:--font-body) text-[1rem] leading-7 text-black/72 md:text-[1.08rem]">
-            Explore the studio&apos;s personalization services for gifting, events, and bespoke keepsakes.
+            Explore the personalization services for gifting, events, and bespoke keepsakes.
           </p>
         </div>
 

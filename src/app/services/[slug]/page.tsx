@@ -86,12 +86,12 @@ export default async function ServiceDetailPage({
             {/* <p className="mt-6 font-(family-name:--font-body) text-xs uppercase tracking-[0.32em] text-black/45">
               {service.label}
             </p> */}
-            <h1 className="mt-3 font-(family-name:--font-body) text-[2.25rem] leading-tight text-black md:text-[3.15rem] lg:text-[3.6rem]">
+            {/* <h1 className="mt-3 font-(family-name:--font-body) text-[2.25rem] leading-tight text-black md:text-[3.15rem] lg:text-[3.6rem]">
               {service.title}
             </h1>
             <p className="mt-2 font-(family-name:--font-heading) text-[1.8rem] leading-none text-black/55 md:text-[2.4rem] lg:text-[2.7rem]">
               {service.eyebrow}
-            </p>
+            </p> */}
             <p className="mt-5 max-w-2xl font-(family-name:--font-body) text-[1rem] leading-7 text-black/72 md:text-[1.05rem] lg:text-[1.1rem]">
               {service.description}
             </p>
@@ -151,7 +151,7 @@ export default async function ServiceDetailPage({
               Featured pieces coming soon
             </h2>
             <p className="mt-4 max-w-2xl font-(family-name:--font-body) text-base leading-7 text-black/72">
-              This service is currently presented as bespoke studio work. Product examples for this category will appear here as they are added to the collection.
+              This service is currently presented as bespoke work. Product examples for this category will appear here as they are added to the collection.
             </p>
           </section>
         )}

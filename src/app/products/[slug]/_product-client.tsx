@@ -91,12 +91,6 @@ export default function ProductDetailClient({
   }, [product.attributes]);
 
   useEffect(() => {
-    setSelectedImageIndex(0);
-    setColor("");
-    setStyle("");
-  }, [product.id]);
-
-  useEffect(() => {
     return () => {
       if (resetAddedStateTimerRef.current !== null) {
         window.clearTimeout(resetAddedStateTimerRef.current);
@@ -118,6 +112,11 @@ export default function ProductDetailClient({
         slug: product.slug,
         price: Number(product.price || product.regularPrice || 0),
         image: selectedImage?.src || product.images[0]?.src || "",
+        customizations: [
+          { key: "Color", value: color },
+          { key: "Style", value: style },
+          { key: "Personalization", value: personalization },
+        ],
       },
       quantity,
     );
@@ -380,7 +379,7 @@ export default function ProductDetailClient({
               </div>
               <div>
                 <p className="font-(family-name:--font-body) text-[0.72rem] uppercase tracking-[0.24em] text-black/45">
-                  Studio note
+                  Note
                 </p>
                 <p className="mt-2 leading-7">
                   Carefully finished with attention to composition and detail.

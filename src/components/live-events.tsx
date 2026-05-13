@@ -1,4 +1,8 @@
+import Link from "next/link";
 import Reveal from "@/components/reveal";
+import { services } from "@/lib/services";
+
+const liveEventServices = services.filter((service) => service.slug !== "leafing");
 
 export default function LiveEvents() {
   return (
@@ -29,19 +33,16 @@ export default function LiveEvents() {
           />
         </div>
 
-        <div className="mx-auto mt-6 grid max-w-5xl gap-4 border-t border-black/10 pt-6 text-center md:grid-cols-4 md:gap-6">
-          <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.22em] text-black/55">
-            Heat foiling
-          </p>
-          <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.22em] text-black/55">
-            Engraving
-          </p>
-          <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.22em] text-black/55">
-            Calligraphy
-          </p>
-          <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.22em] text-black/55">
-            Leafing
-          </p>
+        <div className="mx-auto mt-6 grid max-w-5xl gap-4 border-t border-black/10 pt-6 text-center md:grid-cols-3 md:gap-6">
+          {liveEventServices.map((service) => (
+            <Link
+              key={service.slug}
+              href={`/services/${service.slug}`}
+              className="font-(family-name:--font-body) text-sm uppercase tracking-[0.22em] text-black/55 transition-colors hover:text-black"
+            >
+              {service.label}
+            </Link>
+          ))}
         </div>
       </div>
     </Reveal>

@@ -27,10 +27,10 @@ export default function EmailSignup() {
           Stay Connected
         </p>
         <h2 className="mt-3 font-(family-name:--font-heading) text-4xl text-black md:text-5xl">
-          Join the mailing list
+          Let&apos;s Collaborate
         </h2>
         <p className="mx-auto mt-4 max-w-2xl font-(family-name:--font-body) text-[1rem] leading-7 text-black/72 md:text-[1.08rem]">
-          Occasional updates on new collections, live events, and thoughtful details from the studio.
+          Occasional updates on new collections, live events, and thoughtful details.
         </p>
 
         <form
@@ -49,7 +49,7 @@ export default function EmailSignup() {
             type="submit"
             className="button-soft inline-flex h-12 items-center justify-center bg-black px-6 font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-white transition-colors hover:bg-[#1a1a1a]"
           >
-            Subscribe
+            Submit
           </button>
         </form>
       </div>

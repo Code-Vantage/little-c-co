@@ -65,7 +65,7 @@ export default function About() {
         {/* Right: text content */}
         <div className="flex max-w-xl lg:max-w-2xl flex-col gap-5 md:gap-7 justify-center text-center md:text-left pt-0 md:pt-6">
           <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.32em] text-black/45 hidden md:block">
-            About the studio
+            About
           </p>
           <h2 className="font-(family-name:--font-heading) text-5xl text-black hidden md:block">
             Little c co.

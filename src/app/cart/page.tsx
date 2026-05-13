@@ -75,9 +75,12 @@ export default function CartPage() {
               </div>
 
               <div>
-                {items.map((item, index) => (
+                {items.map((item, index) => {
+                  const lineKey = item.key ?? item.id;
+
+                  return (
                   <article
-                    key={item.id}
+                    key={lineKey}
                     className={`lift-card px-5 py-5 sm:px-6 sm:py-6 ${
                       index !== items.length - 1 ? "border-b border-black/10" : ""
                     }`}
@@ -105,9 +108,18 @@ export default function CartPage() {
                           <p className="mt-1 font-(family-name:--font-body) text-base text-black/72">
                             {formatPrice(item.price)}
                           </p>
+                          {item.customizations && item.customizations.length > 0 && (
+                            <div className="mt-2 space-y-1 font-(family-name:--font-body) text-sm leading-6 text-black/60">
+                              {item.customizations.map((customization) => (
+                                <p key={`${customization.key}-${customization.value}`}>
+                                  {customization.key}: {customization.value}
+                                </p>
+                              ))}
+                            </div>
+                          )}
                           <button
                             type="button"
-                            onClick={() => removeItem(item.id)}
+                            onClick={() => removeItem(lineKey)}
                             className="mt-3 font-(family-name:--font-body) text-sm text-black/60 underline underline-offset-4 hover:text-black"
                           >
                             Remove
@@ -122,7 +134,7 @@ export default function CartPage() {
                         <div className="flex h-11.5 w-fit items-center border border-black/15">
                           <button
                             type="button"
-                            onClick={() => setItemQuantity(item.id, item.quantity - 1)}
+                            onClick={() => setItemQuantity(lineKey, item.quantity - 1)}
                             className="h-full w-11 border-r border-black/15 font-(family-name:--font-body) text-xl transition-colors hover:bg-black/5"
                             aria-label={`Decrease quantity for ${item.name}`}
                           >
@@ -133,7 +145,7 @@ export default function CartPage() {
                           </span>
                           <button
                             type="button"
-                            onClick={() => setItemQuantity(item.id, item.quantity + 1)}
+                            onClick={() => setItemQuantity(lineKey, item.quantity + 1)}
                             className="h-full w-11 border-l border-black/15 font-(family-name:--font-body) text-xl transition-colors hover:bg-black/5"
                             aria-label={`Increase quantity for ${item.name}`}
                           >
@@ -152,7 +164,8 @@ export default function CartPage() {
                       </div>
                     </div>
                   </article>
-                ))}
+                  );
+                })}
               </div>
             </section>
 

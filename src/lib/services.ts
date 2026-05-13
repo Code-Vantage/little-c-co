@@ -20,7 +20,7 @@ export const services: ServiceItem[] = [
     eyebrow: "Foil impressions",
     description:
       "Heat foiling brings a luminous metallic finish to invitations, stationery, gifting pieces, and event details, adding polish, depth, and a quietly luxurious feel.",
-    image: "/services/heatfoiling.JPG",
+    image: "/services/heatfoiling.webp",
     detailOneLabel: "Ideal for",
     detailOneText:
       "Invitations, menus, keepsake cards, name details, and elevated paper goods that benefit from a refined metallic finish.",
@@ -36,7 +36,7 @@ export const services: ServiceItem[] = [
     eyebrow: "Precision engraved",
     description:
       "Engraving offers crisp, permanent personalization for keepsakes and gifting pieces, with a timeless finish that feels precise, lasting, and quietly elegant.",
-    image: "/services/engraving.PNG",
+    image: "/services/engraving.webp",
     detailOneLabel: "Ideal for",
     detailOneText:
       "Boxes, plaques, keychains, glassware, and personal keepsakes that call for durable detail and a more classic presentation.",
@@ -52,7 +52,7 @@ export const services: ServiceItem[] = [
     eyebrow: "The art of lettering",
     description:
       "Calligraphy brings expressive, hand-lettered character to celebrations, gifting, decor, and custom pieces, making each detail feel personal and thoughtfully made.",
-    image: "/services/calligraphy.PNG",
+    image: "/services/calligraphy.webp",
     detailOneLabel: "Ideal for",
     detailOneText:
       "Place cards, framed artwork, event signage, letters, gifting details, and custom pieces designed to feel intimate and one of a kind.",
@@ -68,7 +68,7 @@ export const services: ServiceItem[] = [
     eyebrow: "Gilded details",
     description:
       "Leafing adds hand-finished metallic accents that bring softness, texture, and a more artisanal sense of luxury to bespoke pieces and event details.",
-    image: "/services/leafing.JPG",
+    image: "/services/leafing.webp",
     detailOneLabel: "Ideal for",
     detailOneText:
       "Frames, monograms, celebration pieces, place details, and decorative surfaces that need warmth, shimmer, and visual depth.",

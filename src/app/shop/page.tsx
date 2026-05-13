@@ -135,7 +135,7 @@ export default async function ShopPage({
           </h1>
         ) : (
           <h1 className="mt-3 font-(family-name:--font-body) text-[2.35rem] leading-tight text-black md:text-[3.2rem]">
-            Browse the <span className="font-(family-name:--font-heading)">collection</span>
+            <span className="font-(family-name:--font-heading)">collection</span>
           </h1>
         )}
         <p className="mt-3 font-(family-name:--font-body) text-[1rem] leading-7 text-black/70 md:text-[1.08rem]">
