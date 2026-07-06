@@ -8,11 +8,6 @@ const categories = [
     image: "/categories/cake.webp",
   },
   {
-    name: "Perfume bottle",
-    label: "Perfume\nbottle",
-    image: "/categories/perfume.webp",
-  },
-  {
     name: "Wine glass & bottle",
     label: "Wine glass &\nbottle",
     image: "/categories/wineglass.webp",
@@ -21,11 +16,6 @@ const categories = [
     name: "Compact mirror",
     label: "Compact\nmirror",
     image: "/categories/compact-mirror.png",
-  },
-  {
-    name: "Ring box",
-    label: "Ring box",
-    image: "/categories/ring_box.webp",
   },
   {
     name: "Letter",

@@ -61,22 +61,23 @@ export const services: ServiceItem[] = [
       "Fluid hand lettering with an elegant rhythm, balanced composition, and a bespoke studio-made feel.",
     sourceCategories: ["Calligraphy + Doodle Art"],
   },
-  {
-    slug: "leafing",
-    label: "Leafing",
-    title: "Leafing",
-    eyebrow: "Gilded details",
-    description:
-      "Leafing adds hand-finished metallic accents that bring softness, texture, and a more artisanal sense of luxury to bespoke pieces and event details.",
-    image: "/services/leafing.webp",
-    detailOneLabel: "Ideal for",
-    detailOneText:
-      "Frames, monograms, celebration pieces, place details, and decorative surfaces that need warmth, shimmer, and visual depth.",
-    detailTwoLabel: "Finish",
-    detailTwoText:
-      "Gilded highlights with a hand-applied character that catches the light beautifully and feels richly crafted.",
-    sourceCategories: ["Leafing"],
-  },
+  // Leafing temporarily hidden from nav/site — keep entry here to re-enable later.
+  // {
+  //   slug: "leafing",
+  //   label: "Leafing",
+  //   title: "Leafing",
+  //   eyebrow: "Gilded details",
+  //   description:
+  //     "Leafing adds hand-finished metallic accents that bring softness, texture, and a more artisanal sense of luxury to bespoke pieces and event details.",
+  //   image: "/services/leafing.webp",
+  //   detailOneLabel: "Ideal for",
+  //   detailOneText:
+  //     "Frames, monograms, celebration pieces, place details, and decorative surfaces that need warmth, shimmer, and visual depth.",
+  //   detailTwoLabel: "Finish",
+  //   detailTwoText:
+  //     "Gilded highlights with a hand-applied character that catches the light beautifully and feels richly crafted.",
+  //   sourceCategories: ["Leafing"],
+  // },
 ];
 
 export function getServiceBySlug(slug: string) {
