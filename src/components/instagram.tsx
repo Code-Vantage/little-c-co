@@ -9,18 +9,42 @@ interface InstagramPost {
   caption?: string;
 }
 
-async function getPosts(): Promise<InstagramPost[]> {
+async function refreshToken(token: string): Promise<string> {
   try {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_SITE_URL ??
-      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+    const res = await fetch(
+      `https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${token}`,
+      { cache: "no-store" }
+    );
+    if (!res.ok) return token;
+    const data = await res.json();
+    return (data.access_token as string) ?? token;
+  } catch {
+    return token;
+  }
+}
 
-    const res = await fetch(`${baseUrl}/api/instagram`, {
-      next: { revalidate: 3600 },
-    });
+async function getPosts(): Promise<InstagramPost[]> {
+  const token = process.env.INSTAGRAM_ACCESS_TOKEN;
+  if (!token) return [];
+
+  try {
+    const freshToken = await refreshToken(token);
+    const fields = "id,media_type,media_url,thumbnail_url,permalink,caption";
+    const res = await fetch(
+      `https://graph.instagram.com/me/media?fields=${fields}&limit=3&access_token=${freshToken}`,
+      { next: { revalidate: 3600 } }
+    );
 
     if (!res.ok) return [];
-    return res.json();
+    const data = await res.json();
+    return (data.data ?? []).map(
+      (p: { id: string; media_type: string; media_url: string; thumbnail_url?: string; permalink: string; caption?: string }) => ({
+        id: p.id,
+        media_url: p.media_type === "VIDEO" ? (p.thumbnail_url ?? p.media_url) : p.media_url,
+        permalink: p.permalink,
+        caption: p.caption ?? "",
+      })
+    );
   } catch {
     return [];
   }
