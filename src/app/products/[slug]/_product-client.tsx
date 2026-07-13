@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { StoreProduct } from "@/lib/types";
+import { getSchemaForProduct } from "@/lib/product-options";
 import { useCartStore } from "../../../lib/cart-store";
+import { ProductOptions } from "./_product-options";
 
 function RelatedProductCard({ product }: { product: StoreProduct }) {
   const image = product.images[0];
@@ -56,10 +58,17 @@ export default function ProductDetailClient({
 }) {
   type CartButtonState = "idle" | "adding" | "added";
 
+  const schema = useMemo(() => getSchemaForProduct(product), [product]);
+
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
   const [style, setStyle] = useState("");
   const [personalization, setPersonalization] = useState("");
+  const [schemaCustomizations, setSchemaCustomizations] = useState<
+    Array<{ key: string; value: string }>
+  >([]);
+  const [schemaQuantity, setSchemaQuantity] = useState(1);
+  const [schemaValid, setSchemaValid] = useState(false);
   const [showFullDesc, setShowFullDesc] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [cartButtonState, setCartButtonState] = useState<CartButtonState>("idle");
@@ -98,12 +107,37 @@ export default function ProductDetailClient({
     };
   }, []);
 
+  const handleSchemaChange = useCallback(
+    (result: {
+      customizations: Array<{ key: string; value: string }>;
+      quantity: number;
+      valid: boolean;
+    }) => {
+      setSchemaCustomizations(result.customizations);
+      setSchemaQuantity(result.quantity);
+      setSchemaValid(result.valid);
+    },
+    [],
+  );
+
   function handleAddToCart() {
     if (cartButtonState === "adding") {
       return;
     }
 
+    if (schema && !schemaValid) {
+      return;
+    }
+
     setCartButtonState("adding");
+
+    const customizations = schema
+      ? schemaCustomizations
+      : [
+          { key: "Color", value: color },
+          { key: "Style", value: style },
+          { key: "Personalization", value: personalization },
+        ];
 
     addItem(
       {
@@ -112,13 +146,9 @@ export default function ProductDetailClient({
         slug: product.slug,
         price: Number(product.price || product.regularPrice || 0),
         image: selectedImage?.src || product.images[0]?.src || "",
-        customizations: [
-          { key: "Color", value: color },
-          { key: "Style", value: style },
-          { key: "Personalization", value: personalization },
-        ],
+        customizations,
       },
-      quantity,
+      schema ? schemaQuantity : quantity,
     );
 
     setCartButtonState("added");
@@ -200,108 +230,116 @@ export default function ProductDetailClient({
 
             <div className="mt-8 border-t border-black/10 pt-7">
               <div className="grid gap-5">
-                <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_9rem] sm:items-end">
-                  <div>
-                    <label className="mb-2 block font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-black/48">
-                      Color
-                    </label>
-                    <div className="relative">
-                      <select
-                        value={color}
-                        onChange={(e) => setColor(e.target.value)}
-                        disabled={colorOptions.length === 0}
-                        className={`h-12 w-full appearance-none border border-black/15 bg-transparent px-4 pr-10 font-(family-name:--font-body) text-sm text-black ${
-                          colorOptions.length === 0 ? "cursor-not-allowed opacity-70" : "cursor-pointer"
-                        }`}
-                      >
-                        <option value="">{colorOptions.length > 0 ? "Select Color" : "No Color Options"}</option>
-                        {colorOptions.map((option, index) => (
-                          <option key={`${option}-${index}`} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                      <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
-                        <svg width="11" height="6" viewBox="0 0 11 6" fill="none">
-                          <path d="M1 1L5.5 5L10 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
+                {schema ? (
+                  <ProductOptions schema={schema} onChange={handleSchemaChange} />
+                ) : (
+                  <>
+                    <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_9rem] sm:items-end">
+                      <div>
+                        <label className="mb-2 block font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-black/48">
+                          Color
+                        </label>
+                        <div className="relative">
+                          <select
+                            value={color}
+                            onChange={(e) => setColor(e.target.value)}
+                            disabled={colorOptions.length === 0}
+                            className={`h-12 w-full appearance-none border border-black/15 bg-transparent px-4 pr-10 font-(family-name:--font-body) text-sm text-black ${
+                              colorOptions.length === 0 ? "cursor-not-allowed opacity-70" : "cursor-pointer"
+                            }`}
+                          >
+                            <option value="">{colorOptions.length > 0 ? "Select Color" : "No Color Options"}</option>
+                            {colorOptions.map((option, index) => (
+                              <option key={`${option}-${index}`} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+                            <svg width="11" height="6" viewBox="0 0 11 6" fill="none">
+                              <path d="M1 1L5.5 5L10 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="mb-2 block font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-black/48">
+                          Quantity
+                        </label>
+                        <div className="flex h-12 items-center border border-black/15">
+                          <button
+                            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                            className="h-full w-12 border-r border-black/15 font-(family-name:--font-body) text-xl transition-colors hover:bg-black/5"
+                            aria-label="Decrease quantity"
+                          >
+                            −
+                          </button>
+                          <span className="flex h-full flex-1 items-center justify-center font-(family-name:--font-body) text-lg">
+                            {quantity}
+                          </span>
+                          <button
+                            onClick={() => setQuantity((q) => q + 1)}
+                            className="h-full w-12 border-l border-black/15 font-(family-name:--font-body) text-xl transition-colors hover:bg-black/5"
+                            aria-label="Increase quantity"
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div>
-                    <label className="mb-2 block font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-black/48">
-                      Quantity
-                    </label>
-                    <div className="flex h-12 items-center border border-black/15">
-                      <button
-                        onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                        className="h-full w-12 border-r border-black/15 font-(family-name:--font-body) text-xl transition-colors hover:bg-black/5"
-                        aria-label="Decrease quantity"
-                      >
-                        −
-                      </button>
-                      <span className="flex h-full flex-1 items-center justify-center font-(family-name:--font-body) text-lg">
-                        {quantity}
-                      </span>
-                      <button
-                        onClick={() => setQuantity((q) => q + 1)}
-                        className="h-full w-12 border-l border-black/15 font-(family-name:--font-body) text-xl transition-colors hover:bg-black/5"
-                        aria-label="Increase quantity"
-                      >
-                        +
-                      </button>
+                    <div>
+                      <label className="mb-2 block font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-black/48">
+                        Style
+                      </label>
+                      <div className="relative">
+                        <select
+                          value={style}
+                          onChange={(e) => setStyle(e.target.value)}
+                          disabled={styleOptions.length === 0}
+                          className={`h-12 w-full appearance-none border border-black/15 bg-transparent px-4 pr-10 font-(family-name:--font-body) text-sm text-black ${
+                            styleOptions.length === 0 ? "cursor-not-allowed opacity-70" : "cursor-pointer"
+                          }`}
+                        >
+                          <option value="">{styleOptions.length > 0 ? "Select Style" : "No Style Options"}</option>
+                          {styleOptions.map((option, index) => (
+                            <option key={`${option}-${index}`} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+                          <svg width="11" height="6" viewBox="0 0 11 6" fill="none">
+                            <path d="M1 1L5.5 5L10 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                <div>
-                  <label className="mb-2 block font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-black/48">
-                    Style
-                  </label>
-                  <div className="relative">
-                    <select
-                      value={style}
-                      onChange={(e) => setStyle(e.target.value)}
-                      disabled={styleOptions.length === 0}
-                      className={`h-12 w-full appearance-none border border-black/15 bg-transparent px-4 pr-10 font-(family-name:--font-body) text-sm text-black ${
-                        styleOptions.length === 0 ? "cursor-not-allowed opacity-70" : "cursor-pointer"
-                      }`}
-                    >
-                      <option value="">{styleOptions.length > 0 ? "Select Style" : "No Style Options"}</option>
-                      {styleOptions.map((option, index) => (
-                        <option key={`${option}-${index}`} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
-                      <svg width="11" height="6" viewBox="0 0 11 6" fill="none">
-                        <path d="M1 1L5.5 5L10 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
+                    <div>
+                      <label className="mb-2 block font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-black/48">
+                        Personalization
+                      </label>
+                      <textarea
+                        value={personalization}
+                        onChange={(e) => setPersonalization(e.target.value)}
+                        placeholder="Add names, wording, or details here"
+                        rows={4}
+                        className="w-full resize-none border border-black/15 bg-transparent px-4 py-3 font-(family-name:--font-body) text-sm text-black placeholder:text-black/40"
+                      />
                     </div>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="mb-2 block font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-black/48">
-                    Personalization
-                  </label>
-                  <textarea
-                    value={personalization}
-                    onChange={(e) => setPersonalization(e.target.value)}
-                    placeholder="Add names, wording, or details here"
-                    rows={4}
-                    className="w-full resize-none border border-black/15 bg-transparent px-4 py-3 font-(family-name:--font-body) text-sm text-black placeholder:text-black/40"
-                  />
-                </div>
+                  </>
+                )}
 
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  disabled={cartButtonState === "adding"}
+                  disabled={cartButtonState === "adding" || (Boolean(schema) && !schemaValid)}
                   className={`relative mt-2 inline-flex h-14 w-full items-center justify-center overflow-hidden border font-(family-name:--font-body) text-[0.98rem] uppercase tracking-[0.18em] text-white transition-[background-color,border-color,transform] duration-300 ${
-                    cartButtonState === "added"
+                    schema && !schemaValid
+                      ? "cursor-not-allowed border-black/30 bg-black/40"
+                      : cartButtonState === "added"
                       ? "border-[#1f3b2d] bg-[#1f3b2d]"
                       : cartButtonState === "adding"
                         ? "cursor-progress border-black/75 bg-black/75"

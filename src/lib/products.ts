@@ -19,6 +19,7 @@ export async function getProducts(): Promise<StoreProduct[]> {
       images: Array<{ src: string; alt: string }>;
       categories: Array<{ id: number; name: string; slug: string }>;
       attributes?: Array<{ name: string; options?: string[] }>;
+      meta_data?: Array<{ key: string; value: unknown }>;
     }>>("/wp-json/wc/v3/products?status=publish&per_page=100");
 
     return products.map((product) => {
