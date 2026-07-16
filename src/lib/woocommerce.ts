@@ -116,6 +116,27 @@ type WooProduct = {
   meta_data?: Array<{ key: string; value: unknown }>;
 };
 
+const HTML_ENTITIES: Record<string, string> = {
+  "&amp;": "&",
+  "&#038;": "&",
+  "&#8217;": "’",
+  "&#8216;": "‘",
+  "&#8220;": "“",
+  "&#8221;": "”",
+  "&#8211;": "–",
+  "&#8212;": "—",
+  "&nbsp;": " ",
+  "&quot;": '"',
+  "&#039;": "'",
+};
+
+// WooCommerce's REST API returns titles/names as WordPress renders them: with
+// HTML entities encoded (e.g. "Cake Knife &amp; Server Set"). Decode once here
+// so every consumer of `name`/category labels gets plain text.
+function decodeHtmlEntities(value: string): string {
+  return value.replace(/&(?:amp|#038|#8217|#8216|#8220|#8221|#8211|#8212|nbsp|quot|#039);/g, (match) => HTML_ENTITIES[match] ?? match);
+}
+
 function readCustomizationType(product: WooProduct): string | undefined {
   const meta = product.meta_data?.find((entry) => entry.key === "customization_type");
   const value = meta?.value;
@@ -128,7 +149,7 @@ function readCustomizationType(product: WooProduct): string | undefined {
 export function normalizeWooProduct(product: WooProduct): StoreProduct {
   return {
     id: product.id,
-    name: product.name,
+    name: decodeHtmlEntities(product.name),
     slug: product.slug,
     description: product.description,
     shortDescription: product.short_description,
@@ -136,7 +157,7 @@ export function normalizeWooProduct(product: WooProduct): StoreProduct {
     regularPrice: product.regular_price,
     stockStatus: product.stock_status,
     images: product.images ?? [],
-    categories: (product.categories ?? []).map((c) => c.name),
+    categories: (product.categories ?? []).map((c) => decodeHtmlEntities(c.name)),
     attributes: (product.attributes ?? [])
       .filter((attribute) => attribute.name && (attribute.options?.length ?? 0) > 0)
       .map((attribute) => ({

@@ -8,9 +8,9 @@ const categories = [
     image: "/categories/cake.webp",
   },
   {
-    name: "Wine glass & bottle",
-    label: "Wine glass &\nbottle",
-    image: "/categories/wineglass.webp",
+    name: "Wine glass",
+    label: "Wine glass",
+    image: "/categories/wine-glass.webp",
   },
   {
     name: "Compact mirror",

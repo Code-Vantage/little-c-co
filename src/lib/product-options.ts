@@ -16,6 +16,7 @@ const FRAME: ProductOptionSchema = {
   type: "frame",
   title: "Personalised Frame",
   options: [
+    { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
     {
       kind: "radio",
       id: "style",
@@ -106,6 +107,7 @@ const LETTER_GLASS_BOX: ProductOptionSchema = {
   type: "letter-glass-box",
   title: "Handwritten Letter in an Engraved Glass Box",
   options: [
+    { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
     {
       kind: "radio",
       id: "letter_style",
@@ -365,6 +367,7 @@ const SIGNAGE: ProductOptionSchema = {
   type: "signage",
   title: "Handpainted Signage",
   options: [
+    { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
     {
       kind: "radio",
       id: "signage_type",
@@ -499,6 +502,7 @@ const RING_BOX: ProductOptionSchema = {
   type: "ring-box",
   title: "Personalised Glass Ring Box",
   options: [
+    { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
     {
       kind: "radio",
       id: "box_size",
@@ -609,6 +613,7 @@ const CURATED_GIFT: ProductOptionSchema = {
   type: "curated-gift",
   title: "Personalised Gift",
   options: [
+    { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
     {
       kind: "radio",
       id: "gift_type",
@@ -699,6 +704,7 @@ const GREETING_CARD: ProductOptionSchema = {
   type: "greeting-card",
   title: "Personalised Greeting Card",
   options: [
+    { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
     {
       kind: "radio",
       id: "style",
