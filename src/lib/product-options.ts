@@ -1,37 +1,12 @@
-import type {
-  OptionChoice,
-  ProductOption,
-  ProductOptionSchema,
-  StoreProduct,
-  TextOption,
-} from "@/lib/types";
+import type { OptionChoice, ProductOptionSchema, StoreProduct } from "@/lib/types";
+
+// All customer-facing copy in this file is transcribed verbatim from
+// `products.txt`, which is the ground truth for product customization content.
+// Do not paraphrase, shorten, or drop wording when editing these schemas.
 
 // Helper: turn a list of plain strings into OptionChoice[] (value === label).
 function choices(...values: string[]): OptionChoice[] {
   return values.map((value) => ({ value, label: value }));
-}
-
-// Universal trailing text areas that appear on every product in the brief.
-const PERSONALISATION_FIELD: TextOption = {
-  kind: "textarea",
-  id: "personalisation",
-  label: "Personalisation",
-  placeholder: "Names, wording, dates, or any text you'd like included.",
-  required: false,
-};
-
-const SPECIAL_REQUEST_FIELD: TextOption = {
-  kind: "textarea",
-  id: "special_request",
-  label: "Special Request",
-  placeholder:
-    "Gifting occasion, recipient details, colour palette, or any ideas for us to consider.",
-  required: false,
-};
-
-// Append the two universal fields to a product's own options.
-function withBaseline(options: ProductOption[]): ProductOption[] {
-  return [...options, PERSONALISATION_FIELD, SPECIAL_REQUEST_FIELD];
 }
 
 // ---------------------------------------------------------------------------
@@ -40,14 +15,27 @@ function withBaseline(options: ProductOption[]): ProductOption[] {
 const FRAME: ProductOptionSchema = {
   type: "frame",
   title: "Personalised Frame",
-  options: withBaseline([
+  options: [
     {
       kind: "radio",
       id: "style",
       label: "Style",
       help: "Choose your preferred artwork style.",
       required: true,
-      options: choices("Doily Paper", "Glass Engraving"),
+      options: [
+        {
+          value: "Doily Paper",
+          label: "Doily Paper",
+          description:
+            "Handwritten calligraphy on premium doily paper, beautifully displayed within the glass frame.",
+        },
+        {
+          value: "Glass Engraving",
+          label: "Glass Engraving",
+          description:
+            "Precision engraving on the front glass surface, with optional decorative finishes.",
+        },
+      ],
     },
     {
       kind: "select",
@@ -94,7 +82,21 @@ const FRAME: ProductOptionSchema = {
       options: choices("Gold Fill", "Natural Finish"),
       showIf: { optionId: "style", equals: "Glass Engraving" },
     },
-  ]),
+    {
+      kind: "textarea",
+      id: "personalisation",
+      label: "Personalisation",
+      help: "Enter your quote, message, name, date or any special text you'd like included.",
+      required: false,
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share any special requests, gifting occasion, recipient details, or ideas you'd like us to consider while creating your artwork",
+      required: false,
+    },
+  ],
 };
 
 // ---------------------------------------------------------------------------
@@ -110,7 +112,20 @@ const LETTER_GLASS_BOX: ProductOptionSchema = {
       label: "Letter Style",
       help: "Choose how you'd like your letter to be presented.",
       required: true,
-      options: choices("Handwritten Calligraphy", "Printed Letter"),
+      options: [
+        {
+          value: "Handwritten Calligraphy",
+          label: "Handwritten Calligraphy",
+          description:
+            "Your message is carefully handwritten in modern calligraphy on premium paper and delicately rolled to fit inside the glass box.",
+        },
+        {
+          value: "Printed Letter",
+          label: "Printed Letter",
+          description:
+            "Your message is professionally printed in a timeless serif font for a clean, elegant finish.",
+        },
+      ],
     },
     {
       kind: "select",
@@ -156,18 +171,24 @@ const LETTER_GLASS_BOX: ProductOptionSchema = {
       kind: "textarea",
       id: "letter_content",
       label: "Letter Content",
-      help: "Enter the letter, vows, poem, or message to be handwritten or printed inside the glass box.",
+      help: "Enter the letter, vows, poem, message, or any text you'd like handwritten or printed inside the glass box.",
       required: true,
     },
     {
       kind: "text",
       id: "glass_engraving_text",
       label: "Glass Engraving Text (Optional)",
-      help: "Custom text — name(s), initials, date or short quote.",
+      help: "Custom text. Suggestions above.",
       required: false,
       showIf: { optionId: "glass_engraving", equals: "Engraving" },
     },
-    SPECIAL_REQUEST_FIELD,
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share any special requests, gifting occasion, recipient details, or ideas you'd like us to consider while creating your keepsake.",
+      required: false,
+    },
   ],
 };
 
@@ -177,14 +198,27 @@ const LETTER_GLASS_BOX: ProductOptionSchema = {
 const COMPACT_MIRROR: ProductOptionSchema = {
   type: "compact-mirror",
   title: "Personalised Compact Mirror",
-  options: withBaseline([
+  options: [
     {
       kind: "radio",
       id: "engraving_location",
       label: "Engraving Location",
       help: "Choose where you'd like your personalised engraving to be featured.",
       required: true,
-      options: choices("Exterior Engraving", "Interior Engraving"),
+      options: [
+        {
+          value: "Exterior Engraving",
+          label: "Exterior Engraving",
+          description:
+            "Your personalised design is delicately engraved on the outer surface of the compact mirror for a timeless and elegant finish.",
+        },
+        {
+          value: "Interior Engraving",
+          label: "Interior Engraving",
+          description:
+            "A hidden personalised message engraved inside the compact, creating a meaningful detail revealed whenever it is opened.",
+        },
+      ],
     },
     { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
     {
@@ -211,7 +245,21 @@ const COMPACT_MIRROR: ProductOptionSchema = {
       required: true,
       options: choices("Gold Fill", "Silver Fill", "Natural Finish"),
     },
-  ]),
+    {
+      kind: "textarea",
+      id: "personalisation",
+      label: "Personalisation",
+      help: "Enter your name(s), initials, wedding date, or any special text you'd like included.",
+      required: false,
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share any special requests, gifting occasion, recipient details, or ideas you'd like us to consider while creating your personalised mirror.",
+      required: false,
+    },
+  ],
 };
 
 // ---------------------------------------------------------------------------
@@ -236,21 +284,36 @@ const CAKE_SET: ProductOptionSchema = {
       label: "Engraving Details",
       help: "Choose your preferred engraving style.",
       required: true,
-      options: choices("Cake Knife Engraving", "Cake Server Engraving", "Both"),
+      options: [
+        { value: "Cake Knife Engraving", label: "Cake Knife Engraving" },
+        { value: "Cake Server Engraving", label: "Cake Server Engraving" },
+        {
+          value: "Both",
+          label: "Both",
+          description:
+            "Custom engraving on both the cake knife and server, creating a coordinated and elegant set designed for your special occasion.",
+        },
+      ],
+    },
+    {
+      kind: "note",
+      id: "custom_engraving_heading",
+      label: "Custom Engraving",
+      help: "Personalise each piece with meaningful details.",
     },
     {
       kind: "text",
       id: "engraving_knife",
-      label: "Cake Knife Engraving",
-      help: "Initials, names, date, quote, prefix, or any special text for the knife.",
+      label: "Cake Knife",
+      help: "Enter initials, names, date, quote, prefix, or any special text you'd like engraved on the knife.",
       required: false,
       showIf: { optionId: "engraving_details", equals: ["Cake Knife Engraving", "Both"] },
     },
     {
       kind: "text",
       id: "engraving_server",
-      label: "Cake Server Engraving",
-      help: "Initials, names, date, quote, prefix, or any special text for the server.",
+      label: "Cake Server",
+      help: "Enter initials, names, date, quote, prefix, or any special text you'd like engraved on the server.",
       required: false,
       showIf: { optionId: "engraving_details", equals: ["Cake Server Engraving", "Both"] },
     },
@@ -263,7 +326,7 @@ const CAKE_SET: ProductOptionSchema = {
       options: choices("Silver Fill", "Natural Finish"),
     },
     {
-      kind: "radio",
+      kind: "select",
       id: "personalisation_ideas",
       label: "Personalisation Ideas",
       help: "Create a design that reflects your celebration.",
@@ -276,7 +339,20 @@ const CAKE_SET: ProductOptionSchema = {
         "Custom Text",
       ),
     },
-    SPECIAL_REQUEST_FIELD,
+    {
+      kind: "text",
+      id: "personalisation_ideas_custom_text",
+      label: "Custom Text",
+      required: false,
+      showIf: { optionId: "personalisation_ideas", equals: "Custom Text" },
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share any special requests, gifting occasion, recipient details, design preferences, or ideas you'd like us to consider while creating your personalised set.",
+      required: false,
+    },
   ],
 };
 
@@ -288,33 +364,58 @@ const CAKE_SET: ProductOptionSchema = {
 const SIGNAGE: ProductOptionSchema = {
   type: "signage",
   title: "Handpainted Signage",
-  options: withBaseline([
+  options: [
     {
       kind: "radio",
       id: "signage_type",
       label: "Signage Type",
-      help: "For intimate and small hosting events only.",
+      help: "Choose the type of signage you'd like.",
       required: true,
-      options: choices("Food & Drinks Menu", "Seating Arrangement Chart"),
+      options: [
+        {
+          value: "Food & Drinks Menu",
+          label: "Food & Drinks Menu (For intimate and small hosting events only)",
+          description:
+            "Handpainted menu signage featuring elegant calligraphy with custom illustrations inspired by the food and beverages being served.",
+        },
+        {
+          value: "Seating Arrangement Chart",
+          label: "Seating Arrangement Chart (For intimate and small hosting events only)",
+          description:
+            "A handpainted seating display featuring guest names and table assignments, designed to suit your event theme.",
+        },
+      ],
     },
     {
       kind: "radio",
       id: "material",
       label: "Material",
       required: true,
-      options: choices(
-        "White Canvas",
-        "Black Canvas",
-        "MDF Wooden Board",
-        "Linen Fabric",
-      ),
+      options: [
+        { value: "White Canvas", label: "White Canvas" },
+        { value: "Black Canvas", label: "Black Canvas" },
+        { value: "MDF Wooden Board", label: "MDF Wooden Board" },
+        {
+          value: "Linen Fabric",
+          label: "Linen Fabric",
+          description: "Available in custom sizes upon request.",
+        },
+      ],
     },
     {
       kind: "radio",
       id: "shape",
       label: "Shape",
       required: true,
-      options: choices("Rectangle", "Square", "Arched Rectangle"),
+      options: [
+        { value: "Rectangle", label: "Rectangle" },
+        { value: "Square", label: "Square" },
+        {
+          value: "Arched Rectangle",
+          label: "Arched Rectangle",
+          description: "Available in custom sizes upon request.",
+        },
+      ],
     },
     {
       kind: "select",
@@ -361,7 +462,34 @@ const SIGNAGE: ProductOptionSchema = {
       required: true,
       options: choices("Black", "Red", "White", "Blue", "Green"),
     },
-  ]),
+    {
+      kind: "textarea",
+      id: "personalisation",
+      label: "Personalisation",
+      help: "Enter your menu items, seating details, event names, dates, welcome message, or any wording you'd like included on your signage.",
+      required: false,
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share your event theme, colour palette, reference images, preferred illustration preferences, or any special requests you'd like us to consider while creating your signage.",
+      required: false,
+    },
+  ],
+  afterCart: [
+    {
+      kind: "note",
+      id: "please_note",
+      label: "Please Note",
+      items: [
+        "Pricing varies depending on the signage type, material, size, shape, and level of illustration.",
+        "Each signage piece is individually handpainted and hand-lettered, making every creation one of a kind.",
+        "Suitable for intimate celebrations and small hosting events.",
+        "Custom sizes and bespoke signage designs are available upon request.",
+      ],
+    },
+  ],
 };
 
 // ---------------------------------------------------------------------------
@@ -372,11 +500,18 @@ const RING_BOX: ProductOptionSchema = {
   title: "Personalised Glass Ring Box",
   options: [
     {
-      kind: "select",
+      kind: "radio",
       id: "box_size",
       label: "Box Size",
       required: true,
-      options: choices("3 × 3 in"),
+      options: [
+        {
+          value: "3 × 3 in",
+          label: "3 × 3 in",
+          description:
+            "Perfect for engagement rings, wedding bands, proposal photos, and ceremony styling.",
+        },
+      ],
     },
     {
       kind: "radio",
@@ -390,7 +525,7 @@ const RING_BOX: ProductOptionSchema = {
       kind: "text",
       id: "custom_engraving",
       label: "Custom Engraving",
-      help: "Names, initials, date, or short text to be engraved on your glass ring box.",
+      help: "Enter the names, initials, date, or short text you'd like engraved on your glass ring box.",
       required: false,
     },
     {
@@ -402,21 +537,19 @@ const RING_BOX: ProductOptionSchema = {
       options: choices("Gold Fill", "Natural Finish"),
     },
     {
-      kind: "radio",
+      kind: "textarea",
       id: "personalisation_ideas",
       label: "Personalisation Ideas",
-      help: "Choose your preferred engraving design.",
+      help: "Choose your preferred engraving design. For example: Mr. & Mrs., Bride & Groom, Names & Date, Date, Initials, or Short Text.",
       required: false,
-      options: choices(
-        "Mr. & Mrs.",
-        "Bride & Groom",
-        "Names & Date",
-        "Date",
-        "Initials",
-        "Short Text",
-      ),
     },
-    SPECIAL_REQUEST_FIELD,
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share any special requests, gifting occasion, preferred layout, or design details you'd like us to consider while creating your personalised ring box.",
+      required: false,
+    },
   ],
 };
 
@@ -426,13 +559,13 @@ const RING_BOX: ProductOptionSchema = {
 const WINE_GLASS: ProductOptionSchema = {
   type: "wine-glass",
   title: "Personalised Wine Glass",
-  options: withBaseline([
+  options: [
     { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
     {
       kind: "radio",
       id: "botanical_accents",
       label: "Botanical Accents",
-      help: "Delicate hand-painted botanical accents paired with your engraving.",
+      help: "Delicate hand-painted botanical accents paired with your personalised engraving for an elegant finish.",
       required: true,
       options: choices("Handpainted Botanicals", "No Botanicals"),
     },
@@ -452,7 +585,21 @@ const WINE_GLASS: ProductOptionSchema = {
       required: true,
       options: choices("Natural Finish", "Gold Fill", "Silver Fill"),
     },
-  ]),
+    {
+      kind: "textarea",
+      id: "personalisation",
+      label: "Personalisation",
+      help: "Enter the name(s), quote, date, initials, or any special text you'd like engraved.",
+      required: false,
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share any custom design ideas, gifting occasion, recipient details, or other requests you'd like us to consider while creating your personalised wine glass.",
+      required: false,
+    },
+  ],
 };
 
 // ---------------------------------------------------------------------------
@@ -461,7 +608,7 @@ const WINE_GLASS: ProductOptionSchema = {
 const CURATED_GIFT: ProductOptionSchema = {
   type: "curated-gift",
   title: "Personalised Gift",
-  options: withBaseline([
+  options: [
     {
       kind: "radio",
       id: "gift_type",
@@ -518,7 +665,21 @@ const CURATED_GIFT: ProductOptionSchema = {
       required: true,
       showIf: { optionId: "greeting_card", equals: "Yes" },
     },
-  ]),
+    {
+      kind: "textarea",
+      id: "personalisation",
+      label: "Personalisation",
+      help: "Enter the name, personalised message, date, or any special text you'd like included.",
+      required: false,
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share the occasion, recipient details, preferred colours, gift theme, wrapping preferences, or any custom ideas you'd like us to consider while creating your personalised gift.",
+      required: false,
+    },
+  ],
 };
 
 // ---------------------------------------------------------------------------
@@ -537,7 +698,7 @@ const DOODLE_ILLUSTRATION_OPTIONS = [
 const GREETING_CARD: ProductOptionSchema = {
   type: "greeting-card",
   title: "Personalised Greeting Card",
-  options: withBaseline([
+  options: [
     {
       kind: "radio",
       id: "style",
@@ -548,6 +709,7 @@ const GREETING_CARD: ProductOptionSchema = {
         {
           value: "Handwritten Calligraphy",
           label: "Handwritten Calligraphy",
+          description: "Beautifully hand-lettered with your personalised message.",
         },
       ],
     },
@@ -555,7 +717,7 @@ const GREETING_CARD: ProductOptionSchema = {
       kind: "radio",
       id: "doodle_illustration",
       label: "Doodle Illustration (Optional)",
-      help: "Add simple hand-drawn doodles to the card.",
+      help: "Add simple hand-drawn doodles to the card",
       required: false,
       options: choices(...DOODLE_ILLUSTRATION_OPTIONS),
     },
@@ -563,7 +725,7 @@ const GREETING_CARD: ProductOptionSchema = {
       kind: "text",
       id: "doodle_idea",
       label: "Doodle Idea",
-      help: "Tell us what you'd like doodled — e.g. flowers, birthday cake, wedding rings, or any other occasion-specific detail.",
+      help: "Tell us what you'd like doodled. For example: flowers, birthday cake, wedding rings or any other occasion specific detail to match your gift.",
       required: false,
       // Shown whenever any doodle illustration is chosen (not only "Custom Doodle").
       showIf: { optionId: "doodle_illustration", equals: DOODLE_ILLUSTRATION_OPTIONS },
@@ -600,7 +762,21 @@ const GREETING_CARD: ProductOptionSchema = {
       required: true,
       options: choices("Kraft Envelope", "No Envelope"),
     },
-  ]),
+    {
+      kind: "textarea",
+      id: "personalisation",
+      label: "Personalisation",
+      help: "Enter your message, recipient name, occasion in detail, or any special text you'd like included.",
+      required: false,
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share your preferred colours, theme, or any custom requests you'd like us to consider while creating your greeting card.",
+      required: false,
+    },
+  ],
 };
 
 export const PRODUCT_OPTION_SCHEMAS: Record<string, ProductOptionSchema> = {

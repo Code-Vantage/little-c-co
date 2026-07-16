@@ -32,6 +32,21 @@ const categories = [
     label: "Signage",
     image: "/categories/signage.webp",
   },
+  {
+    name: "Personalised frame",
+    label: "Personalised\nframe",
+    image: "/categories/personalised-frame.webp",
+  },
+  {
+    name: "Personalised gifting",
+    label: "Personalised\ngifting",
+    image: "/categories/personalised-gifting.webp",
+  },
+  {
+    name: "Greeting card",
+    label: "Greeting card",
+    image: "/categories/greeting-card.webp",
+  },
 ] as const;
 
 function CategoryCards({ duplicate = false }: { duplicate?: boolean }) {

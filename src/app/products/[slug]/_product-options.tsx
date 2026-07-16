@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type {
+  NoteOption,
   OptionChoice,
   OptionCondition,
   ProductOption,
@@ -20,6 +21,23 @@ type OptionsResult = {
 const labelClass =
   "mb-2 block font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-black/48";
 const helpClass = "mb-2 font-(family-name:--font-body) text-xs leading-5 text-black/45";
+
+/** Read-only informational block: heading, intro copy, and/or a bulleted list. */
+export function NoteBlock({ option }: { option: NoteOption }) {
+  return (
+    <div>
+      {option.label && <p className={labelClass}>{option.label}</p>}
+      {option.help && <p className={helpClass}>{option.help}</p>}
+      {option.items && option.items.length > 0 && (
+        <ul className="ml-4 list-disc font-(family-name:--font-body) text-xs leading-6 text-black/55">
+          {option.items.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 function conditionMet(condition: OptionCondition | undefined, state: OptionState): boolean {
   if (!condition) {
@@ -98,6 +116,10 @@ export function ProductOptions({
       const customizations: Array<{ key: string; value: string }> = [];
 
       for (const option of visible) {
+        if (option.kind === "note") {
+          continue;
+        }
+
         const value = (nextState[option.id] ?? "").trim();
 
         if (option.kind === "quantity") {
@@ -136,12 +158,18 @@ export function ProductOptions({
           }
         }
 
-        onChange(buildResult(next));
         return next;
       });
     },
-    [schema.options, buildResult, onChange],
+    [schema.options],
   );
+
+  // Notify the parent after the state commit, never from inside the updater —
+  // React can run updaters during render, which would set state in the parent
+  // mid-render.
+  useEffect(() => {
+    onChange(buildResult(state));
+  }, [state, buildResult, onChange]);
 
   async function handleFile(id: string, file: File | null, maxSizeMB?: number) {
     if (!file) {
@@ -173,6 +201,10 @@ export function ProductOptions({
   return (
     <div className="grid gap-5">
       {visibleOptions.map((option) => {
+        if (option.kind === "note") {
+          return <NoteBlock key={option.id} option={option} />;
+        }
+
         if (option.kind === "quantity") {
           const min = option.min ?? 1;
           const current = Number.parseInt(state[option.id] ?? "", 10);
@@ -270,6 +302,57 @@ export function ProductOptions({
         if (option.kind !== "select" && option.kind !== "radio") {
           return null;
         }
+
+        // Radios render as a visible list so each choice can surface its own
+        // description on hover/focus — a native <option> cannot.
+        if (option.kind === "radio") {
+          const radioChoices = resolveChoices(option, state);
+          const selected = state[option.id] ?? "";
+          return (
+            <div key={option.id}>
+              <label className={labelClass}>
+                {option.label}
+                {option.required ? " *" : ""}
+              </label>
+              {option.help && <p className={helpClass}>{option.help}</p>}
+              <div className="grid gap-2">
+                {radioChoices.map((choice) => {
+                  const isSelected = selected === choice.value;
+                  return (
+                    <label
+                      key={choice.value}
+                      className={`flex cursor-pointer gap-3 border px-4 py-3 transition-colors ${
+                        isSelected
+                          ? "border-black bg-black/3"
+                          : "border-black/15 hover:border-black/40"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name={option.id}
+                        value={choice.value}
+                        checked={isSelected}
+                        onChange={() => update(option.id, choice.value)}
+                        className="mt-1 h-4 w-4 shrink-0 accent-black"
+                      />
+                      <span className="min-w-0">
+                        <span className="block font-(family-name:--font-body) text-sm text-black">
+                          {choice.label}
+                        </span>
+                        {choice.description && (
+                          <span className="mt-1 block font-(family-name:--font-body) text-xs leading-5 text-black/55">
+                            {choice.description}
+                          </span>
+                        )}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
         const resolved = resolveChoices(option, state);
         const disabled = resolved.length === 0;
         return (

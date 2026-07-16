@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { StoreProduct } from "@/lib/types";
 import { getSchemaForProduct } from "@/lib/product-options";
 import { useCartStore } from "../../../lib/cart-store";
-import { ProductOptions } from "./_product-options";
+import { NoteBlock, ProductOptions } from "./_product-options";
 
 function RelatedProductCard({ product }: { product: StoreProduct }) {
   const image = product.images[0];
@@ -69,7 +69,6 @@ export default function ProductDetailClient({
   >([]);
   const [schemaQuantity, setSchemaQuantity] = useState(1);
   const [schemaValid, setSchemaValid] = useState(false);
-  const [showFullDesc, setShowFullDesc] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [cartButtonState, setCartButtonState] = useState<CartButtonState>("idle");
   const resetAddedStateTimerRef = useRef<number | null>(null);
@@ -85,7 +84,11 @@ export default function ProductDetailClient({
   const primaryCategory = product.categories?.[0] ?? "Product";
 
   const description = product.description || product.shortDescription || "";
-  const descPreview = description.length > 260 ? description.slice(0, 260) : description;
+  // Local-delivery products carry the note in the title; surface it as its own
+  // badge so it can never be lost in the description copy.
+  const localDeliveryOnly = /local delivery only/i.test(
+    `${product.name} ${description}`,
+  );
   const colorOptions = useMemo(() => {
     const colorAttribute = (product.attributes ?? []).find((attribute) =>
       /color/i.test(attribute.name),
@@ -221,11 +224,17 @@ export default function ProductDetailClient({
               </span>
             </div>
 
-            {description && (
-              <p className="mt-6 max-w-3xl font-(family-name:--font-body) text-[1.02rem] leading-8 text-black/72">
-                {descPreview}
-                {description.length > 260 ? "..." : ""}
+            {localDeliveryOnly && (
+              <p className="mt-4 inline-block border border-black/20 px-3 py-1.5 font-(family-name:--font-body) text-[0.72rem] uppercase tracking-[0.18em] text-black/65">
+                Available for Local Delivery Only
               </p>
+            )}
+
+            {description && (
+              <div
+                className="mt-6 max-w-3xl font-(family-name:--font-body) text-[1.02rem] leading-8 text-black/72 [&>p]:mb-4 [&>ul]:ml-4 [&>ul]:list-disc"
+                dangerouslySetInnerHTML={{ __html: description }}
+              />
             )}
 
             <div className="mt-8 border-t border-black/10 pt-7">
@@ -395,6 +404,14 @@ export default function ProductDetailClient({
                     Added to cart. {cartItemCount} item{cartItemCount === 1 ? "" : "s"} in cart.
                   </span>
                 </div>
+
+                {schema?.afterCart?.length ? (
+                  <div className="grid gap-5 border-t border-black/10 pt-6">
+                    {schema.afterCart.map((note) => (
+                      <NoteBlock key={note.id} option={note} />
+                    ))}
+                  </div>
+                ) : null}
               </div>
             </div>
 
@@ -439,21 +456,8 @@ export default function ProductDetailClient({
             </h2>
             <div
               className="mt-6 max-w-3xl font-(family-name:--font-body) text-[1rem] leading-8 text-black/78 [&>p]:mb-4 [&>ul]:ml-4 [&>ul]:list-disc"
-              dangerouslySetInnerHTML={{
-                __html:
-                  showFullDesc || description.length <= 260
-                    ? description
-                    : `${descPreview}...`,
-              }}
+              dangerouslySetInnerHTML={{ __html: description }}
             />
-            {description.length > 260 && !showFullDesc && (
-              <button
-                onClick={() => setShowFullDesc(true)}
-                className="mt-1 font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-black underline underline-offset-4 transition-colors hover:text-black/70"
-              >
-                Read more
-              </button>
-            )}
           </div>
 
           <div className="grid gap-8 self-start lg:pt-10">

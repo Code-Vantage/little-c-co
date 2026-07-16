@@ -26,6 +26,8 @@ export type StoreProduct = {
 export type OptionChoice = {
   value: string;
   label: string;
+  // Shown on hover/focus of the choice (radio kind only).
+  description?: string;
   priceDelta?: number;
 };
 
@@ -79,12 +81,30 @@ export type FileOption = {
   showIf?: OptionCondition;
 };
 
-export type ProductOption = SelectOption | TextOption | QuantityOption | FileOption;
+// Read-only informational block. Contributes no value to the cart and is never
+// required — used for suggestion lists and "please note" copy.
+export type NoteOption = {
+  kind: "note";
+  id: string;
+  label?: string;
+  help?: string;
+  items?: string[];
+  showIf?: OptionCondition;
+};
+
+export type ProductOption =
+  | SelectOption
+  | TextOption
+  | QuantityOption
+  | FileOption
+  | NoteOption;
 
 export type ProductOptionSchema = {
   type: string;
   title: string;
   options: ProductOption[];
+  // Read-only blocks rendered beneath the Add To Cart button.
+  afterCart?: NoteOption[];
 };
 
 export type CartLine = {

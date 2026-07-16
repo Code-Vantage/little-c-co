@@ -174,10 +174,6 @@ textarea:focus-visible {
   will-change: transform;
 }
 
-.categories-marquee:hover .categories-track {
-  animation-play-state: paused;
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
