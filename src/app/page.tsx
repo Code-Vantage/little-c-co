@@ -16,7 +16,7 @@ export default function HomePage() {
       </Reveal>
       <CategoriesStrip />
       <About />
-      <Surfaces />
+      {/* <Surfaces /> */}
       <LiveEvents />
       <EmailSignup />
       <Instagram />
