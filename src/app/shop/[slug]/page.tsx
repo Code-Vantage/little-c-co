@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProducts } from "@/lib/products";
-import { getServiceBySlug } from "@/lib/services";
+import { getCollectionBySlug } from "@/lib/collections";
 import { getFromPrice } from "@/lib/pricing";
 import Reveal from "@/components/reveal";
 
@@ -63,21 +63,21 @@ function ProductCard({
   );
 }
 
-export default async function ServiceDetailPage({
+export default async function CollectionDetailPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const service = getServiceBySlug(slug);
+  const collection = getCollectionBySlug(slug);
 
-  if (!service) {
+  if (!collection) {
     notFound();
   }
 
   const products = await getProducts();
   const matchingProducts = products.filter((product) =>
-    product.categories.some((category) => service.sourceCategories.includes(category)),
+    product.categories.some((category) => collection.sourceCategories.includes(category)),
   );
 
   return (
@@ -85,44 +85,25 @@ export default async function ServiceDetailPage({
       <Reveal as="section" className="border-b border-black/10 bg-[#f7f2ea]">
         <div className="grid md:min-h-[22rem] md:grid-cols-[minmax(0,0.74fr)_minmax(26rem,1.26fr)] md:items-stretch lg:min-h-[24rem]">
           <div className="min-h-[12rem] overflow-hidden bg-[#f4ede1] md:min-h-full">
-            <img
-              src={service.image}
-              alt={service.title}
-              className="block h-full w-full object-cover"
-            />
+            {collection.image ? (
+              <img
+                src={collection.image}
+                alt={collection.title}
+                className="block h-full w-full object-cover"
+              />
+            ) : null}
           </div>
 
           <div className="flex flex-col justify-center px-6 py-8 sm:px-8 md:px-12 md:py-12 lg:px-14">
-            {/* <p className="mt-6 font-(family-name:--font-body) text-xs uppercase tracking-[0.32em] text-black/45">
-              {service.label}
-            </p> */}
-            {/* <h1 className="mt-3 font-(family-name:--font-body) text-[2.25rem] leading-tight text-black md:text-[3.15rem] lg:text-[3.6rem]">
-              {service.title}
-            </h1>
-            <p className="mt-2 font-(family-name:--font-heading) text-[1.8rem] leading-none text-black/55 md:text-[2.4rem] lg:text-[2.7rem]">
-              {service.eyebrow}
-            </p> */}
-            <p className="mt-5 max-w-2xl font-(family-name:--font-body) text-[1rem] leading-7 text-black/72 md:text-[1.05rem] lg:text-[1.1rem]">
-              {service.description}
+            <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.32em] text-black/45">
+              {collection.eyebrow}
             </p>
-            <div className="mt-8 grid gap-4 border-t border-black/10 pt-6 sm:grid-cols-2">
-              <div>
-                <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.28em] text-black/45">
-                  {service.detailOneLabel}
-                </p>
-                <p className="mt-2 font-(family-name:--font-body) text-base leading-7 text-black/72">
-                  {service.detailOneText}
-                </p>
-              </div>
-              <div>
-                <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.28em] text-black/45">
-                  {service.detailTwoLabel}
-                </p>
-                <p className="mt-2 font-(family-name:--font-body) text-base leading-7 text-black/72">
-                  {service.detailTwoText}
-                </p>
-              </div>
-            </div>
+            <h1 className="mt-3 font-(family-name:--font-body) text-[2.25rem] leading-tight text-black md:text-[3.15rem] lg:text-[3.6rem]">
+              {collection.title}
+            </h1>
+            <p className="mt-5 max-w-2xl font-(family-name:--font-body) text-[1rem] leading-7 text-black/72 md:text-[1.05rem] lg:text-[1.1rem]">
+              {collection.description}
+            </p>
           </div>
         </div>
       </Reveal>
@@ -130,41 +111,47 @@ export default async function ServiceDetailPage({
       <Reveal as="div" className="px-6 py-10 sm:px-8 md:px-16 md:py-16" delay={80}>
         <div className="mx-auto max-w-7xl">
           {matchingProducts.length > 0 ? (
-          <section>
-            <div className="mb-7 flex flex-col gap-2 md:mb-8 md:flex-row md:items-end md:justify-between">
-              <div>
-                <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.28em] text-black/45">
-                  Products
-                </p>
-                <h2 className="mt-2 font-(family-name:--font-body) text-[1.8rem] leading-tight text-black md:text-[2.2rem]">
-                  Featured in this service
-                </h2>
-              </div>
-              <p className="font-(family-name:--font-body) text-sm text-black/50">
-                {matchingProducts.length} item{matchingProducts.length === 1 ? "" : "s"}
-              </p>
-            </div>
-            <div className="grid grid-cols-2 justify-items-center gap-x-5 gap-y-7 md:grid-cols-4 md:gap-x-7 md:gap-y-9 lg:gap-x-10 lg:gap-y-12">
-              {matchingProducts.map((product) => (
-                <div key={product.id} className="w-full max-w-[16.5rem] sm:max-w-[17.5rem] lg:max-w-[18.5rem]">
-                  <ProductCard product={product} />
+            <section>
+              <div className="mb-7 flex flex-col gap-2 md:mb-8 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.28em] text-black/45">
+                    Products
+                  </p>
+                  <h2 className="mt-2 font-(family-name:--font-body) text-[1.8rem] leading-tight text-black md:text-[2.2rem]">
+                    In this collection
+                  </h2>
                 </div>
-              ))}
-            </div>
-          </section>
-        ) : (
-          <section className="border-t border-black/10 pt-8 md:pt-10">
-            <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.28em] text-black/45">
-              Products
-            </p>
-            <h2 className="mt-2 font-(family-name:--font-body) text-[1.8rem] leading-tight text-black md:text-[2.2rem]">
-              Featured pieces coming soon
-            </h2>
-            <p className="mt-4 max-w-2xl font-(family-name:--font-body) text-base leading-7 text-black/72">
-              This service is currently presented as bespoke work. Product examples for this category will appear here as they are added to the collection.
-            </p>
-          </section>
-        )}
+                <p className="font-(family-name:--font-body) text-sm text-black/50">
+                  {matchingProducts.length} item{matchingProducts.length === 1 ? "" : "s"}
+                </p>
+              </div>
+              <div className="grid grid-cols-2 justify-items-center gap-x-5 gap-y-7 md:grid-cols-4 md:gap-x-7 md:gap-y-9 lg:gap-x-10 lg:gap-y-12">
+                {matchingProducts.map((product) => (
+                  <div key={product.id} className="w-full max-w-[16.5rem] sm:max-w-[17.5rem] lg:max-w-[18.5rem]">
+                    <ProductCard product={product} />
+                  </div>
+                ))}
+              </div>
+            </section>
+          ) : (
+            <section className="border-t border-black/10 pt-8 md:pt-10">
+              <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.28em] text-black/45">
+                Products
+              </p>
+              <h2 className="mt-2 font-(family-name:--font-body) text-[1.8rem] leading-tight text-black md:text-[2.2rem]">
+                Featured pieces coming soon
+              </h2>
+              <p className="mt-4 max-w-2xl font-(family-name:--font-body) text-base leading-7 text-black/72">
+                Pieces for this collection will appear here as they are added to the shop.
+              </p>
+              <Link
+                href="/shop"
+                className="button-soft mt-6 inline-flex h-11 items-center justify-center bg-black px-5 text-white font-(family-name:--font-body) text-base hover:bg-[#1a1a1a] transition-colors"
+              >
+                Browse the full shop
+              </Link>
+            </section>
+          )}
         </div>
       </Reveal>
     </main>

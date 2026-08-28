@@ -1,13 +1,113 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { StoreProduct } from "@/lib/types";
 import { getSchemaForProduct } from "@/lib/product-options";
+import {
+  findSetOption,
+  getFromPrice,
+  getPricingRule,
+  priceTiered,
+  type PricingRule,
+} from "@/lib/pricing";
 import { useCartStore } from "../../../lib/cart-store";
 import { NoteBlock, ProductOptions } from "./_product-options";
 
+function inr(value: number) {
+  return value.toLocaleString("en-IN");
+}
+
+function FieldLabel({ children }: { children: ReactNode }) {
+  return (
+    <label className="mb-2 block font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-black/48">
+      {children}
+    </label>
+  );
+}
+
+function PersonalizationField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div>
+      <FieldLabel>Personalization</FieldLabel>
+      <textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="Add names, wording, or details here"
+        rows={4}
+        className="w-full resize-none border border-black/15 bg-transparent px-4 py-3 font-(family-name:--font-body) text-sm text-black placeholder:text-black/40"
+      />
+    </div>
+  );
+}
+
+function QtyStepper({
+  label,
+  value,
+  onChange,
+  min = 1,
+}: {
+  label: string;
+  value: number;
+  onChange: (n: number) => void;
+  min?: number;
+}) {
+  return (
+    <div>
+      <FieldLabel>{label}</FieldLabel>
+      <div className="flex h-12 w-fit items-center border border-black/15">
+        <button
+          type="button"
+          onClick={() => onChange(Math.max(min, value - 1))}
+          className="h-full w-12 border-r border-black/15 font-(family-name:--font-body) text-xl transition-colors hover:bg-black/5"
+          aria-label={`Decrease ${label}`}
+        >
+          −
+        </button>
+        <span className="flex h-full w-16 items-center justify-center font-(family-name:--font-body) text-lg">
+          {value}
+        </span>
+        <button
+          type="button"
+          onClick={() => onChange(value + 1)}
+          className="h-full w-12 border-l border-black/15 font-(family-name:--font-body) text-xl transition-colors hover:bg-black/5"
+          aria-label={`Increase ${label}`}
+        >
+          +
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/** Compact "Bulk pricing: 4+ ₹1,149 · 10+ ₹999 …" line for a tiered product. */
+function TierList({ rule }: { rule: Extract<PricingRule, { kind: "tiered" }> }) {
+  const rows = rule.tiers.filter(
+    (t) => t.perUnit !== undefined && t.perUnit < rule.basePrice,
+  );
+  if (rows.length === 0) return null;
+  return (
+    <p className="mt-3 font-(family-name:--font-body) text-xs leading-6 text-black/55">
+      Bulk pricing:{" "}
+      {rows.map((t, i) => (
+        <span key={t.min}>
+          {i > 0 ? " · " : ""}
+          {t.min}+ ₹{inr(t.perUnit as number)}
+        </span>
+      ))}{" "}
+      each
+    </p>
+  );
+}
+
 function RelatedProductCard({ product }: { product: StoreProduct }) {
   const image = product.images[0];
+  const fromPrice = getFromPrice(product.slug);
   const salePrice = Number(product.price).toLocaleString("en-IN");
   const regularPrice = Number(product.regularPrice).toLocaleString("en-IN");
 
@@ -37,11 +137,19 @@ function RelatedProductCard({ product }: { product: StoreProduct }) {
             </p>
           </div>
           <div className="mt-4 flex items-end gap-2">
-            <span className="font-(family-name:--font-body) text-[1.35rem] leading-none text-[#181411]">₹{salePrice}</span>
-            <span className="relative mb-0.5 pb-0.5 font-(family-name:--font-body) text-[0.92rem] text-black/40">
-              ₹{regularPrice}
-              <span className="absolute left-0 top-1/2 w-full border-t border-black/30" />
-            </span>
+            {fromPrice !== null ? (
+              <span className="font-(family-name:--font-body) text-[1.35rem] leading-none text-[#181411]">
+                From ₹{inr(fromPrice)}
+              </span>
+            ) : (
+              <>
+                <span className="font-(family-name:--font-body) text-[1.35rem] leading-none text-[#181411]">₹{salePrice}</span>
+                <span className="relative mb-0.5 pb-0.5 font-(family-name:--font-body) text-[0.92rem] text-black/40">
+                  ₹{regularPrice}
+                  <span className="absolute left-0 top-1/2 w-full border-t border-black/30" />
+                </span>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -59,8 +167,13 @@ export default function ProductDetailClient({
   type CartButtonState = "idle" | "adding" | "added";
 
   const schema = useMemo(() => getSchemaForProduct(product), [product]);
+  const rule = useMemo(() => getPricingRule(product.slug), [product.slug]);
+  const isSet = rule?.kind === "set";
 
   const [quantity, setQuantity] = useState(1);
+  const [setPieces, setSetPieces] = useState(
+    rule?.kind === "set" ? rule.sets[0].pieces : 0,
+  );
   const [color, setColor] = useState("");
   const [style, setStyle] = useState("");
   const [personalization, setPersonalization] = useState("");
@@ -102,6 +215,31 @@ export default function ProductDetailClient({
     return styleAttribute?.options ?? [];
   }, [product.attributes]);
 
+  // Quantity that actually drives pricing: schema products report their own,
+  // set products count sets, everything else uses the plain stepper.
+  const effectiveQty = schema ? schemaQuantity : quantity;
+
+  // Effective price for the current selection. `lineTotal` is authoritative;
+  // `unitPrice` is what we store on the cart line (the cart + server recompute
+  // the tiered total from the rule, so this is a display/fallback figure).
+  const pricing = useMemo(() => {
+    if (rule?.kind === "tiered") {
+      const { unitPrice, lineTotal } = priceTiered(rule, effectiveQty);
+      return { unitPrice, lineTotal, cartQty: effectiveQty, setOpt: null as null };
+    }
+    if (rule?.kind === "set") {
+      const setOpt = findSetOption(rule, setPieces) ?? rule.sets[0];
+      return {
+        unitPrice: setOpt.total,
+        lineTotal: setOpt.total * quantity,
+        cartQty: quantity,
+        setOpt,
+      };
+    }
+    const flat = Number(product.price || product.regularPrice || 0);
+    return { unitPrice: flat, lineTotal: flat * effectiveQty, cartQty: effectiveQty, setOpt: null as null };
+  }, [rule, effectiveQty, setPieces, quantity, product.price, product.regularPrice]);
+
   useEffect(() => {
     return () => {
       if (resetAddedStateTimerRef.current !== null) {
@@ -136,22 +274,28 @@ export default function ProductDetailClient({
 
     const customizations = schema
       ? schemaCustomizations
-      : [
-          { key: "Color", value: color },
-          { key: "Style", value: style },
-          { key: "Personalization", value: personalization },
-        ];
+      : isSet
+        ? [
+            { key: "Set size", value: pricing.setOpt?.label ?? "" },
+            { key: "Personalization", value: personalization },
+          ]
+        : [
+            { key: "Color", value: color },
+            { key: "Style", value: style },
+            { key: "Personalization", value: personalization },
+          ];
 
     addItem(
       {
         id: product.id,
         name: product.name,
         slug: product.slug,
-        price: Number(product.price || product.regularPrice || 0),
+        price: pricing.unitPrice,
         image: selectedImage?.src || product.images[0]?.src || "",
+        setPieces: isSet ? setPieces : undefined,
         customizations,
       },
-      schema ? schemaQuantity : quantity,
+      pricing.cartQty,
     );
 
     setCartButtonState("added");
@@ -214,14 +358,41 @@ export default function ProductDetailClient({
               {product.name}
             </h1>
 
-            <div className="mt-6 flex items-end gap-3">
-              <span className="font-(family-name:--font-body) text-[2.25rem] leading-none text-black sm:text-[2.55rem]">
-                ₹{salePrice}
-              </span>
-              <span className="relative mb-1 pb-0.5 font-(family-name:--font-body) text-lg text-black/38">
-                ₹{regularPrice}
-                <span className="absolute left-0 top-1/2 w-full border-t border-black/30" />
-              </span>
+            <div className="mt-6">
+              {rule ? (
+                <>
+                  <div className="flex items-end gap-2.5">
+                    <span className="font-(family-name:--font-body) text-[2.25rem] leading-none text-black sm:text-[2.55rem]">
+                      ₹{inr(pricing.unitPrice)}
+                    </span>
+                    <span className="mb-1 font-(family-name:--font-body) text-base text-black/55">
+                      {isSet ? `for ${pricing.setOpt?.label}` : "each"}
+                    </span>
+                  </div>
+                  {isSet ? (
+                    <p className="mt-1.5 font-(family-name:--font-body) text-sm text-black/60">
+                      ₹{inr(pricing.setOpt?.perPiece ?? 0)} per piece
+                    </p>
+                  ) : (
+                    effectiveQty > 1 && (
+                      <p className="mt-1.5 font-(family-name:--font-body) text-sm text-black/60">
+                        Total for {effectiveQty}: ₹{inr(pricing.lineTotal)}
+                      </p>
+                    )
+                  )}
+                  {rule.kind === "tiered" && <TierList rule={rule} />}
+                </>
+              ) : (
+                <div className="flex items-end gap-3">
+                  <span className="font-(family-name:--font-body) text-[2.25rem] leading-none text-black sm:text-[2.55rem]">
+                    ₹{salePrice}
+                  </span>
+                  <span className="relative mb-1 pb-0.5 font-(family-name:--font-body) text-lg text-black/38">
+                    ₹{regularPrice}
+                    <span className="absolute left-0 top-1/2 w-full border-t border-black/30" />
+                  </span>
+                </div>
+              )}
             </div>
 
             {localDeliveryOnly && (
@@ -241,6 +412,37 @@ export default function ProductDetailClient({
               <div className="grid gap-5">
                 {schema ? (
                   <ProductOptions schema={schema} onChange={handleSchemaChange} />
+                ) : rule?.kind === "set" ? (
+                  <>
+                    <div>
+                      <FieldLabel>Set Size</FieldLabel>
+                      <div className="relative">
+                        <select
+                          value={setPieces}
+                          onChange={(e) => setSetPieces(Number(e.target.value))}
+                          className="h-12 w-full cursor-pointer appearance-none border border-black/15 bg-transparent px-4 pr-10 font-(family-name:--font-body) text-sm text-black"
+                        >
+                          {rule.sets.map((s) => (
+                            <option key={s.pieces} value={s.pieces}>
+                              {s.label} — ₹{inr(s.total)} (₹{inr(s.perPiece)}/pc)
+                            </option>
+                          ))}
+                        </select>
+                        <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+                          <svg width="11" height="6" viewBox="0 0 11 6" fill="none">
+                            <path d="M1 1L5.5 5L10 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                    <QtyStepper label="Number of Sets" value={quantity} onChange={setQuantity} />
+                    <PersonalizationField value={personalization} onChange={setPersonalization} />
+                  </>
+                ) : rule ? (
+                  <>
+                    <QtyStepper label="Quantity" value={quantity} onChange={setQuantity} />
+                    <PersonalizationField value={personalization} onChange={setPersonalization} />
+                  </>
                 ) : (
                   <>
                     <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_9rem] sm:items-end">

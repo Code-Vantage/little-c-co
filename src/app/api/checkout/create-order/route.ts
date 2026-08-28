@@ -1,11 +1,15 @@
 import { getCustomerIdFromRequest } from "@/lib/customer-session";
 import { isWooConfigured, wooRequest } from "@/lib/woocommerce";
+import { getProducts } from "@/lib/products";
+import { getPricingRule, resolveLineTotal } from "@/lib/pricing";
 import { getRazorpayClient, isRazorpayConfigured } from "@/lib/razorpay";
 import type { Address } from "@/lib/types";
 
 type CheckoutLineItem = {
   product_id?: number;
   quantity?: number;
+  set_pieces?: number;
+  line_total?: number;
   customizations?: Array<{ key?: string; value?: string }>;
 };
 
@@ -30,6 +34,8 @@ const REQUIRED_ADDRESS_FIELDS: Array<keyof Address> = [
 type NormalizedLine = {
   productId: number;
   quantity: number;
+  setPieces: number | null;
+  clientLineTotal: number | null;
   meta: Array<{ key: string; value: string }>;
 };
 
@@ -38,6 +44,14 @@ function normalizeCartItems(items: CheckoutPayload["items"]): NormalizedLine[] {
     .map((item) => ({
       productId: Number(item.product_id),
       quantity: Math.max(1, Math.floor(Number(item.quantity) || 1)),
+      setPieces:
+        Number.isFinite(Number(item.set_pieces)) && Number(item.set_pieces) > 0
+          ? Math.floor(Number(item.set_pieces))
+          : null,
+      clientLineTotal:
+        Number.isFinite(Number(item.line_total)) && Number(item.line_total) > 0
+          ? Number(item.line_total)
+          : null,
       meta: (item.customizations ?? [])
         .map((c) => ({
           key: String(c.key ?? "").trim(),
@@ -127,6 +141,37 @@ export async function POST(request: Request) {
     const paymentMethod = process.env.WOOCOMMERCE_PAYMENT_METHOD?.trim() || "razorpay";
     const paymentMethodTitle = process.env.WOOCOMMERCE_PAYMENT_METHOD_TITLE?.trim() || "Razorpay";
 
+    // Resolve authoritative line pricing (Little C Co. tier / set pricing from
+    // lib/pricing.ts) so the amount charged always equals what the storefront
+    // displayed. Products without a pricing rule fall back to WooCommerce's own
+    // product price (no subtotal/total override sent).
+    const catalogue = await getProducts();
+    const slugById = new Map(catalogue.map((p) => [p.id, p.slug]));
+
+    const lineItems = items.map((item) => {
+      const slug = slugById.get(item.productId);
+      const rule = getPricingRule(slug);
+      let lineTotal = resolveLineTotal({
+        slug,
+        quantity: item.quantity,
+        setPieces: item.setPieces,
+      });
+      // Rule exists but couldn't be resolved server-side (e.g. missing set
+      // size) — trust the client's displayed total rather than silently
+      // charging the Woo base price.
+      if (lineTotal === null && rule) {
+        lineTotal = item.clientLineTotal;
+      }
+      return {
+        product_id: item.productId,
+        quantity: item.quantity,
+        meta_data: item.meta.map((m) => ({ key: m.key, value: m.value })),
+        ...(lineTotal !== null
+          ? { subtotal: lineTotal.toFixed(2), total: lineTotal.toFixed(2) }
+          : {}),
+      };
+    });
+
     // Create a pending Woo order carrying billing/shipping and each line's
     // customizations as line-item meta, so the client sees exactly what to
     // make (and where to ship it) in wp-admin.
@@ -139,11 +184,7 @@ export async function POST(request: Request) {
         payment_method_title: paymentMethodTitle,
         billing,
         shipping,
-        line_items: items.map((item) => ({
-          product_id: item.productId,
-          quantity: item.quantity,
-          meta_data: item.meta.map((m) => ({ key: m.key, value: m.value })),
-        })),
+        line_items: lineItems,
       }),
     });
 

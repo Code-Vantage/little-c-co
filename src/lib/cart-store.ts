@@ -16,7 +16,7 @@ function normalizeCustomizations(customizations: CartLine["customizations"] = []
 
 function createCartLineKey(item: CartInput) {
   const customizations = normalizeCustomizations(item.customizations);
-  return `${item.id}:${JSON.stringify(customizations)}`;
+  return `${item.id}:${item.setPieces ?? ""}:${JSON.stringify(customizations)}`;
 }
 
 function getLineKey(line: CartLine) {

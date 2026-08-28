@@ -1,8 +1,10 @@
 import { getProducts } from "@/lib/products";
+import { getFromPrice } from "@/lib/pricing";
 import type { StoreProduct } from "@/lib/types";
 
 function ProductCard({ product }: { product: StoreProduct }) {
   const image = product.images[0];
+  const fromPrice = getFromPrice(product.slug);
   const salePrice = Number(product.price).toLocaleString("en-IN");
   const regularPrice = Number(product.regularPrice).toLocaleString("en-IN");
 
@@ -35,13 +37,21 @@ function ProductCard({ product }: { product: StoreProduct }) {
           </div>
 
           <div className="mt-4 flex items-end gap-2">
-            <span className="font-(family-name:--font-body) text-[1.35rem] leading-none text-[#181411]">
-              ₹{salePrice}
-            </span>
-            <span className="relative mb-0.5 pb-0.5 font-(family-name:--font-body) text-[0.92rem] text-black/40">
-              ₹{regularPrice}
-              <span className="absolute left-0 top-1/2 w-full border-t border-black/30" />
-            </span>
+            {fromPrice !== null ? (
+              <span className="font-(family-name:--font-body) text-[1.35rem] leading-none text-[#181411]">
+                From ₹{fromPrice.toLocaleString("en-IN")}
+              </span>
+            ) : (
+              <>
+                <span className="font-(family-name:--font-body) text-[1.35rem] leading-none text-[#181411]">
+                  ₹{salePrice}
+                </span>
+                <span className="relative mb-0.5 pb-0.5 font-(family-name:--font-body) text-[0.92rem] text-black/40">
+                  ₹{regularPrice}
+                  <span className="absolute left-0 top-1/2 w-full border-t border-black/30" />
+                </span>
+              </>
+            )}
           </div>
         </div>
       </div>

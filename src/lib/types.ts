@@ -115,6 +115,9 @@ export type CartLine = {
   price: number;
   quantity: number;
   image: string;
+  // Present only for "set"-priced products (see lib/pricing.ts): the chosen set
+  // size in pieces. Drives line-total recomputation and is sent to checkout.
+  setPieces?: number;
   customizations?: Array<{
     key: string;
     value: string;

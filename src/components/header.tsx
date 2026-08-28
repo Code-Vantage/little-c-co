@@ -3,6 +3,7 @@
 import { useState } from "react";
 import CartNavLink from "@/components/cart-nav-link";
 import { services } from "@/lib/services";
+import { collections } from "@/lib/collections";
 import Link from "next/link";
 
 function UserIcon() {
@@ -110,9 +111,30 @@ export default function Header() {
                 </div>
               </div>
             </div>
-            <Link href="/shop" className="whitespace-nowrap font-(family-name:--font-body) text-[1.02rem] text-black transition-opacity hover:opacity-70">
-              Shop
-            </Link>
+            <div className="group relative">
+              <Link
+                href="/shop"
+                className="inline-flex items-center gap-1 whitespace-nowrap font-(family-name:--font-body) text-[1.02rem] text-black transition-opacity hover:opacity-70"
+              >
+                Shop
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </Link>
+              <div className="invisible absolute left-0 top-full z-50 pt-4 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
+                <div className="min-w-56 border border-black/10 bg-white shadow-[0px_18px_36px_rgba(15,23,42,0.08)]">
+                  {collections.map((collection) => (
+                    <Link
+                      key={collection.slug}
+                      href={`/shop/${collection.slug}`}
+                      className="block border-b border-black/6 px-5 py-3 font-(family-name:--font-body) text-[0.96rem] text-black/80 transition-colors hover:bg-black/[0.03] hover:text-black last:border-b-0"
+                    >
+                      {collection.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
             <Link href="/#about" className="whitespace-nowrap font-(family-name:--font-body) text-[1.02rem] text-black transition-opacity hover:opacity-70">
               About
             </Link>
@@ -127,8 +149,8 @@ export default function Header() {
 
       {/* Mobile Drawer/Menu */}
       <div 
-        className={`lg:hidden absolute top-full left-0 w-full border-t border-black/10 shadow-xl overflow-hidden transition-all duration-300 ${
-          isMobileMenuOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0 pointer-events-none border-t-0 border-transparent shadow-none"
+        className={`lg:hidden absolute top-full left-0 w-full border-t border-black/10 shadow-xl transition-all duration-300 ${
+          isMobileMenuOpen ? "max-h-[85vh] overflow-y-auto opacity-100" : "max-h-0 overflow-hidden opacity-0 pointer-events-none border-t-0 border-transparent shadow-none"
         }`}
       >
         <div className="flex flex-col gap-6 bg-[var(--background)] px-5 py-6">
@@ -156,13 +178,27 @@ export default function Header() {
           </form>
 
           <nav className="flex flex-col gap-5">
-            <Link 
-              onClick={() => setIsMobileMenuOpen(false)} 
-              href="/shop" 
-              className="font-(family-name:--font-body) text-[1.12rem] text-black transition-colors hover:text-black/70"
-            >
-              Shop
-            </Link>
+            <div className="flex flex-col gap-3">
+              <Link
+                onClick={() => setIsMobileMenuOpen(false)}
+                href="/shop"
+                className="font-(family-name:--font-body) text-[1.12rem] text-black transition-colors hover:text-black/70"
+              >
+                Shop
+              </Link>
+              <div className="ml-2 flex flex-col gap-3 border-l border-black/10 pl-4">
+                {collections.map((collection) => (
+                  <Link
+                    key={collection.slug}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    href={`/shop/${collection.slug}`}
+                    className="font-(family-name:--font-body) text-[0.97rem] text-black/75 transition-colors hover:text-black"
+                  >
+                    {collection.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
             <hr className="border-t border-black/10" />
             <div className="flex flex-col gap-3">
               <Link

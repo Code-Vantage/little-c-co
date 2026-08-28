@@ -140,7 +140,7 @@ export const demoProducts: StoreProduct[] = [
     ],
   },
 
-  // ── Heat foiling ─────────────────────────────────────────────────────────────
+  // ── Foil stamping ───────────────────────────────────────────────────────────
   {
     id: 301,
     name: "Gold Foil Wedding Card",
@@ -150,7 +150,7 @@ export const demoProducts: StoreProduct[] = [
     price: "1500.00",
     regularPrice: "1800.00",
     stockStatus: "instock",
-    categories: ["Heat foiling"],
+    categories: ["Foil stamping"],
     images: [
       {
         src: "https://images.unsplash.com/photo-1521369909029-2afed882baee?auto=format&fit=crop&w=600&q=80",
@@ -167,7 +167,7 @@ export const demoProducts: StoreProduct[] = [
     price: "600.00",
     regularPrice: "600.00",
     stockStatus: "instock",
-    categories: ["Heat foiling"],
+    categories: ["Foil stamping"],
     images: [
       {
         src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
@@ -184,7 +184,7 @@ export const demoProducts: StoreProduct[] = [
     price: "1100.00",
     regularPrice: "1400.00",
     stockStatus: "instock",
-    categories: ["Heat foiling"],
+    categories: ["Foil stamping"],
     images: [
       {
         src: "https://images.unsplash.com/photo-1510771463146-e89e6e86560e?auto=format&fit=crop&w=600&q=80",
@@ -201,7 +201,7 @@ export const demoProducts: StoreProduct[] = [
     price: "1000.00",
     regularPrice: "1000.00",
     stockStatus: "instock",
-    categories: ["Heat foiling"],
+    categories: ["Foil stamping"],
     images: [
       {
         src: "https://images.unsplash.com/photo-1529736576495-1ed4a29ca6e7?auto=format&fit=crop&w=600&q=80",

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/lib/cart-store";
+import { cartLineInfo } from "@/lib/pricing";
 import type { Address } from "@/lib/types";
 import { AddressForm, addressMissingFields, emptyAddress } from "@/components/address-form";
 
@@ -65,7 +66,7 @@ export default function CheckoutPage() {
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
   const subtotal = useMemo(
-    () => items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    () => items.reduce((sum, item) => sum + cartLineInfo(item).lineTotal, 0),
     [items],
   );
   const totalItems = useMemo(
@@ -137,6 +138,8 @@ export default function CheckoutPage() {
           items: items.map((item) => ({
             product_id: item.id,
             quantity: item.quantity,
+            set_pieces: item.setPieces,
+            line_total: cartLineInfo(item).lineTotal,
             customizations: item.customizations ?? [],
           })),
           billing,
@@ -475,7 +478,7 @@ export default function CheckoutPage() {
                     <p className="text-black/55">Qty {item.quantity}</p>
                   </div>
                   <p className="shrink-0 font-(family-name:--font-body) text-sm text-black">
-                    {formatPrice(item.price * item.quantity)}
+                    {formatPrice(cartLineInfo(item).lineTotal)}
                   </p>
                 </div>
               ))}

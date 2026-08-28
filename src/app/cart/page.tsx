@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { useCartStore } from "@/lib/cart-store";
+import { cartLineInfo, getPricingRule } from "@/lib/pricing";
 
 function formatPrice(value: number) {
   return `₹${Math.max(0, value).toLocaleString("en-IN")}`;
@@ -14,7 +15,7 @@ export default function CartPage() {
   const clearCart = useCartStore((state) => state.clearCart);
 
   const subtotal = useMemo(
-    () => items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    () => items.reduce((sum, item) => sum + cartLineInfo(item).lineTotal, 0),
     [items],
   );
   const totalItems = useMemo(
@@ -77,6 +78,7 @@ export default function CartPage() {
               <div>
                 {items.map((item, index) => {
                   const lineKey = item.key ?? item.id;
+                  const info = cartLineInfo(item);
 
                   return (
                   <article
@@ -106,7 +108,8 @@ export default function CartPage() {
                             {item.name}
                           </a>
                           <p className="mt-1 font-(family-name:--font-body) text-base text-black/72">
-                            {formatPrice(item.price)}
+                            {formatPrice(info.unitPrice)}
+                            {getPricingRule(item.slug)?.kind === "tiered" ? " each" : ""}
                           </p>
                           {item.customizations && item.customizations.length > 0 && (
                             <div className="mt-2 space-y-1 font-(family-name:--font-body) text-sm leading-6 text-black/60">
@@ -159,7 +162,7 @@ export default function CartPage() {
                           Total
                         </p>
                         <p className="font-(family-name:--font-body) text-[1.2rem] text-black">
-                          {formatPrice(item.price * item.quantity)}
+                          {formatPrice(info.lineTotal)}
                         </p>
                       </div>
                     </div>

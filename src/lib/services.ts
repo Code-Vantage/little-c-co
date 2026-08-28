@@ -14,12 +14,12 @@ export type ServiceItem = {
 
 export const services: ServiceItem[] = [
   {
-    slug: "heat-foiling",
-    label: "Heat foiling",
-    title: "Heat foiling",
+    slug: "foil-stamping",
+    label: "Foil stamping",
+    title: "Foil stamping",
     eyebrow: "Foil impressions",
     description:
-      "Heat foiling brings a luminous metallic finish to invitations, stationery, gifting pieces, and event details, adding polish, depth, and a quietly luxurious feel.",
+      "Foil stamping brings a luminous metallic finish to invitations, stationery, gifting pieces, and event details, adding polish, depth, and a quietly luxurious feel.",
     image: "/services/heatfoiling.webp",
     detailOneLabel: "Ideal for",
     detailOneText:
@@ -27,7 +27,7 @@ export const services: ServiceItem[] = [
     detailTwoLabel: "Finish",
     detailTwoText:
       "Crisp foil impressions with a warm reflective quality that adds depth without overwhelming the design.",
-    sourceCategories: ["Heat foiling"],
+    sourceCategories: ["Foil stamping"],
   },
   {
     slug: "engraving",
