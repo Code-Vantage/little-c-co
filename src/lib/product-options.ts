@@ -785,6 +785,336 @@ const GREETING_CARD: ProductOptionSchema = {
   ],
 };
 
+// ---------------------------------------------------------------------------
+// PRODUCT 10 — Handpainted Linen Tote Bag (bulk / quantity limit 20)
+// ---------------------------------------------------------------------------
+const TOTE_BAG: ProductOptionSchema = {
+  type: "tote-bag",
+  title: "Handpainted Linen Tote Bag",
+  options: [
+    {
+      kind: "radio",
+      id: "bag_colour",
+      label: "Bag Colour",
+      help: "Select the colour that best complements your occasion.",
+      required: true,
+      options: choices("Dark Blue", "Black", "Ivory"),
+    },
+    { kind: "quantity", id: "quantity", label: "Quantity", min: 1, max: 20 },
+    {
+      kind: "textarea",
+      id: "calligraphy_text",
+      label: "Calligraphy Text",
+      help: "Enter custom text, quote, or any special phrase you'd like handpainted on the tote.",
+      required: false,
+    },
+    {
+      kind: "textarea",
+      id: "personalisation_ideas",
+      label: "Personalisation Ideas",
+      help: "Eg. Bridal Shower Honouring — Illustration — Bride's Name — Date",
+      required: false,
+    },
+    {
+      kind: "radio",
+      id: "illustration",
+      label: "Illustration",
+      help: "Add a handpainted illustration to make your tote uniquely yours.",
+      required: true,
+      options: choices("Yes", "No"),
+    },
+    {
+      kind: "note",
+      id: "illustration_request",
+      label: "Illustration Request",
+      help: "Have a specific illustration or idea in mind? Share it with us in the Special Request box below.",
+      showIf: { optionId: "illustration", equals: "Yes" },
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share any illustration ideas, design preferences, colour preferences, gifting occasion, or other details you'd like us to consider while creating your personalised tote.",
+      required: false,
+    },
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// PRODUCT 11 — Personalised Card Holder (bulk orders accepted)
+// ---------------------------------------------------------------------------
+const CARD_HOLDER: ProductOptionSchema = {
+  type: "card-holder",
+  title: "Personalised Card Holder",
+  options: [
+    { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
+    {
+      kind: "radio",
+      id: "card_holder_colour",
+      label: "Card Holder Colour",
+      help: "Select the finish that best complements your design.",
+      required: true,
+      options: choices("Gold", "Silver"),
+    },
+    {
+      kind: "select",
+      id: "card_holder_size",
+      label: "Card Holder Size",
+      help: "Select your card holder size.",
+      required: true,
+      groups: [
+        { label: "Rectangular Card Holder", options: choices("Measurements coming soon") },
+      ],
+    },
+    {
+      kind: "radio",
+      id: "engraving_fill",
+      label: "Engraving Fill",
+      help: "Select the colour finish of your engraved details.",
+      required: true,
+      options: choices("Gold Fill", "Silver Fill", "Natural Finish"),
+    },
+    {
+      kind: "textarea",
+      id: "personalisation",
+      label: "Personalisation",
+      help: "Enter your name, initials, monogram, date, or any special text you'd like included.",
+      required: false,
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share any special requests, gifting occasion, recipient details, design preferences, or ideas you'd like us to consider while creating your personalised card holder.",
+      required: false,
+    },
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// PRODUCT 12 — Personalised Calligraphed Place Cards (set-priced: 6–30 pieces)
+// Serves up to 30, minimum 6. The set-size selector (Set of 6/12/18/24/30) is
+// rendered by the product page from the pricing rule, so this schema carries no
+// quantity field.
+// ---------------------------------------------------------------------------
+const PLACE_CARDS: ProductOptionSchema = {
+  type: "place-cards",
+  title: "Personalised Calligraphed Place Cards",
+  options: [
+    {
+      kind: "radio",
+      id: "place_card_style",
+      label: "Place Card Style",
+      help: "Choose the style that best complements your table setting.",
+      required: true,
+      options: [
+        {
+          value: "Folded Place Card",
+          label: "Folded Place Card",
+          description:
+            "Available in Black or Ivory. For other colours, please mention your preference in Special Request.",
+        },
+        {
+          value: "Doily Place Card",
+          label: "Doily Place Card",
+          description: "Available in White.",
+        },
+        {
+          value: "Ribbon Place Card",
+          label: "Ribbon Place Card",
+          description: "Available in Blue, Black, and other colours on request.",
+        },
+      ],
+    },
+    {
+      // Colour options depend on the chosen place card style; the field only
+      // appears once a style is selected.
+      kind: "select",
+      id: "colour",
+      label: "Colour",
+      help: "Choose your preferred colour based on the style selected.",
+      required: true,
+      dependsOn: "place_card_style",
+      optionsByParent: {
+        "Folded Place Card": choices("Black", "Ivory", "Special Request"),
+        "Doily Place Card": choices("White"),
+        "Ribbon Place Card": choices("Blue", "Black", "Special Request"),
+      },
+      showIf: {
+        optionId: "place_card_style",
+        equals: ["Folded Place Card", "Doily Place Card", "Ribbon Place Card"],
+      },
+    },
+    {
+      // TODO: replace placeholder with the real calligraphy style options
+      // (pending from client).
+      kind: "radio",
+      id: "calligraphy_style",
+      label: "Calligraphy Style",
+      help: "Choose your preferred calligraphy style.",
+      required: true,
+      options: choices("Styles coming soon"),
+    },
+    {
+      kind: "textarea",
+      id: "personalisation",
+      label: "Personalisation",
+      help: "Add names, numbers, last names, initials, or any special text you'd like hand-calligraphed.",
+      required: false,
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share any special requests, occasion details, colour preferences, design ideas, or other details you'd like us to consider while creating your personalised place cards.",
+      required: false,
+    },
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// PRODUCT 13 — Handpainted Linen Dining Napkins (set-priced: 6–30 pieces)
+// Serves up to 30, minimum 6. The set-size selector is rendered by the product
+// page from the pricing rule, so this schema carries no quantity field.
+// ---------------------------------------------------------------------------
+const NAPKINS: ProductOptionSchema = {
+  type: "napkins",
+  title: "Handpainted Linen Dining Napkins",
+  options: [
+    {
+      kind: "radio",
+      id: "napkin_colour",
+      label: "Napkin Colour",
+      help: "Select the colour that best complements your table setting.",
+      required: true,
+      options: choices("Ivory", "Blue", "Special Request"),
+    },
+    {
+      kind: "textarea",
+      id: "personalised_text",
+      label: "Personalised Text",
+      help: "Enter custom text or any special phrase you'd like handpainted on the napkin.",
+      required: false,
+    },
+    {
+      kind: "textarea",
+      id: "personalisation_ideas",
+      label: "Personalisation Ideas",
+      help: "Eg. Hosts' last/family name, dining values, host couple initials, guest initials",
+      required: false,
+    },
+    {
+      kind: "radio",
+      id: "illustration",
+      label: "Illustration",
+      help: "Add a handpainted illustration to make your napkin uniquely yours, matching your theme.",
+      required: true,
+      options: choices("Yes", "No"),
+    },
+    {
+      kind: "note",
+      id: "illustration_request",
+      label: "Illustration Request",
+      help: "Have a specific illustration or idea in mind? Share it with us in the Special Request box below.",
+      showIf: { optionId: "illustration", equals: "Yes" },
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share any illustration ideas, design preferences, colour preferences, occasion details, or other details you'd like us to consider while creating your personalised napkins.",
+      required: false,
+    },
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// PRODUCT 14 — Personalised Engraved Cutlery Set (set-priced: 6–30 sets, one
+// set = 1 knife + 1 spoon). Bulk orders accepted — Number of Sets uncapped.
+// ---------------------------------------------------------------------------
+const CUTLERY: ProductOptionSchema = {
+  type: "cutlery",
+  title: "Personalised Engraved Cutlery Set",
+  options: [
+    {
+      kind: "radio",
+      id: "cutlery_colour",
+      label: "Cutlery Colour",
+      help: "Select the finish that best complements your table setting.",
+      required: true,
+      options: choices("Gold", "Rose Gold", "Silver"),
+    },
+    {
+      kind: "radio",
+      id: "engraving_details",
+      label: "Engraving Details",
+      help: "Choose your preferred engraving.",
+      required: true,
+      options: [
+        { value: "Knife Engraving", label: "Knife Engraving" },
+        { value: "Spoon Engraving", label: "Spoon Engraving" },
+        {
+          value: "Both",
+          label: "Both",
+          description:
+            "Custom engraving on both the knife and spoon, creating a coordinated and elegant set for your table.",
+        },
+      ],
+    },
+    {
+      kind: "note",
+      id: "custom_engraving_heading",
+      label: "Custom Engraving",
+    },
+    {
+      kind: "text",
+      id: "engraving_knife",
+      label: "Knife",
+      help: "Enter a name, initials, date, quote, prefix, or any special text you'd like engraved on the knife.",
+      required: false,
+      showIf: { optionId: "engraving_details", equals: ["Knife Engraving", "Both"] },
+    },
+    {
+      kind: "text",
+      id: "engraving_spoon",
+      label: "Spoon",
+      help: "Enter a name, initials, date, quote, prefix, or any special text you'd like engraved on the spoon.",
+      required: false,
+      showIf: { optionId: "engraving_details", equals: ["Spoon Engraving", "Both"] },
+    },
+    {
+      kind: "radio",
+      id: "engraving_fill",
+      label: "Engraving Fill",
+      help: "Select the colour finish of your engraved details.",
+      required: true,
+      options: choices("Gold Fill", "Silver Fill", "Natural Finish"),
+    },
+    {
+      kind: "select",
+      id: "personalisation_ideas",
+      label: "Personalisation Ideas",
+      help: "Create a design that reflects your celebration.",
+      required: false,
+      options: choices("Name", "Initials", "Date", "Prefix & Last Name", "Custom Text"),
+    },
+    {
+      kind: "text",
+      id: "personalisation_ideas_custom_text",
+      label: "Custom Text",
+      required: false,
+      showIf: { optionId: "personalisation_ideas", equals: "Custom Text" },
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share any special requests, occasion, theme, design preferences, or ideas you'd like us to consider while creating your personalised cutlery set.",
+      required: false,
+    },
+  ],
+};
+
 export const PRODUCT_OPTION_SCHEMAS: Record<string, ProductOptionSchema> = {
   frame: FRAME,
   "letter-glass-box": LETTER_GLASS_BOX,
@@ -795,6 +1125,11 @@ export const PRODUCT_OPTION_SCHEMAS: Record<string, ProductOptionSchema> = {
   "wine-glass": WINE_GLASS,
   "curated-gift": CURATED_GIFT,
   "greeting-card": GREETING_CARD,
+  "tote-bag": TOTE_BAG,
+  "card-holder": CARD_HOLDER,
+  "place-cards": PLACE_CARDS,
+  napkins: NAPKINS,
+  cutlery: CUTLERY,
 };
 
 // Fallback: map a product's WooCommerce category name to a schema type when the
@@ -820,6 +1155,15 @@ const CATEGORY_TO_TYPE: Record<string, string> = {
   "greeting card": "greeting-card",
   "greeting cards": "greeting-card",
   "personalised greeting card": "greeting-card",
+  tote: "tote-bag",
+  "tote bag": "tote-bag",
+  "tote bags": "tote-bag",
+  "handpainted tote bag": "tote-bag",
+  "handpainted linen tote bag": "tote-bag",
+  "card holder": "card-holder",
+  "card holders": "card-holder",
+  "personalised card holder": "card-holder",
+  "engraved custom card holder": "card-holder",
 };
 
 /**

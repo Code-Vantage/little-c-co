@@ -3,8 +3,19 @@
 import { useState } from "react";
 import CartNavLink from "@/components/cart-nav-link";
 import { services } from "@/lib/services";
-import { collections } from "@/lib/collections";
+import { navCollections } from "@/lib/collections";
 import Link from "next/link";
+
+// Header Shop dropdown: the nav collections, with the "Curate your hamper" page
+// slotted in right after "Little Stuff".
+const shopMenuLinks: { label: string; href: string }[] = navCollections.flatMap(
+  (collection) => {
+    const link = { label: collection.label, href: `/shop/${collection.slug}` };
+    return collection.slug === "little-stuff"
+      ? [link, { label: "Curate your hamper", href: "/curate-your-hamper" }]
+      : [link];
+  },
+);
 
 function UserIcon() {
   return (
@@ -123,13 +134,13 @@ export default function Header() {
               </Link>
               <div className="invisible absolute left-0 top-full z-50 pt-4 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
                 <div className="min-w-56 border border-black/10 bg-white shadow-[0px_18px_36px_rgba(15,23,42,0.08)]">
-                  {collections.map((collection) => (
+                  {shopMenuLinks.map((item) => (
                     <Link
-                      key={collection.slug}
-                      href={`/shop/${collection.slug}`}
+                      key={item.href}
+                      href={item.href}
                       className="block border-b border-black/6 px-5 py-3 font-(family-name:--font-body) text-[0.96rem] text-black/80 transition-colors hover:bg-black/[0.03] hover:text-black last:border-b-0"
                     >
-                      {collection.label}
+                      {item.label}
                     </Link>
                   ))}
                 </div>
@@ -187,14 +198,14 @@ export default function Header() {
                 Shop
               </Link>
               <div className="ml-2 flex flex-col gap-3 border-l border-black/10 pl-4">
-                {collections.map((collection) => (
+                {shopMenuLinks.map((item) => (
                   <Link
-                    key={collection.slug}
+                    key={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    href={`/shop/${collection.slug}`}
+                    href={item.href}
                     className="font-(family-name:--font-body) text-[0.97rem] text-black/75 transition-colors hover:text-black"
                   >
-                    {collection.label}
+                    {item.label}
                   </Link>
                 ))}
               </div>

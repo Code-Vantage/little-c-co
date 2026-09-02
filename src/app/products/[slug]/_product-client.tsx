@@ -4,11 +4,10 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import type { StoreProduct } from "@/lib/types";
 import { getSchemaForProduct } from "@/lib/product-options";
 import {
-  findSetOption,
   getFromPrice,
   getPricingRule,
+  priceSet,
   priceTiered,
-  type PricingRule,
 } from "@/lib/pricing";
 import { useCartStore } from "../../../lib/cart-store";
 import { NoteBlock, ProductOptions } from "./_product-options";
@@ -51,11 +50,13 @@ function QtyStepper({
   value,
   onChange,
   min = 1,
+  max,
 }: {
   label: string;
   value: number;
   onChange: (n: number) => void;
   min?: number;
+  max?: number;
 }) {
   return (
     <div>
@@ -74,7 +75,7 @@ function QtyStepper({
         </span>
         <button
           type="button"
-          onClick={() => onChange(value + 1)}
+          onClick={() => onChange(max ? Math.min(max, value + 1) : value + 1)}
           className="h-full w-12 border-l border-black/15 font-(family-name:--font-body) text-xl transition-colors hover:bg-black/5"
           aria-label={`Increase ${label}`}
         >
@@ -82,26 +83,6 @@ function QtyStepper({
         </button>
       </div>
     </div>
-  );
-}
-
-/** Compact "Bulk pricing: 4+ ₹1,149 · 10+ ₹999 …" line for a tiered product. */
-function TierList({ rule }: { rule: Extract<PricingRule, { kind: "tiered" }> }) {
-  const rows = rule.tiers.filter(
-    (t) => t.perUnit !== undefined && t.perUnit < rule.basePrice,
-  );
-  if (rows.length === 0) return null;
-  return (
-    <p className="mt-3 font-(family-name:--font-body) text-xs leading-6 text-black/55">
-      Bulk pricing:{" "}
-      {rows.map((t, i) => (
-        <span key={t.min}>
-          {i > 0 ? " · " : ""}
-          {t.min}+ ₹{inr(t.perUnit as number)}
-        </span>
-      ))}{" "}
-      each
-    </p>
   );
 }
 
@@ -170,10 +151,8 @@ export default function ProductDetailClient({
   const rule = useMemo(() => getPricingRule(product.slug), [product.slug]);
   const isSet = rule?.kind === "set";
 
+  // For set-priced products `quantity` is the number of sets.
   const [quantity, setQuantity] = useState(1);
-  const [setPieces, setSetPieces] = useState(
-    rule?.kind === "set" ? rule.sets[0].pieces : 0,
-  );
   const [color, setColor] = useState("");
   const [style, setStyle] = useState("");
   const [personalization, setPersonalization] = useState("");
@@ -225,20 +204,21 @@ export default function ProductDetailClient({
   const pricing = useMemo(() => {
     if (rule?.kind === "tiered") {
       const { unitPrice, lineTotal } = priceTiered(rule, effectiveQty);
-      return { unitPrice, lineTotal, cartQty: effectiveQty, setOpt: null as null };
+      return { unitPrice, lineTotal, cartQty: effectiveQty, set: null as null };
     }
     if (rule?.kind === "set") {
-      const setOpt = findSetOption(rule, setPieces) ?? rule.sets[0];
+      // `quantity` is the number of sets.
+      const { numSets, pieces, perSet, perPiece, lineTotal } = priceSet(rule, quantity);
       return {
-        unitPrice: setOpt.total,
-        lineTotal: setOpt.total * quantity,
-        cartQty: quantity,
-        setOpt,
+        unitPrice: perSet,
+        lineTotal,
+        cartQty: numSets,
+        set: { numSets, pieces, perSet, perPiece, setSize: rule.setSize },
       };
     }
     const flat = Number(product.price || product.regularPrice || 0);
-    return { unitPrice: flat, lineTotal: flat * effectiveQty, cartQty: effectiveQty, setOpt: null as null };
-  }, [rule, effectiveQty, setPieces, quantity, product.price, product.regularPrice]);
+    return { unitPrice: flat, lineTotal: flat * effectiveQty, cartQty: effectiveQty, set: null as null };
+  }, [rule, effectiveQty, quantity, product.price, product.regularPrice]);
 
   useEffect(() => {
     return () => {
@@ -272,11 +252,20 @@ export default function ProductDetailClient({
 
     setCartButtonState("adding");
 
+    const setLine = pricing.set
+      ? {
+          key: "Quantity",
+          value: `${pricing.set.numSets} × set of ${pricing.set.setSize} (${pricing.set.pieces} pieces)`,
+        }
+      : null;
+
     const customizations = schema
-      ? schemaCustomizations
+      ? setLine
+        ? [setLine, ...schemaCustomizations]
+        : schemaCustomizations
       : isSet
         ? [
-            { key: "Set size", value: pricing.setOpt?.label ?? "" },
+            ...(setLine ? [setLine] : []),
             { key: "Personalization", value: personalization },
           ]
         : [
@@ -292,7 +281,7 @@ export default function ProductDetailClient({
         slug: product.slug,
         price: pricing.unitPrice,
         image: selectedImage?.src || product.images[0]?.src || "",
-        setPieces: isSet ? setPieces : undefined,
+        setPieces: pricing.set ? pricing.set.setSize : undefined,
         customizations,
       },
       pricing.cartQty,
@@ -363,24 +352,27 @@ export default function ProductDetailClient({
                 <>
                   <div className="flex items-end gap-2.5">
                     <span className="font-(family-name:--font-body) text-[2.25rem] leading-none text-black sm:text-[2.55rem]">
-                      ₹{inr(pricing.unitPrice)}
+                      ₹{inr(pricing.lineTotal)}
                     </span>
                     <span className="mb-1 font-(family-name:--font-body) text-base text-black/55">
-                      {isSet ? `for ${pricing.setOpt?.label}` : "each"}
+                      {pricing.set
+                        ? `for ${pricing.set.numSets > 1 ? `${pricing.set.numSets} sets` : "a set"} of ${pricing.set.setSize}`
+                        : effectiveQty > 1
+                          ? `for ${effectiveQty}`
+                          : "each"}
                     </span>
                   </div>
-                  {isSet ? (
-                    <p className="mt-1.5 font-(family-name:--font-body) text-sm text-black/60">
-                      ₹{inr(pricing.setOpt?.perPiece ?? 0)} per piece
-                    </p>
-                  ) : (
-                    effectiveQty > 1 && (
-                      <p className="mt-1.5 font-(family-name:--font-body) text-sm text-black/60">
-                        Total for {effectiveQty}: ₹{inr(pricing.lineTotal)}
-                      </p>
-                    )
-                  )}
-                  {rule.kind === "tiered" && <TierList rule={rule} />}
+                  <p className="mt-1.5 font-(family-name:--font-body) text-sm text-black/60">
+                    {pricing.set ? (
+                      <>
+                        ₹{inr(pricing.set.perSet)} per set of {pricing.set.setSize} · ₹
+                        {inr(pricing.set.perPiece)} per piece
+                        {pricing.set.numSets > 1 && <> · {pricing.set.pieces} pieces</>}
+                      </>
+                    ) : (
+                      <>₹{inr(pricing.unitPrice)} each</>
+                    )}
+                  </p>
                 </>
               ) : (
                 <div className="flex items-end gap-3">
@@ -411,31 +403,30 @@ export default function ProductDetailClient({
             <div className="mt-8 border-t border-black/10 pt-7">
               <div className="grid gap-5">
                 {schema ? (
-                  <ProductOptions schema={schema} onChange={handleSchemaChange} />
+                  <>
+                    {rule?.kind === "set" && (
+                      <>
+                        {/* Set products are sold by the set (e.g. 6). The
+                            customer picks a plain quantity = number of sets;
+                            the schema itself carries no quantity field. */}
+                        <QtyStepper
+                          label={`Quantity (sets of ${rule.setSize})`}
+                          value={quantity}
+                          onChange={setQuantity}
+                          max={rule.maxSets ?? undefined}
+                        />
+                      </>
+                    )}
+                    <ProductOptions schema={schema} onChange={handleSchemaChange} />
+                  </>
                 ) : rule?.kind === "set" ? (
                   <>
-                    <div>
-                      <FieldLabel>Set Size</FieldLabel>
-                      <div className="relative">
-                        <select
-                          value={setPieces}
-                          onChange={(e) => setSetPieces(Number(e.target.value))}
-                          className="h-12 w-full cursor-pointer appearance-none border border-black/15 bg-transparent px-4 pr-10 font-(family-name:--font-body) text-sm text-black"
-                        >
-                          {rule.sets.map((s) => (
-                            <option key={s.pieces} value={s.pieces}>
-                              {s.label} — ₹{inr(s.total)} (₹{inr(s.perPiece)}/pc)
-                            </option>
-                          ))}
-                        </select>
-                        <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
-                          <svg width="11" height="6" viewBox="0 0 11 6" fill="none">
-                            <path d="M1 1L5.5 5L10 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
-                    <QtyStepper label="Number of Sets" value={quantity} onChange={setQuantity} />
+                    <QtyStepper
+                      label={`Quantity (sets of ${rule.setSize})`}
+                      value={quantity}
+                      onChange={setQuantity}
+                      max={rule.maxSets ?? undefined}
+                    />
                     <PersonalizationField value={personalization} onChange={setPersonalization} />
                   </>
                 ) : rule ? (

@@ -6,6 +6,10 @@ export type CollectionItem = {
   description: string;
   image?: string;
   sourceCategories: string[];
+  // When true, the `/shop/[slug]` page still exists but the collection is not
+  // listed in the header Shop dropdown. Used for edits that are surfaced
+  // elsewhere (e.g. as suggestions inside "Curate your hamper").
+  hideFromNav?: boolean;
 };
 
 // Shop collections mirror the `services.ts` pattern: each collection is a curated
@@ -52,6 +56,7 @@ export const collections: CollectionItem[] = [
       "Personalised gifting for the people standing beside you — keepsakes and details to say thank you.",
     image: "/collections/for-your-bridesmaids.webp",
     sourceCategories: ["For your Bridesmaids"],
+    hideFromNav: true,
   },
   {
     slug: "for-a-babyshower-event",
@@ -62,6 +67,7 @@ export const collections: CollectionItem[] = [
       "Soft, celebratory details and keepsakes for welcoming a little one.",
     image: "/collections/for-a-babyshower-event.webp",
     sourceCategories: ["For a Babyshower Event"],
+    hideFromNav: true,
   },
   {
     slug: "for-couples",
@@ -72,6 +78,7 @@ export const collections: CollectionItem[] = [
       "Personalised keepsakes for anniversaries, engagements, and everyday milestones shared by two.",
     image: "/collections/for-couples.webp",
     sourceCategories: ["For Couples"],
+    hideFromNav: true,
   },
   {
     slug: "for-corporate",
@@ -82,8 +89,13 @@ export const collections: CollectionItem[] = [
       "Considered, personalised gifting for teams, clients, and events — crafted with the same care as everything else.",
     image: "/collections/for-corporate.webp",
     sourceCategories: ["For Corporate"],
+    hideFromNav: true,
   },
 ];
+
+// Collections shown in the header Shop dropdown, in order. Excludes edits that
+// are surfaced elsewhere (see `hideFromNav`).
+export const navCollections = collections.filter((collection) => !collection.hideFromNav);
 
 export function getCollectionBySlug(slug: string) {
   return collections.find((collection) => collection.slug === slug) ?? null;

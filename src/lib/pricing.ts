@@ -21,18 +21,28 @@ export type QtyTier = {
   flatTotal?: number;
 };
 
-export type SetOption = {
-  pieces: number;
-  label: string;
-  /** fixed total for one set of this size */
-  total: number;
-  /** per-piece figure, for display only */
-  perPiece: number;
+// A "set"-priced product is sold in fixed base sets (e.g. a set of 6). The
+// customer picks a plain quantity = number of sets; quantity 2 means two sets
+// (12 pieces). The per-set price drops at higher quantities (volume discount).
+export type SetTier = {
+  /** inclusive lower bound on number of sets */
+  minSets: number;
+  /** inclusive upper bound on number of sets; null = no upper bound */
+  maxSets: number | null;
+  /** price for ONE base set within this range */
+  perSet: number;
 };
 
 export type PricingRule =
   | { kind: "tiered"; basePrice: number; tiers: QtyTier[] }
-  | { kind: "set"; sets: SetOption[] };
+  | {
+      kind: "set";
+      /** pieces in one base set */
+      setSize: number;
+      /** hard cap on number of sets orderable; null = no cap */
+      maxSets: number | null;
+      tiers: SetTier[];
+    };
 
 const MIRROR_STYLE_TIERS: QtyTier[] = [
   { min: 1, max: 3, perUnit: 1299 },
@@ -82,15 +92,6 @@ const RING_BOX_TIERS: QtyTier[] = [
   { min: 50, max: null, perUnit: 1250 },
 ];
 
-function setOptions(base: number, table: Array<[pieces: number, total: number]>): SetOption[] {
-  return table.map(([pieces, total]) => ({
-    pieces,
-    label: `Set of ${pieces}`,
-    total,
-    perPiece: Math.round(total / pieces),
-  }));
-}
-
 // Keyed by product slug (WooCommerce slug).
 export const PRICING_RULES: Record<string, PricingRule> = {
   "personalised-compact-mirror": { kind: "tiered", basePrice: 1299, tiers: MIRROR_STYLE_TIERS },
@@ -100,35 +101,37 @@ export const PRICING_RULES: Record<string, PricingRule> = {
   "personalised-wine-glass": { kind: "tiered", basePrice: 1799, tiers: WINE_GLASS_TIERS },
   "personalised-glass-ring-box": { kind: "tiered", basePrice: 1699, tiers: RING_BOX_TIERS },
 
+  // Sets of 6. Per-set price by number of sets (1 / 2–3 / 4+). Place cards and
+  // napkins serve a maximum of 30 (5 sets); cutlery takes bulk orders (no cap).
   "linen-handpainted-table-napkins": {
     kind: "set",
-    sets: setOptions(650, [
-      [6, 3900],
-      [12, 3750],
-      [18, 3750],
-      [24, 3594],
-      [30, 3594],
-    ]),
+    setSize: 6,
+    maxSets: 5,
+    tiers: [
+      { minSets: 1, maxSets: 1, perSet: 3900 },
+      { minSets: 2, maxSets: 3, perSet: 3750 },
+      { minSets: 4, maxSets: null, perSet: 3594 },
+    ],
   },
   "calligraphed-place-cards": {
     kind: "set",
-    sets: setOptions(150, [
-      [6, 900],
-      [12, 870],
-      [18, 870],
-      [24, 834],
-      [30, 834],
-    ]),
+    setSize: 6,
+    maxSets: 5,
+    tiers: [
+      { minSets: 1, maxSets: 1, perSet: 900 },
+      { minSets: 2, maxSets: 3, perSet: 870 },
+      { minSets: 4, maxSets: null, perSet: 834 },
+    ],
   },
   "engraved-personalised-cutlery": {
     kind: "set",
-    sets: setOptions(500, [
-      [6, 3000],
-      [12, 2850],
-      [18, 2850],
-      [24, 2694],
-      [30, 2694],
-    ]),
+    setSize: 6,
+    maxSets: null,
+    tiers: [
+      { minSets: 1, maxSets: 1, perSet: 3000 },
+      { minSets: 2, maxSets: 3, perSet: 2850 },
+      { minSets: 4, maxSets: null, perSet: 2694 },
+    ],
   },
 };
 
@@ -159,23 +162,45 @@ export function priceTiered(
   return { unitPrice, lineTotal, tier };
 }
 
-export function findSetOption(
+/**
+ * Resolve a set-priced line for a given number of sets (the plain quantity the
+ * customer picks). `perSet` is the per-set price at that quantity's tier;
+ * `lineTotal` is authoritative.
+ */
+export function priceSet(
   rule: Extract<PricingRule, { kind: "set" }>,
-  pieces: number,
-): SetOption | null {
-  return rule.sets.find((s) => s.pieces === pieces) ?? null;
+  numSetsInput: number,
+): {
+  numSets: number;
+  pieces: number;
+  perSet: number;
+  perPiece: number;
+  lineTotal: number;
+} {
+  const cap = rule.maxSets ?? Number.POSITIVE_INFINITY;
+  const numSets = Math.min(cap, Math.max(1, Math.floor(numSetsInput) || 1));
+  const tier =
+    rule.tiers.find(
+      (t) => numSets >= t.minSets && (t.maxSets === null || numSets <= t.maxSets),
+    ) ?? rule.tiers[rule.tiers.length - 1];
+  return {
+    numSets,
+    pieces: rule.setSize * numSets,
+    perSet: tier.perSet,
+    perPiece: Math.round(tier.perSet / rule.setSize),
+    lineTotal: tier.perSet * numSets,
+  };
 }
 
 /**
  * Entry price for a product with a rule — used for "From ₹X" catalogue cards.
- * Tiered: the single-unit base price. Set: the smallest set's total (which is
- * also what the product page shows by default).
+ * Tiered: the single-unit base price. Set: the price of one set.
  */
 export function getFromPrice(slug: string | undefined | null): number | null {
   const rule = getPricingRule(slug);
   if (!rule) return null;
   if (rule.kind === "set") {
-    return rule.sets[0].total;
+    return rule.tiers[0].perSet;
   }
   return rule.basePrice;
 }
@@ -195,18 +220,24 @@ export function cartLineInfo(line: {
     const { unitPrice, lineTotal } = priceTiered(rule, line.quantity);
     return { unitPrice, lineTotal };
   }
+  if (rule?.kind === "set") {
+    // `quantity` on a set line is the number of sets.
+    const { perSet, lineTotal } = priceSet(rule, line.quantity);
+    return { unitPrice: perSet, lineTotal };
+  }
   return { unitPrice: line.price, lineTotal: line.price * line.quantity };
 }
 
 /**
  * Authoritative line total for any cart/checkout line.
  * - tiered: computed from quantity
- * - set:    set total (looked up by `setPieces`) × quantity (number of sets)
+ * - set:    computed from quantity (= number of sets)
  * - no rule / bad input: null → caller falls back to WooCommerce's own price
  */
 export function resolveLineTotal(args: {
   slug: string | undefined | null;
   quantity: number;
+  /** Kept for call-site compatibility; set pricing derives everything from quantity. */
   setPieces?: number | null;
 }): number | null {
   const rule = getPricingRule(args.slug);
@@ -217,7 +248,5 @@ export function resolveLineTotal(args: {
     return priceTiered(rule, qty).lineTotal;
   }
 
-  const opt = args.setPieces ? findSetOption(rule, args.setPieces) : null;
-  if (!opt) return null;
-  return opt.total * qty;
+  return priceSet(rule, qty).lineTotal;
 }

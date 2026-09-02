@@ -410,3 +410,186 @@ PERSONALISATION [Textbox]
 
 SPECIAL REQUEST [Textbox]
 (Share your preferred colours, theme, or any custom requests you'd like us to consider while creating your greeting card.
+
+--------------------------------------------------------------------------------------------------
+
+PRODUCT 10
+
+HANDPAINTED LINEN TOTE BAG (Set Bulk/ Quantity Limit to 20 only)
+A beautifully crafted keepsake, handpainted on quality linen tote bag to bring together everyday utility. Each tote is made individually, making it a unique addition to gifting, celebrations, and beyond.
+
+BAG COLOUR
+Select the colour that best complements your occasion.
+• Dark Blue
+• Black
+• Ivory
+
+QUANTITY
+
+CALLIGRAPHY TEXT [Textbox]
+(Enter custom text, quote, or any special phrase you'd like handpainted on the tote.)
+
+PERSONALISATION IDEAS [Textbox]
+(Eg. Bridal Shower Honouring — Illustration — Bride's Name — Date)
+
+ILLUSTRATION
+(Add a handpainted illustration to make your tote uniquely yours.)
+• Yes
+• No
+
+ILLUSTRATION REQUEST
+Have a specific illustration or idea in mind? Share it with us in the Special Request box below.
+
+SPECIAL REQUEST [Textbox]
+(Share any illustration ideas, design preferences, colour preferences, gifting occasion, or other details you'd like us to consider while creating your personalised tote.)
+
+--------------------------------------------------------------------------------------------------
+
+PRODUCT 11
+
+PERSONALISED CARD HOLDER (Bulk Orders Accepted)
+A refined everyday essential, thoughtfully personalised with delicate engraving. Crafted to be both functional and distinctive, each card holder makes an elegant keepsake for weddings, gifting, anniversaries and special celebrations.
+
+QUANTITY
+
+CARD HOLDER COLOUR
+Select the finish that best complements your design.
+• Gold
+• Silver
+
+CARD HOLDER SIZE
+Select your card holder size.
+Rectangular Card Holder
+(Measurements to be added.)
+
+ENGRAVING FILL
+Select the colour finish of your engraved details.
+• Gold Fill
+• Silver Fill
+• Natural Finish
+
+PERSONALISATION [Textbox]
+(Enter your name, initials, monogram, date, or any special text you'd like included.)
+
+SPECIAL REQUEST [Textbox]
+(Share any special requests, gifting occasion, recipient details, design preferences, or ideas you'd like us to consider while creating your personalised card holder.)
+
+--------------------------------------------------------------------------------------------------
+
+PRODUCT 12
+
+PERSONALISED CALLIGRAPHED PLACE CARDS (Bulk Orders Accepted)
+(Serves 30 people only. Set bulk limits. Minimum order for 6 people.)
+A beautiful finishing touch to any table, each place card is individually calligraphed to add a thoughtful and personal detail to your celebration. Perfect for intimate gatherings, dinner parties, and special occasions.
+
+QUANTITY
+
+PLACE CARD STYLE
+Choose the style that best complements your table setting.
+* Folded Place Card
+(Available in Black or Ivory. For other colours, please mention your preference in Special Request.)
+* Doily Place Card
+(Available in White.)
+* Ribbon Place Card
+(Available in Blue, Black, and other colours on request.)
+
+COLOUR
+Choose your preferred colour based on the style selected. (Shown after a style is chosen.)
+Folded
+• Black
+• Ivory
+• Special Request
+Doily
+• White
+Ribbon
+• Blue
+• Black
+• Special Request
+
+CALLIGRAPHY STYLE
+Choose your preferred calligraphy style.
+(Options to be added.)
+
+PERSONALISATION [Textbox]
+(Add names, numbers, last names, initials, or any special text you'd like hand-calligraphed.)
+
+SPECIAL REQUEST [Textbox]
+(Share any special requests, occasion details, colour preferences, design ideas, or other details you'd like us to consider while creating your personalised place cards.)
+
+--------------------------------------------------------------------------------------------------
+
+PRODUCT 13
+
+HANDPAINTED LINEN DINING NAPKINS
+(Serves 30 people only. Set bulk limits. Minimum order for 6 people.)
+Beautifully crafted in quality linen, each napkin is individually handpainted to bring a touch of colour and character to your table. Thoughtful, aesthetic, and playful — they're made to turn everyday table settings and special celebrations into something worth remembering.
+
+NAPKIN COLOUR
+Select the colour that best complements your table setting.
+* Ivory
+* Blue
+* Special Request
+
+QUANTITY
+
+PERSONALISED TEXT [Textbox]
+(Enter custom text or any special phrase you'd like handpainted on the napkin.)
+
+PERSONALISATION IDEAS [Textbox]
+(Eg. Hosts' last/family name, dining values, host couple initials, guest initials)
+
+ILLUSTRATION
+(Add a handpainted illustration to make your napkin uniquely yours, matching your theme)
+* Yes
+* No
+
+ILLUSTRATION REQUEST
+Have a specific illustration or idea in mind? Share it with us in the Special Request box below.
+
+SPECIAL REQUEST [Textbox]
+(Share any illustration ideas, design preferences, colour preferences, occasion details, or other details you'd like us to consider while creating your personalised napkins.)
+
+--------------------------------------------------------------------------------------------------
+
+PRODUCT 14
+
+PERSONALISED ENGRAVED CUTLERY SET (Each set includes 1 Knife + 1 Spoon. Bulk Orders Accepted)
+A refined addition to your table, thoughtfully personalised to make every place setting feel a little more special. Perfect for intimate gatherings, dinner parties, gifting, and celebrations.
+
+CUTLERY COLOUR
+Select the finish that best complements your table setting.
+* Gold
+* Rose Gold
+* Silver
+
+QUANTITY
+
+ENGRAVING DETAILS
+Choose your preferred engraving.
+* Knife Engraving
+* Spoon Engraving
+* Both
+(Custom engraving on both the knife and spoon, creating a coordinated and elegant set for your table.)
+
+CUSTOM ENGRAVING
+Knife [Textbox]
+(Enter a name, initials, date, quote, prefix, or any special text you'd like engraved on the knife.)
+Spoon [Textbox]
+(Enter a name, initials, date, quote, prefix, or any special text you'd like engraved on the spoon.)
+
+ENGRAVING FILL
+Select the colour finish of your engraved details.
+* Gold Fill
+* Silver Fill
+* Natural Finish
+
+PERSONALISATION IDEAS
+Create a design that reflects your celebration.
+* Name
+* Initials
+* Date
+* Prefix & Last Name
+* Custom Text
+
+SPECIAL REQUEST [Textbox]
+(Share any special requests, occasion, theme, design preferences, or ideas you'd like us to consider while creating your personalised cutlery set.)
