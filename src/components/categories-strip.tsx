@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import Reveal from "@/components/reveal";
 
 const categories = [
@@ -6,46 +7,49 @@ const categories = [
     name: "Cake knife & server",
     label: "Cake knife &\nserver",
     image: "/categories/cake.webp",
+    href: "/products/personalised-cake-knife-server-set",
   },
   {
     name: "Wine glass",
     label: "Wine glass",
     image: "/categories/wine-glass.webp",
+    href: "/products/personalised-wine-glass",
   },
   {
     name: "Compact mirror",
     label: "Compact\nmirror",
     image: "/categories/compact-mirror.png",
+    href: "/products/personalised-compact-mirror",
   },
   {
     name: "Letter",
     label: "Letter",
     image: "/categories/letter.webp",
-  },
-  {
-    name: "Place cards",
-    label: "Place cards",
-    image: "/categories/placecards.webp",
+    href: "/products/handwritten-letter-in-an-engraved-glass-box",
   },
   {
     name: "Signage",
     label: "Signage",
     image: "/categories/signage.webp",
+    href: "/products/handpainted-signage",
   },
   {
     name: "Personalised frame",
     label: "Personalised\nframe",
     image: "/categories/personalised-frame.webp",
+    href: "/products/personalised-frame",
   },
   {
-    name: "Personalised gifting",
-    label: "Personalised\ngifting",
+    name: "Hamper",
+    label: "Hamper",
     image: "/categories/personalised-gifting.webp",
+    href: "/curate-your-hamper",
   },
   {
-    name: "Greeting card",
-    label: "Greeting card",
-    image: "/categories/greeting-card.webp",
+    name: "Table details",
+    label: "Table\ndetails",
+    image: "/categories/placecards.webp",
+    href: "/products/calligraphed-place-cards",
   },
 ] as const;
 
@@ -57,8 +61,10 @@ function CategoryCards({ duplicate = false }: { duplicate?: boolean }) {
       aria-hidden={duplicate}
     >
       {categories.map((category) => (
-        <div
+        <Link
           key={`${duplicate ? "duplicate" : "primary"}-${category.name}`}
+          href={category.href}
+          tabIndex={duplicate ? -1 : undefined}
           className="lift-card flex w-28 flex-none flex-col items-center text-center sm:w-31 lg:w-34"
         >
           <div className="relative flex h-28 w-full items-center justify-center overflow-hidden sm:h-31 lg:h-34">
@@ -75,7 +81,7 @@ function CategoryCards({ duplicate = false }: { duplicate?: boolean }) {
           <p className="mt-2 max-w-[12ch] whitespace-pre-line text-center font-(family-name:--font-body) text-sm leading-[1.02] tracking-[0.02em] text-black/60 uppercase ">
             {category.label}
           </p>
-        </div>
+        </Link>
       ))}
     </div>
   );

@@ -24,24 +24,25 @@ function FieldLabel({ children }: { children: ReactNode }) {
   );
 }
 
-function PersonalizationField({
-  value,
-  onChange,
+function ProductInfoDropdown({
+  title,
+  children,
 }: {
-  value: string;
-  onChange: (v: string) => void;
+  title: string;
+  children: ReactNode;
 }) {
   return (
-    <div>
-      <FieldLabel>Personalization</FieldLabel>
-      <textarea
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="Add names, wording, or details here"
-        rows={4}
-        className="w-full resize-none border border-black/15 bg-transparent px-4 py-3 font-(family-name:--font-body) text-sm text-black placeholder:text-black/40"
-      />
-    </div>
+    <details className="group border-b border-black/10">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 font-(family-name:--font-body) text-sm uppercase tracking-[0.2em] text-black [&::-webkit-details-marker]:hidden">
+        {title}
+        <span className="text-xl font-light leading-none transition-transform group-open:rotate-45" aria-hidden="true">
+          +
+        </span>
+      </summary>
+      <div className="pb-5 font-(family-name:--font-body) text-[0.98rem] leading-7 text-black/76">
+        {children}
+      </div>
+    </details>
   );
 }
 
@@ -155,7 +156,6 @@ export default function ProductDetailClient({
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
   const [style, setStyle] = useState("");
-  const [personalization, setPersonalization] = useState("");
   const [schemaCustomizations, setSchemaCustomizations] = useState<
     Array<{ key: string; value: string }>
   >([]);
@@ -264,14 +264,10 @@ export default function ProductDetailClient({
         ? [setLine, ...schemaCustomizations]
         : schemaCustomizations
       : isSet
-        ? [
-            ...(setLine ? [setLine] : []),
-            { key: "Personalization", value: personalization },
-          ]
+        ? [...(setLine ? [setLine] : [])]
         : [
             { key: "Color", value: color },
             { key: "Style", value: style },
-            { key: "Personalization", value: personalization },
           ];
 
     addItem(
@@ -427,12 +423,10 @@ export default function ProductDetailClient({
                       onChange={setQuantity}
                       max={rule.maxSets ?? undefined}
                     />
-                    <PersonalizationField value={personalization} onChange={setPersonalization} />
                   </>
                 ) : rule ? (
                   <>
                     <QtyStepper label="Quantity" value={quantity} onChange={setQuantity} />
-                    <PersonalizationField value={personalization} onChange={setPersonalization} />
                   </>
                 ) : (
                   <>
@@ -519,18 +513,6 @@ export default function ProductDetailClient({
                       </div>
                     </div>
 
-                    <div>
-                      <label className="mb-2 block font-(family-name:--font-body) text-sm uppercase tracking-[0.18em] text-black/48">
-                        Personalization
-                      </label>
-                      <textarea
-                        value={personalization}
-                        onChange={(e) => setPersonalization(e.target.value)}
-                        placeholder="Add names, wording, or details here"
-                        rows={4}
-                        className="w-full resize-none border border-black/15 bg-transparent px-4 py-3 font-(family-name:--font-body) text-sm text-black placeholder:text-black/40"
-                      />
-                    </div>
                   </>
                 )}
 
@@ -634,45 +616,32 @@ export default function ProductDetailClient({
                 </p>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      <section className="border-b border-black/10">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-10 sm:px-8 sm:py-14 md:px-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)] lg:gap-16 lg:px-16">
-          <div>
-            <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.3em] text-black/45">
-              Product Details
-            </p>
-            <h2 className="mt-3 max-w-[16ch] font-(family-name:--font-body) text-[1.85rem] leading-tight text-black sm:text-[2.2rem]">
-              Designed to feel considered, personal, and lasting.
-            </h2>
-            <div
-              className="mt-6 max-w-3xl font-(family-name:--font-body) text-[1rem] leading-8 text-black/78 [&>p]:mb-4 [&>ul]:ml-4 [&>ul]:list-disc"
-              dangerouslySetInnerHTML={{ __html: description }}
-            />
-          </div>
-
-          <div className="grid gap-8 self-start lg:pt-10">
-            <div className="border-t border-black/10 pt-5">
-              <p className="font-(family-name:--font-body) text-[0.72rem] uppercase tracking-[0.28em] text-black/45">
-                Shipping & Returns
-              </p>
-              <div className="mt-3 space-y-3 font-(family-name:--font-body) text-[0.98rem] leading-7 text-black/76">
+            <div className="mt-8 border-t border-black/10">
+              <ProductInfoDropdown title="Shipping">
                 <p><strong>Standard Shipping:</strong> 5-7 business days.</p>
-                <p><strong>Express Shipping:</strong> 2-3 business days.</p>
+                <p className="mt-3"><strong>Express Shipping:</strong> 2-3 business days.</p>
+              </ProductInfoDropdown>
+              <ProductInfoDropdown title="Returns">
                 <p>Returns accepted within 15 days of delivery in original condition and packaging.</p>
-              </div>
-            </div>
-
-            <div className="border-t border-black/10 pt-5">
-              <p className="font-(family-name:--font-body) text-[0.72rem] uppercase tracking-[0.28em] text-black/45">
-                Materials & Care
-              </p>
-              <div className="mt-3 space-y-3 font-(family-name:--font-body) text-[0.98rem] leading-7 text-black/76">
+              </ProductInfoDropdown>
+              <ProductInfoDropdown title="Materials & Care / Product Details">
+                {description && (
+                  <div
+                    className="[&>p]:mb-3 [&>ul]:ml-4 [&>ul]:list-disc"
+                    dangerouslySetInnerHTML={{ __html: description }}
+                  />
+                )}
                 <p>Crafted with premium materials for longevity and everyday display.</p>
-                <p>Wipe gently with a soft, dry cloth and avoid extended exposure to heat or moisture.</p>
-              </div>
+                <p className="mt-3">Wipe gently with a soft, dry cloth and avoid extended exposure to heat or moisture.</p>
+              </ProductInfoDropdown>
+              <ProductInfoDropdown title="Products Included">
+                <p>
+                  {rule?.kind === "set"
+                    ? `Each set includes ${rule.setSize} pieces.`
+                    : "Includes the product and options selected above."}
+                </p>
+              </ProductInfoDropdown>
             </div>
           </div>
         </div>
@@ -685,8 +654,8 @@ export default function ProductDetailClient({
               <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.28em] text-black/45">
                 Related
               </p>
-              <h2 className="mt-2 font-(family-name:--font-body) text-[1.9rem] leading-tight text-black md:text-[2.3rem]">
-                You may also like
+              <h2 className="mt-2 font-(family-name:--font-heading) text-[1.9rem] leading-tight text-black md:text-[2.3rem]">
+                Pairs Beautifully With
               </h2>
             </div>
             <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-8 lg:grid-cols-4">

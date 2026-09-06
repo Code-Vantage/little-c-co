@@ -17,6 +17,17 @@ const shopMenuLinks: { label: string; href: string }[] = navCollections.flatMap(
   },
 );
 
+const navServiceOrder = ["calligraphy", "engraving", "foil-stamping"];
+const navServices = [...services].sort((a, b) => {
+  const aPosition = navServiceOrder.indexOf(a.slug);
+  const bPosition = navServiceOrder.indexOf(b.slug);
+
+  return (
+    (aPosition === -1 ? navServiceOrder.length : aPosition) -
+    (bPosition === -1 ? navServiceOrder.length : bPosition)
+  );
+});
+
 function UserIcon() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -37,9 +48,10 @@ function SearchIcon() {
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isServicesMenuOpen, setIsServicesMenuOpen] = useState(false);
 
   return (
-    <header className="relative z-50 w-full bg-[rgba(252,250,247,0.92)] shadow-[0px_5px_7px_0px_rgba(0,0,0,0.14)] backdrop-blur-sm">
+    <header className="relative z-50 w-full capitalize bg-[rgba(252,250,247,0.92)] shadow-[0px_5px_7px_0px_rgba(0,0,0,0.14)] backdrop-blur-sm">
       <div className="mx-auto flex max-w-360 items-center justify-between px-4 py-3 lg:justify-start lg:gap-7 lg:px-8 lg:py-2">
         
         {/* Mobile Hamburger Button */}
@@ -98,22 +110,37 @@ export default function Header() {
         {/* Desktop Nav links & Mobile Right Icons */}
         <div className="flex shrink-0 items-center gap-4 lg:gap-5"> 
           <nav aria-label="Primary" className="hidden items-center gap-5 lg:flex">
-            <div className="group relative">
-              <Link
-                href="/services"
-                className="inline-flex items-center gap-1 whitespace-nowrap font-(family-name:--font-body) text-[1.02rem] text-black transition-opacity hover:opacity-70"
+            <div
+              className="relative"
+              onMouseEnter={() => setIsServicesMenuOpen(true)}
+              onMouseLeave={() => setIsServicesMenuOpen(false)}
+            >
+              <button
+                type="button"
+                onClick={() => setIsServicesMenuOpen(true)}
+                aria-expanded={isServicesMenuOpen}
+                aria-controls="services-menu"
+                className="inline-flex cursor-pointer items-center gap-1 whitespace-nowrap font-(family-name:--font-body) text-[1.02rem] text-black transition-opacity hover:opacity-70"
               >
                 Services
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg className={`transition-transform ${isServicesMenuOpen ? "rotate-180" : ""}`} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="m6 9 6 6 6-6" />
                 </svg>
-              </Link>
-              <div className="invisible absolute left-0 top-full z-50 pt-4 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
+              </button>
+              <div
+                id="services-menu"
+                className={`absolute left-0 top-full z-50 pt-4 transition-all duration-200 ${
+                  isServicesMenuOpen
+                    ? "visible opacity-100"
+                    : "invisible pointer-events-none opacity-0"
+                }`}
+              >
                 <div className="min-w-56 border border-black/10 bg-white shadow-[0px_18px_36px_rgba(15,23,42,0.08)]">
-                  {services.map((service) => (
+                  {navServices.map((service) => (
                     <Link
                       key={service.slug}
                       href={`/services/${service.slug}`}
+                      onClick={() => setIsServicesMenuOpen(false)}
                       className="block border-b border-black/6 px-5 py-3 font-(family-name:--font-body) text-[0.96rem] text-black/80 transition-colors hover:bg-black/[0.03] hover:text-black last:border-b-0"
                     >
                       {service.label}
@@ -128,7 +155,7 @@ export default function Header() {
                 className="inline-flex items-center gap-1 whitespace-nowrap font-(family-name:--font-body) text-[1.02rem] text-black transition-opacity hover:opacity-70"
               >
                 Shop
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg className="transition-transform group-hover:rotate-180" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="m6 9 6 6 6-6" />
                 </svg>
               </Link>
@@ -212,25 +239,35 @@ export default function Header() {
             </div>
             <hr className="border-t border-black/10" />
             <div className="flex flex-col gap-3">
-              <Link
-                onClick={() => setIsMobileMenuOpen(false)}
-                href="/services"
-                className="font-(family-name:--font-body) text-[1.12rem] text-black transition-colors hover:text-black/70"
+              <button
+                type="button"
+                onClick={() => setIsServicesMenuOpen((isOpen) => !isOpen)}
+                aria-expanded={isServicesMenuOpen}
+                aria-controls="mobile-services-menu"
+                className="flex w-full cursor-pointer items-center justify-between font-(family-name:--font-body) text-[1.12rem] text-black"
               >
                 Services
-              </Link>
-              <div className="ml-2 flex flex-col gap-3 border-l border-black/10 pl-4">
-                {services.map((service) => (
-                  <Link
-                    key={service.slug}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    href={`/services/${service.slug}`}
-                    className="font-(family-name:--font-body) text-[0.97rem] text-black/75 transition-colors hover:text-black"
-                  >
-                    {service.label}
-                  </Link>
-                ))}
-              </div>
+                <svg className={`transition-transform ${isServicesMenuOpen ? "rotate-180" : ""}`} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+              {isServicesMenuOpen && (
+                <div id="mobile-services-menu" className="ml-2 flex flex-col gap-3 border-l border-black/10 pl-4">
+                  {navServices.map((service) => (
+                    <Link
+                      key={service.slug}
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        setIsServicesMenuOpen(false);
+                      }}
+                      href={`/services/${service.slug}`}
+                      className="font-(family-name:--font-body) text-[0.97rem] text-black/75 transition-colors hover:text-black"
+                    >
+                      {service.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
             <hr className="border-t border-black/10" />
             <Link 

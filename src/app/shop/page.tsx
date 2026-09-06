@@ -3,6 +3,9 @@ import { getProducts } from "@/lib/products";
 import { getFromPrice } from "@/lib/pricing";
 import type { StoreProduct } from "@/lib/types";
 
+const uncategorizedLabel = "Gifts & Keepsakes";
+const categoryOrder = [uncategorizedLabel, "The Table Edit"];
+
 function normalizeSearchValue(value: string | string[] | undefined) {
   if (Array.isArray(value)) {
     return value[0]?.trim().toLowerCase() || "";
@@ -120,32 +123,43 @@ export default async function ShopPage({
   const products = await getProducts();
   const visibleProducts = products.filter((product) => productMatchesQuery(product, query));
 
-  // Group products by category, preserving first-seen order
+  // Group products by category, then show the keepsake and table edits first.
   const categoryMap = new Map<string, StoreProduct[]>();
   for (const product of visibleProducts) {
     const cats = product.categories?.length ? product.categories : ["Uncategorized"];
     for (const cat of cats) {
-      if (!categoryMap.has(cat)) categoryMap.set(cat, []);
-      categoryMap.get(cat)!.push(product);
+      const categoryName = cat === "Uncategorized" ? uncategorizedLabel : cat;
+      if (!categoryMap.has(categoryName)) categoryMap.set(categoryName, []);
+      categoryMap.get(categoryName)!.push(product);
     }
   }
 
-  const categories = Array.from(categoryMap.entries());
+  const categories = Array.from(categoryMap.entries()).sort(([a], [b]) => {
+    const aPosition = categoryOrder.indexOf(a);
+    const bPosition = categoryOrder.indexOf(b);
+
+    return (
+      (aPosition === -1 ? categoryOrder.length : aPosition) -
+      (bPosition === -1 ? categoryOrder.length : bPosition)
+    );
+  });
 
   return (
     <main className="min-h-screen px-4 sm:px-8 py-8 md:px-16 md:py-16">
       <div className="mx-auto max-w-7xl">
       <div className="mb-10 max-w-3xl md:mb-12">
-        <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.32em] text-black/45">
-          {query ? "Search" : "Shop"}
-        </p>
+        {query && (
+          <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.32em] text-black/45">
+            Search
+          </p>
+        )}
         {query ? (
           <h1 className="mt-3 font-(family-name:--font-body) text-[2.35rem] leading-tight text-black md:text-[3.2rem]">
             Search <span className="font-(family-name:--font-heading)">results</span>
           </h1>
         ) : (
-          <h1 className="mt-3 font-(family-name:--font-body) text-[2.35rem] leading-tight text-black md:text-[3.2rem]">
-            <span className="font-(family-name:--font-heading)">collection</span>
+          <h1 className="font-(family-name:--font-body) text-[2.35rem] leading-tight text-black md:text-[3.2rem]">
+            <span className="font-(family-name:--font-heading)">Shop</span>
           </h1>
         )}
         <p className="mt-3 font-(family-name:--font-body) text-[1rem] leading-7 text-black/70 md:text-[1.08rem]">

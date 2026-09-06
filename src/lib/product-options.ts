@@ -84,11 +84,10 @@ const FRAME: ProductOptionSchema = {
       showIf: { optionId: "style", equals: "Glass Engraving" },
     },
     {
-      kind: "textarea",
+      kind: "note",
       id: "personalisation",
       label: "Personalisation",
       help: "Enter your quote, message, name, date or any special text you'd like included.",
-      required: false,
     },
     {
       kind: "textarea",
@@ -248,11 +247,10 @@ const COMPACT_MIRROR: ProductOptionSchema = {
       options: choices("Gold Fill", "Silver Fill", "Natural Finish"),
     },
     {
-      kind: "textarea",
+      kind: "note",
       id: "personalisation",
       label: "Personalisation",
       help: "Enter your name(s), initials, wedding date, or any special text you'd like included.",
-      required: false,
     },
     {
       kind: "textarea",
@@ -328,25 +326,10 @@ const CAKE_SET: ProductOptionSchema = {
       options: choices("Silver Fill", "Natural Finish"),
     },
     {
-      kind: "select",
+      kind: "note",
       id: "personalisation_ideas",
       label: "Personalisation Ideas",
       help: "Create a design that reflects your celebration.",
-      required: false,
-      options: choices(
-        "Date",
-        "Initials",
-        "Quote",
-        "Prefix (Mr. & Mrs.) & Last Name",
-        "Custom Text",
-      ),
-    },
-    {
-      kind: "text",
-      id: "personalisation_ideas_custom_text",
-      label: "Custom Text",
-      required: false,
-      showIf: { optionId: "personalisation_ideas", equals: "Custom Text" },
     },
     {
       kind: "textarea",
@@ -466,11 +449,10 @@ const SIGNAGE: ProductOptionSchema = {
       options: choices("Black", "Red", "White", "Blue", "Green"),
     },
     {
-      kind: "textarea",
+      kind: "note",
       id: "personalisation",
       label: "Personalisation",
       help: "Enter your menu items, seating details, event names, dates, welcome message, or any wording you'd like included on your signage.",
-      required: false,
     },
     {
       kind: "textarea",
@@ -541,11 +523,10 @@ const RING_BOX: ProductOptionSchema = {
       options: choices("Gold Fill", "Natural Finish"),
     },
     {
-      kind: "textarea",
+      kind: "note",
       id: "personalisation_ideas",
       label: "Personalisation Ideas",
       help: "Choose your preferred engraving design. For example: Mr. & Mrs., Bride & Groom, Names & Date, Date, Initials, or Short Text.",
-      required: false,
     },
     {
       kind: "textarea",
@@ -590,11 +571,10 @@ const WINE_GLASS: ProductOptionSchema = {
       options: choices("Natural Finish", "Gold Fill", "Silver Fill"),
     },
     {
-      kind: "textarea",
+      kind: "note",
       id: "personalisation",
       label: "Personalisation",
       help: "Enter the name(s), quote, date, initials, or any special text you'd like engraved.",
-      required: false,
     },
     {
       kind: "textarea",
@@ -671,11 +651,10 @@ const CURATED_GIFT: ProductOptionSchema = {
       showIf: { optionId: "greeting_card", equals: "Yes" },
     },
     {
-      kind: "textarea",
+      kind: "note",
       id: "personalisation",
       label: "Personalisation",
       help: "Enter the name, personalised message, date, or any special text you'd like included.",
-      required: false,
     },
     {
       kind: "textarea",
@@ -769,11 +748,10 @@ const GREETING_CARD: ProductOptionSchema = {
       options: choices("Kraft Envelope", "No Envelope"),
     },
     {
-      kind: "textarea",
+      kind: "note",
       id: "personalisation",
       label: "Personalisation",
       help: "Enter your message, recipient name, occasion in detail, or any special text you'd like included.",
-      required: false,
     },
     {
       kind: "textarea",
@@ -809,11 +787,10 @@ const TOTE_BAG: ProductOptionSchema = {
       required: false,
     },
     {
-      kind: "textarea",
+      kind: "note",
       id: "personalisation_ideas",
       label: "Personalisation Ideas",
       help: "Eg. Bridal Shower Honouring — Illustration — Bride's Name — Date",
-      required: false,
     },
     {
       kind: "radio",
@@ -875,11 +852,10 @@ const CARD_HOLDER: ProductOptionSchema = {
       options: choices("Gold Fill", "Silver Fill", "Natural Finish"),
     },
     {
-      kind: "textarea",
+      kind: "note",
       id: "personalisation",
       label: "Personalisation",
       help: "Enter your name, initials, monogram, date, or any special text you'd like included.",
-      required: false,
     },
     {
       kind: "textarea",
@@ -956,11 +932,10 @@ const PLACE_CARDS: ProductOptionSchema = {
       options: choices("Styles coming soon"),
     },
     {
-      kind: "textarea",
+      kind: "note",
       id: "personalisation",
       label: "Personalisation",
       help: "Add names, numbers, last names, initials, or any special text you'd like hand-calligraphed.",
-      required: false,
     },
     {
       kind: "textarea",
@@ -997,11 +972,10 @@ const NAPKINS: ProductOptionSchema = {
       required: false,
     },
     {
-      kind: "textarea",
+      kind: "note",
       id: "personalisation_ideas",
       label: "Personalisation Ideas",
       help: "Eg. Hosts' last/family name, dining values, host couple initials, guest initials",
-      required: false,
     },
     {
       kind: "radio",
@@ -1091,19 +1065,10 @@ const CUTLERY: ProductOptionSchema = {
       options: choices("Gold Fill", "Silver Fill", "Natural Finish"),
     },
     {
-      kind: "select",
+      kind: "note",
       id: "personalisation_ideas",
       label: "Personalisation Ideas",
       help: "Create a design that reflects your celebration.",
-      required: false,
-      options: choices("Name", "Initials", "Date", "Prefix & Last Name", "Custom Text"),
-    },
-    {
-      kind: "text",
-      id: "personalisation_ideas_custom_text",
-      label: "Custom Text",
-      required: false,
-      showIf: { optionId: "personalisation_ideas", equals: "Custom Text" },
     },
     {
       kind: "textarea",
