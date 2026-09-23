@@ -1080,6 +1080,318 @@ const CUTLERY: ProductOptionSchema = {
   ],
 };
 
+// ---------------------------------------------------------------------------
+// PRODUCT 15 — Cologne Dispenser
+// ---------------------------------------------------------------------------
+const COLOGNE_DISPENSER: ProductOptionSchema = {
+  type: "cologne-dispenser",
+  title: "Cologne Dispenser",
+  options: [
+    { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
+    {
+      kind: "radio",
+      id: "dispenser_colour",
+      label: "Cologne Dispenser Colour",
+      help: "Select the finish that best complements your design.",
+      required: true,
+      options: choices("Silver", "Black"),
+    },
+    {
+      kind: "radio",
+      id: "dispenser_size",
+      label: "Cologne Dispenser Size",
+      help: "Select your dispenser size.",
+      required: true,
+      options: choices("3 Milliliters"),
+    },
+    {
+      kind: "radio",
+      id: "engraving_fill",
+      label: "Engraving Fill",
+      help: "Select the colour finish of your engraved details.",
+      required: true,
+      options: choices("Gold Fill", "Silver Fill", "Natural Finish"),
+    },
+    {
+      kind: "note",
+      id: "personalisation",
+      label: "Personalisation",
+      help: "Enter a name, initials, monogram, date, or any special text you'd like included.",
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share any special requests, gifting occasion, recipient details, design preferences, or ideas you'd like us to consider while creating your personalised cologne dispenser.",
+      required: false,
+    },
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// PRODUCT 16 — The Candle & Match Set
+// ---------------------------------------------------------------------------
+const CANDLE_MATCH_SET: ProductOptionSchema = {
+  type: "candle-match-set",
+  title: "The Candle & Match Set",
+  options: [
+    { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
+    {
+      kind: "radio",
+      id: "candle_colour",
+      label: "Taper Candle Colour",
+      required: true,
+      options: choices("Ivory"),
+    },
+    {
+      kind: "radio",
+      id: "candle_size",
+      label: "Taper Candle Size",
+      required: true,
+      options: choices("2 cm (W) × 24 cm (H)"),
+    },
+    {
+      kind: "radio",
+      id: "matchbox_colour",
+      label: "Matchbox Case Colour",
+      required: true,
+      options: choices("Black"),
+    },
+    {
+      kind: "radio",
+      id: "matchbox_size",
+      label: "Matchbox Case Size",
+      required: true,
+      options: choices("6 cm × 3.4 cm × 1 cm"),
+    },
+    {
+      kind: "radio",
+      id: "engraving_fill",
+      label: "Engraving Fill",
+      help: "Select the colour finish of your engraved details.",
+      required: true,
+      options: choices("Silver Fill"),
+    },
+    {
+      kind: "note",
+      id: "personalisation",
+      label: "Personalisation",
+      help: "Enter a name, initials, monogram, date, or any special text you'd like engraved on the matchbox case.",
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share any gifting details, occasion, recipient details, design preferences, or ideas you'd like us to consider while creating your set.",
+      required: false,
+    },
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// PRODUCT 17 — Handpainted Linen Welcome Signage
+// ---------------------------------------------------------------------------
+const WELCOME_SIGNAGE: ProductOptionSchema = {
+  type: "welcome-signage",
+  title: "Handpainted Linen Welcome Signage",
+  options: [
+    { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
+    {
+      kind: "radio",
+      id: "material",
+      label: "Material",
+      required: true,
+      options: choices("Ivory Linen Fabric"),
+    },
+    {
+      kind: "radio",
+      id: "dimensions",
+      label: "Dimensions",
+      required: true,
+      options: choices("60 × 150 cm"),
+    },
+    {
+      kind: "text",
+      id: "illustration_preference",
+      label: "Illustration Preference",
+      help: "Choose one preferred illustration from the options displayed with the product and mention your selection here.",
+      required: false,
+    },
+    {
+      kind: "radio",
+      id: "calligraphy_ink",
+      label: "Calligraphy Ink",
+      required: true,
+      options: choices("Black", "Red", "White", "Blue", "Green"),
+    },
+    {
+      kind: "note",
+      id: "personalisation",
+      label: "Personalisation",
+      help: "Enter your names, event date, welcome message, or any wording you'd like included on your signage.",
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share your event theme, colour palette, reference images, preferred illustration style, or any special requests you'd like us to consider while creating your signage.",
+      required: false,
+    },
+  ],
+  afterCart: [
+    {
+      kind: "note",
+      id: "please_note",
+      label: "Please Note",
+      items: [
+        "Pricing includes the ivory linen fabric in the specified size.",
+        "Suitable for weddings, intimate celebrations, and special events.",
+        "Custom sizes and bespoke designs are available upon request.",
+      ],
+    },
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// PRODUCT 18 — Handpainted Mirror Welcome Signage
+// ---------------------------------------------------------------------------
+const MIRROR_WELCOME_SIGNAGE: ProductOptionSchema = {
+  type: "mirror-welcome-signage",
+  title: "Handpainted Mirror Welcome Signage",
+  options: [
+    { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
+    {
+      kind: "radio",
+      id: "material",
+      label: "Material",
+      required: true,
+      options: choices("Mirror"),
+    },
+    {
+      kind: "radio",
+      id: "dimensions",
+      label: "Dimensions",
+      required: true,
+      options: choices("60 × 90 cm"),
+    },
+    {
+      kind: "text",
+      id: "illustration_preference",
+      label: "Illustration Preference",
+      help: "Choose one preferred illustration from the options displayed with the product and mention your selection here.",
+      required: false,
+    },
+    {
+      kind: "radio",
+      id: "calligraphy_ink",
+      label: "Calligraphy Ink",
+      required: true,
+      options: choices("White"),
+    },
+    {
+      kind: "note",
+      id: "personalisation",
+      label: "Personalisation",
+      help: "Enter your names, event date, welcome message, or any wording you'd like included on your mirror signage.",
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share your event theme, colour palette, reference images, preferred illustration style, or any special requests you'd like us to consider while creating your signage.",
+      required: false,
+    },
+  ],
+  afterCart: [
+    {
+      kind: "note",
+      id: "please_note",
+      label: "Please Note",
+      items: [
+        "Pricing includes the mirror in the specified size.",
+        "White ink is used for all lettering and illustrations.",
+        "Custom sizes and bespoke designs are available upon request.",
+      ],
+    },
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// PRODUCT 19 — The Ring Ceremony Set
+// ---------------------------------------------------------------------------
+function ringCeremonyBoxOptions(n: 1 | 2): ProductOptionSchema["options"] {
+  return [
+    { kind: "note", id: `ring_box_${n}_heading`, label: `Ring Box ${n}` },
+    {
+      kind: "radio",
+      id: `ring_box_${n}_botanical_accents`,
+      label: `Ring Box ${n} Botanical Accents`,
+      help: "Add delicate natural elements to complement your design.",
+      required: true,
+      options: choices("Dried Flora", "No Florals"),
+    },
+    {
+      kind: "text",
+      id: `ring_box_${n}_custom_engraving`,
+      label: `Ring Box ${n} Custom Engraving`,
+      help: `Enter the names, initials, date, or short text you'd like engraved on Ring Box ${n}.`,
+      required: false,
+    },
+    {
+      kind: "radio",
+      id: `ring_box_${n}_engraving_finish`,
+      label: `Ring Box ${n} Engraving Finish`,
+      help: "Choose your preferred engraving finish.",
+      required: true,
+      options: choices("Gold Fill", "Natural Finish"),
+    },
+    {
+      kind: "note",
+      id: `ring_box_${n}_personalisation_ideas`,
+      label: "Personalisation Ideas",
+      help: "Choose your preferred engraving design.",
+      items: ["Mr. & Mrs.", "Bride & Groom", "Names & Date", "Date", "Initials", "Short Text"],
+    },
+  ];
+}
+
+const RING_CEREMONY_SET: ProductOptionSchema = {
+  type: "ring-ceremony-set",
+  title: "The Ring Ceremony Set",
+  options: [
+    { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
+    {
+      kind: "radio",
+      id: "ring_platter",
+      label: "Ring Platter",
+      required: true,
+      options: choices("Engraved Ring Platter"),
+    },
+    {
+      kind: "text",
+      id: "platter_personalisation",
+      label: "Platter Personalisation",
+      help: "Enter your initials and date you'd like engraved on the platter.",
+      required: false,
+    },
+    ...ringCeremonyBoxOptions(1),
+    ...ringCeremonyBoxOptions(2),
+  ],
+  afterCart: [
+    {
+      kind: "note",
+      id: "please_note",
+      label: "Please Note",
+      items: [
+        "Each set includes one engraved ring platter and two personalised glass ring boxes.",
+        "Personalisation can be different for each ring box.",
+        "Pricing includes the selected engraving finish and personalisation.",
+        "Each piece is individually engraved and finished by hand.",
+      ],
+    },
+  ],
+};
+
 export const PRODUCT_OPTION_SCHEMAS: Record<string, ProductOptionSchema> = {
   frame: FRAME,
   "letter-glass-box": LETTER_GLASS_BOX,
@@ -1095,6 +1407,11 @@ export const PRODUCT_OPTION_SCHEMAS: Record<string, ProductOptionSchema> = {
   "place-cards": PLACE_CARDS,
   napkins: NAPKINS,
   cutlery: CUTLERY,
+  "cologne-dispenser": COLOGNE_DISPENSER,
+  "candle-match-set": CANDLE_MATCH_SET,
+  "welcome-signage": WELCOME_SIGNAGE,
+  "mirror-welcome-signage": MIRROR_WELCOME_SIGNAGE,
+  "ring-ceremony-set": RING_CEREMONY_SET,
 };
 
 // Fallback: map a product's WooCommerce category name to a schema type when the
@@ -1129,6 +1446,19 @@ const CATEGORY_TO_TYPE: Record<string, string> = {
   "card holders": "card-holder",
   "personalised card holder": "card-holder",
   "engraved custom card holder": "card-holder",
+  "cologne dispenser": "cologne-dispenser",
+  "cologne dispensers": "cologne-dispenser",
+  "personalised cologne dispenser": "cologne-dispenser",
+  "candle & match set": "candle-match-set",
+  "candle and match set": "candle-match-set",
+  "the candle & match set": "candle-match-set",
+  "welcome signage": "welcome-signage",
+  "linen welcome signage": "welcome-signage",
+  "handpainted linen welcome signage": "welcome-signage",
+  "mirror welcome signage": "mirror-welcome-signage",
+  "handpainted mirror welcome signage": "mirror-welcome-signage",
+  "ring ceremony set": "ring-ceremony-set",
+  "the ring ceremony set": "ring-ceremony-set",
 };
 
 /**

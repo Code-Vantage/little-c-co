@@ -7,8 +7,6 @@ export type ServiceItem = {
   image: string;
   detailOneLabel: string;
   detailOneText: string;
-  detailTwoLabel: string;
-  detailTwoText: string;
   sourceCategories: string[];
 };
 
@@ -19,46 +17,34 @@ export const services: ServiceItem[] = [
     title: "Foil stamping",
     eyebrow: "Foil impressions",
     description:
-      "Foil stamping brings a luminous metallic finish to invitations, stationery, gifting pieces, and event details, adding polish, depth, and a quietly luxurious feel.",
+      "A design is pressed onto the surface using heat and foil, leaving behind a crisp, polished impression. Choose from classic metallic finishes for a subtle touch of shine.",
     image: "/services/heatfoiling.webp",
-    detailOneLabel: "Ideal for",
-    detailOneText:
-      "Invitations, menus, keepsake cards, name details, and elevated paper goods that benefit from a refined metallic finish.",
-    detailTwoLabel: "Finish",
-    detailTwoText:
-      "Crisp foil impressions with a warm reflective quality that adds depth without overwhelming the design.",
+    detailOneLabel: "Crafted across surfaces",
+    detailOneText: "Paper · Leather · Card",
     sourceCategories: ["Foil stamping"],
   },
   {
     slug: "engraving",
-    label: "Engraving",
-    title: "Engraving",
+    label: "Hand Engraving",
+    title: "Hand Engraving",
     eyebrow: "Precision engraved",
     description:
-      "Engraving offers crisp, permanent personalization for keepsakes and gifting pieces, with a timeless finish that feels precise, lasting, and quietly elegant.",
+      "Each piece is engraved by hand, one detail at a time. The design is carefully marked and etched onto the surface to create a clean, permanent finish — made especially for you.",
     image: "/services/engraving.webp",
-    detailOneLabel: "Ideal for",
-    detailOneText:
-      "Boxes, plaques, keychains, glassware, and personal keepsakes that call for durable detail and a more classic presentation.",
-    detailTwoLabel: "Finish",
-    detailTwoText:
-      "Fine engraved lines and sharply defined lettering that feel permanent, tactile, and beautifully understated.",
+    detailOneLabel: "Crafted across surfaces",
+    detailOneText: "Metal · Glass · Wood",
     sourceCategories: ["Engraving"],
   },
   {
     slug: "calligraphy",
-    label: "Calligraphy",
-    title: "Calligraphy",
+    label: "Modern Calligraphy",
+    title: "Modern Calligraphy",
     eyebrow: "The art of lettering",
     description:
-      "Calligraphy brings expressive, hand-lettered character to celebrations, gifting, decor, and custom pieces, making each detail feel personal and thoughtfully made.",
+      "Each piece is lettered by hand, giving your words the natural character of handwritten type. From names to notes and details, every line is written specifically for the piece it belongs to.",
     image: "/services/calligraphy.webp",
-    detailOneLabel: "Ideal for",
-    detailOneText:
-      "Place cards, framed artwork, event signage, letters, gifting details, and custom pieces designed to feel intimate and one of a kind.",
-    detailTwoLabel: "Finish",
-    detailTwoText:
-      "Fluid hand lettering with an elegant rhythm, balanced composition, and a bespoke studio-made feel.",
+    detailOneLabel: "Crafted across surfaces",
+    detailOneText: "Paper · Fabric · Wood · Acrylic",
     sourceCategories: ["Calligraphy + Doodle Art"],
   },
   // Leafing temporarily hidden from nav/site — keep entry here to re-enable later.

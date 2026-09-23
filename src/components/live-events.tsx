@@ -18,19 +18,22 @@ export default function LiveEvents() {
             Live Events
           </p>
           <h2 className="mt-3 font-(family-name:--font-heading) text-4xl md:text-5xl text-black">
-            Elegant personalization, live at your event
+            Made live, just for your guests
           </h2>
           <p className="mx-auto mt-5 max-w-4xl font-(family-name:--font-body) text-[1.05rem] md:text-[1.18rem] leading-7 md:leading-8 tracking-[0.32px] text-black/85">
-            We bring modern calligraphy and on-site personalization directly to your venue, creating meaningful keepsakes in real time for weddings, brand activations, private dinners, and thoughtfully hosted celebrations.
+            Modern calligraphy and on-site personalisation for brand events, celebrations, private dinners and exhibitions — from guest names to personalised gifts, we add a little something guests can take away with them.
           </p>
         </div>
 
         <div className="lift-card mx-auto mt-10 flex w-fit overflow-hidden shadow-[0px_18px_40px_rgba(0,0,0,0.16)] md:mt-12">
-          <img
-            src="/events-bg.jpeg"
-            alt="Live calligraphy event setup"
-            className="media-soft block max-h-144 w-auto"
-          />
+          <picture>
+            <source media="(min-width: 768px)" srcSet="/events-bg-desktop.jpeg" />
+            <img
+              src="/events-bg.jpeg"
+              alt="Live calligraphy event setup"
+              className="media-soft block max-h-144 w-auto"
+            />
+          </picture>
         </div>
 
         <div className="mx-auto mt-6 grid max-w-5xl gap-4 border-t border-black/10 pt-6 text-center md:grid-cols-3 md:gap-6">
@@ -44,6 +47,16 @@ export default function LiveEvents() {
             </Link>
           ))}
         </div>
+
+        <p className="mt-8 text-center font-(family-name:--font-body) text-sm text-black/55">
+          For live event enquiries{" "}
+          <a
+            href="mailto:littleccoartmakes@gmail.com"
+            className="underline underline-offset-2 transition-colors hover:text-black"
+          >
+            littleccoartmakes@gmail.com
+          </a>
+        </p>
       </div>
     </Reveal>
   );

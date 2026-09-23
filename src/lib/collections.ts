@@ -22,8 +22,8 @@ export type CollectionItem = {
 export const collections: CollectionItem[] = [
   {
     slug: "little-stuff",
-    label: "Little Stuff",
-    title: "Little Stuff",
+    label: "The Collection",
+    title: "The Collection",
     eyebrow: "Curated edit",
     description:
       "Small handcrafted pieces and everyday keepsakes — thoughtful little details made to gift, keep, and personalise.",
@@ -48,6 +48,16 @@ export const collections: CollectionItem[] = [
     description:
       "Handpainted and engraved pieces for the table — napkins, cutlery, place cards, and details that set the scene.",
     sourceCategories: ["The Table Edit"],
+    showComingSoon: true,
+  },
+  {
+    slug: "hindi-by-hand",
+    label: "Hindi, by Hand",
+    title: "Hindi, by Hand",
+    eyebrow: "Curated edit",
+    description:
+      "Hand-lettered Devanagari pieces — names, phrases, and details written in Hindi script.",
+    sourceCategories: ["Hindi, by Hand"],
     showComingSoon: true,
   },
   {

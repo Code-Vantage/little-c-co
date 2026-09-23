@@ -42,23 +42,13 @@ export default async function ServiceDetailPage({
             <p className="mt-5 max-w-2xl font-(family-name:--font-body) text-[1rem] leading-7 text-black/72 md:text-[1.05rem] lg:text-[1.1rem]">
               {service.description}
             </p>
-            <div className="mt-8 grid gap-4 border-t border-black/10 pt-6 sm:grid-cols-2">
-              <div>
-                <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.28em] text-black/45">
-                  {service.detailOneLabel}
-                </p>
-                <p className="mt-2 font-(family-name:--font-body) text-base leading-7 text-black/72">
-                  {service.detailOneText}
-                </p>
-              </div>
-              <div>
-                <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.28em] text-black/45">
-                  {service.detailTwoLabel}
-                </p>
-                <p className="mt-2 font-(family-name:--font-body) text-base leading-7 text-black/72">
-                  {service.detailTwoText}
-                </p>
-              </div>
+            <div className="mt-8 border-t border-black/10 pt-6">
+              <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.28em] text-black/45">
+                {service.detailOneLabel}
+              </p>
+              <p className="mt-2 font-(family-name:--font-body) text-base leading-7 text-black/72">
+                {service.detailOneText}
+              </p>
             </div>
           </div>
         </div>

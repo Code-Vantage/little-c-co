@@ -59,13 +59,13 @@ export default async function Instagram() {
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="max-w-3xl text-center md:text-left">
             <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.32em] text-black/45">
-              Instagram
+              Little c co. on Instagram
             </p>
             <h2 className="mt-3 font-(family-name:--font-heading) text-4xl text-black md:text-5xl">
-              Glimpses of recent work
+              Little details, lately.
             </h2>
             <p className="mt-3 max-w-2xl font-(family-name:--font-body) text-[1rem] leading-7 text-black/72 md:text-[1.08rem]">
-              A collection of finished pieces, event details, and small moments.
+              A look at what we've been making — from finished pieces to works in progress, celebrations, and everything in between. Follow along!
             </p>
           </div>
           <div className="flex justify-center md:block">

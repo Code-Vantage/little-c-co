@@ -30,13 +30,13 @@ export default function CartPage() {
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-3xl">
               <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.28em] text-black/45">
-                Shopping Cart
+                Order Summary
               </p>
               <h1 className="mt-3 font-(family-name:--font-body) text-[2.5rem] leading-tight text-black sm:text-[3.2rem]">
                 Your <span className="font-(family-name:--font-heading)">cart</span>
               </h1>
               <p className="mt-4 max-w-2xl font-(family-name:--font-body) text-base leading-7 text-black/65 sm:text-lg">
-                Review your selections, update quantities, and continue to checkout when you&apos;re ready.
+                Review your selections before you checkout. The picks are almost yours.
               </p>
             </div>
           </div>
@@ -48,16 +48,16 @@ export default function CartPage() {
               No items yet
             </p>
             <h2 className="mt-3 font-(family-name:--font-body) text-[2rem] leading-tight text-black sm:text-[2.4rem]">
-              Your <span className="font-(family-name:--font-heading)">cart</span> is currently empty.
+              Your <span className="font-(family-name:--font-heading)">cart</span> is empty.
             </h2>
             <p className="mx-auto mt-4 max-w-xl font-(family-name:--font-body) text-base leading-7 text-black/65">
-              Explore the collection and add pieces you&apos;d like to keep, gift, or personalize.
+              A few little things might be waiting for you.
             </p>
             <a
               href="/shop"
               className="mt-8 inline-flex h-12 items-center justify-center border border-black bg-black px-6 font-(family-name:--font-body) text-sm uppercase tracking-[0.16em] text-white transition-colors hover:bg-black/85"
             >
-              Continue Shopping
+              Explore the Collection
             </a>
           </section>
         ) : (

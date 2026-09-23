@@ -737,10 +737,10 @@ export default function AccountPageClient() {
               Customer Account
             </p>
             <h1 className="mt-3 font-(family-name:--font-body) text-[2.5rem] leading-tight text-black sm:text-[3.2rem]">
-              {authState === "signedIn" ? "Your Account" : "Manage Your Account"}
+              Your <span className="font-(family-name:--font-heading)">account</span>
             </h1>
             <p className="mt-4 max-w-2xl font-(family-name:--font-body) text-base leading-7 text-black/65 sm:text-lg">
-              Review orders, update saved details, and manage account settings.
+              Your orders and details, all in one place.
             </p>
           </div>
         </Reveal>
@@ -765,9 +765,9 @@ export default function AccountPageClient() {
                   ? "Welcome back"
                   : authStep === "register"
                     ? "Create your account"
-                    : "Start with your email"
+                    : "Let's Begin"
               }
-              description="Use the same email address you order with so your purchase history can be connected automatically."
+              description="Enter the email you use to place your orders so we can keep your purchases together."
               delay={60}
             >
               <div className="flex flex-col gap-4">
@@ -1000,7 +1000,7 @@ export default function AccountPageClient() {
 
               {activeSection === "orders" && (
                 <SectionCard
-                  title="Orders"
+                  title="Your Orders"
                   description="View the orders connected to this account."
                   delay={80}
                 >
@@ -1009,10 +1009,10 @@ export default function AccountPageClient() {
                   ) : orders.length === 0 ? (
                     <div className="border border-black/10 p-6">
                       <p className="font-(family-name:--font-body) text-base text-black/65">
-                        No orders have been linked to this account yet.
+                        Nothing here just yet.
                       </p>
                       <Link href="/shop" className="button-soft mt-4 inline-flex border border-black bg-black px-5 py-3 font-(family-name:--font-body) text-sm text-white hover:bg-black/85">
-                        Browse products
+                        Explore the Collection
                       </Link>
                     </div>
                   ) : (

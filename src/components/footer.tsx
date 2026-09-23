@@ -30,7 +30,7 @@ export default function Footer() {
             className="media-soft h-28 w-auto sm:h-32"
           />
           <p className="mt-4 max-w-md font-(family-name:--font-body) text-[0.98rem] leading-7 text-black/70">
-            Bespoke calligraphy, engraving, foiling, and keepsakes made for celebrations, gifting, and thoughtful details.
+            Little details. Made to mean more.
           </p>
           <div className="mt-5 flex items-center gap-4">
             {socialLinks.map((link) => (

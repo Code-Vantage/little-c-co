@@ -7,7 +7,7 @@ import { navCollections } from "@/lib/collections";
 import Link from "next/link";
 
 // Header Shop dropdown: the nav collections, with the "Curate your hamper" page
-// slotted in right after "Little Stuff".
+// slotted in right after "The Collection".
 const shopMenuLinks: { label: string; href: string }[] = navCollections.flatMap(
   (collection) => {
     const link = {
