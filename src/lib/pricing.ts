@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // Little C Co. pricing system — quantity-tier and set-based pricing.
 //
-// Transcribed verbatim from "Littlecco. Pricing System.pdf". This module is the
+// Transcribed verbatim from "Littlecco. Pricing System.docx". This module is the
 // single source of truth for effective prices; the WooCommerce `regular_price`
 // on these products is only a fallback / catalogue-card figure.
 //
@@ -92,6 +92,23 @@ const RING_BOX_TIERS: QtyTier[] = [
   { min: 50, max: null, perUnit: 1250 },
 ];
 
+const COLOGNE_DISPENSER_TIERS: QtyTier[] = [
+  { min: 1, max: 3, perUnit: 999 },
+  { min: 4, max: 9, perUnit: 899 },
+  { min: 10, max: 24, perUnit: 799 },
+  { min: 25, max: 49, perUnit: 749 },
+  { min: 50, max: 99, perUnit: 699 },
+  { min: 100, max: null, perUnit: 649 },
+];
+
+const CANDLE_MATCH_TIERS: QtyTier[] = [
+  { min: 1, max: 3, perUnit: 1149 },
+  { min: 4, max: 9, perUnit: 1049 },
+  { min: 10, max: 24, perUnit: 949 },
+  { min: 25, max: 49, perUnit: 899 },
+  { min: 50, max: null, perUnit: 799 },
+];
+
 // Keyed by product slug (WooCommerce slug).
 export const PRICING_RULES: Record<string, PricingRule> = {
   "personalised-compact-mirror": { kind: "tiered", basePrice: 1299, tiers: MIRROR_STYLE_TIERS },
@@ -100,6 +117,8 @@ export const PRICING_RULES: Record<string, PricingRule> = {
   "engraved-custom-card-holder": { kind: "tiered", basePrice: 999, tiers: CARD_HOLDER_TIERS },
   "personalised-wine-glass": { kind: "tiered", basePrice: 1799, tiers: WINE_GLASS_TIERS },
   "personalised-glass-ring-box": { kind: "tiered", basePrice: 1699, tiers: RING_BOX_TIERS },
+  "cologne-dispenser": { kind: "tiered", basePrice: 999, tiers: COLOGNE_DISPENSER_TIERS },
+  "the-candle-match-set": { kind: "tiered", basePrice: 1149, tiers: CANDLE_MATCH_TIERS },
 
   // Sets of 6. Per-set price by number of sets (1 / 2–3 / 4+). Place cards and
   // napkins serve a maximum of 30 (5 sets); cutlery takes bulk orders (no cap).
