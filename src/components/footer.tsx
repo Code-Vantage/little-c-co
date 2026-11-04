@@ -26,7 +26,7 @@ export default function Footer() {
         <div className="flex flex-col items-center text-center md:items-start md:text-left">
           <img
             src="/littlecco_logo.png"
-            alt="Little c.co Art Makes"
+            alt="Little c co. Art Makes"
             className="media-soft h-28 w-auto sm:h-32"
           />
           <p className="mt-4 max-w-md font-(family-name:--font-body) text-[0.98rem] leading-7 text-black/70">
@@ -95,7 +95,7 @@ export default function Footer() {
 
       <div className="mx-auto mt-8 max-w-7xl border-t border-black/10 pt-5">
         <p className="text-center font-(family-name:--font-body) text-sm text-black/50 md:text-left">
-          © {new Date().getFullYear()} Little c.co Art Makes. All rights reserved.
+          © {new Date().getFullYear()} Little c co. Art Makes. All rights reserved.
         </p>
       </div>
     </footer>

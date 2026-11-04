@@ -1,8 +1,7 @@
-import Link from "next/link";
 import Reveal from "@/components/reveal";
 import { services } from "@/lib/services";
 
-const liveEventServices = services.filter((service) => service.slug !== "leafing");
+const liveEventServices = services.filter((service) => service.slug !== "leafing" && service.slug !== "foil-stamping");
 
 export default function LiveEvents() {
   return (
@@ -21,7 +20,7 @@ export default function LiveEvents() {
             Made live, just for your guests
           </h2>
           <p className="mx-auto mt-5 max-w-4xl font-(family-name:--font-body) text-[1.05rem] md:text-[1.18rem] leading-7 md:leading-8 tracking-[0.32px] text-black/85">
-            Modern calligraphy and on-site personalisation for brand events, celebrations, private dinners and exhibitions — from guest names to personalised gifts, we add a little something guests can take away with them.
+            On-site personalisation and calligraphy for brand events, celebrations and exhibitions — names that make the gifts personalised &amp; that guests can take away with them.
           </p>
         </div>
 
@@ -36,26 +35,20 @@ export default function LiveEvents() {
           </picture>
         </div>
 
-        <div className="mx-auto mt-6 grid max-w-5xl gap-4 border-t border-black/10 pt-6 text-center md:grid-cols-3 md:gap-6">
+        <div className="mx-auto mt-6 grid max-w-5xl gap-4 border-t border-black/10 pt-6 text-center md:grid-cols-2 md:gap-6">
           {liveEventServices.map((service) => (
-            <Link
+            <span
               key={service.slug}
-              href={`/services/${service.slug}`}
-              className="font-(family-name:--font-body) text-sm uppercase tracking-[0.22em] text-black/55 transition-colors hover:text-black"
+              className="font-(family-name:--font-body) text-sm uppercase tracking-[0.22em] text-black/55"
             >
               {service.label}
-            </Link>
+            </span>
           ))}
         </div>
 
         <p className="mt-8 text-center font-(family-name:--font-body) text-sm text-black/55">
           For live event enquiries{" "}
-          <a
-            href="mailto:littleccoartmakes@gmail.com"
-            className="underline underline-offset-2 transition-colors hover:text-black"
-          >
-            littleccoartmakes@gmail.com
-          </a>
+          littleccoartmakes@gmail.com
         </p>
       </div>
     </Reveal>

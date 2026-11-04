@@ -12,6 +12,11 @@ import {
 import { useCartStore } from "../../../lib/cart-store";
 import { NoteBlock, ProductOptions } from "./_product-options";
 
+// Videos hosted in /public (the WordPress plan does not accept video uploads).
+const PRODUCT_VIDEOS: Record<string, string> = {
+  "handpainted-linen-welcome-signage": "/videos/linen-welcome-signage.mp4",
+};
+
 function inr(value: number) {
   return value.toLocaleString("en-IN");
 }
@@ -165,15 +170,17 @@ function RelatedProductCard({ product }: { product: StoreProduct }) {
           <div className="mt-4 flex items-end gap-2">
             {fromPrice !== null ? (
               <span className="font-(family-name:--font-body) text-[1.35rem] leading-none text-[#181411]">
-                From ₹{inr(fromPrice)}
+                ₹{inr(fromPrice)}
               </span>
             ) : (
               <>
                 <span className="font-(family-name:--font-body) text-[1.35rem] leading-none text-[#181411]">₹{salePrice}</span>
-                <span className="relative mb-0.5 pb-0.5 font-(family-name:--font-body) text-[0.92rem] text-black/40">
-                  ₹{regularPrice}
-                  <span className="absolute left-0 top-1/2 w-full border-t border-black/30" />
-                </span>
+                {regularPrice !== salePrice && (
+                  <span className="relative mb-0.5 pb-0.5 font-(family-name:--font-body) text-[0.92rem] text-black/40">
+                    ₹{regularPrice}
+                    <span className="absolute left-0 top-1/2 w-full border-t border-black/30" />
+                  </span>
+                )}
               </>
             )}
           </div>
@@ -216,7 +223,12 @@ export default function ProductDetailClient({
   );
 
   const thumbnails = product.images.filter((img) => Boolean(img?.src));
-  const selectedImage = thumbnails[selectedImageIndex] ?? thumbnails[0];
+  const videoSrc = PRODUCT_VIDEOS[product.slug];
+  const videoSelected = Boolean(videoSrc) && selectedImageIndex === thumbnails.length;
+  const mediaCount = thumbnails.length + (videoSrc ? 1 : 0);
+  const stepMedia = (dir: 1 | -1) =>
+    setSelectedImageIndex((i) => (i + dir + mediaCount) % mediaCount);
+  const selectedImage = videoSelected ? undefined : (thumbnails[selectedImageIndex] ?? thumbnails[0]);
   const salePrice = Number(product.price).toLocaleString("en-IN");
   const regularPrice = Number(product.regularPrice).toLocaleString("en-IN");
   const primaryCategory =
@@ -346,7 +358,18 @@ export default function ProductDetailClient({
     <main className="min-h-screen">
       <section className="border-b border-black/10 lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <div className="relative order-2 self-start lg:order-1">
-          {selectedImage ? (
+          {videoSelected ? (
+            <video
+              key={videoSrc}
+              src={videoSrc}
+              controls
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="block h-auto w-full object-contain object-left-top"
+            />
+          ) : selectedImage ? (
             <img
               src={selectedImage.src}
               alt={selectedImage.alt || product.name}
@@ -356,7 +379,29 @@ export default function ProductDetailClient({
             <div className="aspect-[4/5] w-full bg-black/5" />
           )}
 
-          {thumbnails.length > 0 && (
+
+          {mediaCount > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={() => stepMedia(-1)}
+                aria-label="Previous image"
+                className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-black/70 backdrop-blur-sm transition-colors hover:bg-white hover:text-black"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
+              </button>
+              <button
+                type="button"
+                onClick={() => stepMedia(1)}
+                aria-label="Next image"
+                className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-black/70 backdrop-blur-sm transition-colors hover:bg-white hover:text-black"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+              </button>
+            </>
+          )}
+
+          {(thumbnails.length > 0 || videoSrc) && (
             <div className="absolute bottom-4 left-4 right-4 flex gap-3 overflow-x-auto bg-white/85 p-3 backdrop-blur-sm sm:bottom-6 sm:left-6 sm:right-auto sm:w-auto">
               {thumbnails.map((thumb, i) => (
                 <button
@@ -377,6 +422,18 @@ export default function ProductDetailClient({
                   />
                 </button>
               ))}
+              {videoSrc && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedImageIndex(thumbnails.length)}
+                  aria-label="Play video"
+                  className={`flex h-[4.5rem] w-[4.5rem] shrink-0 items-center justify-center border bg-black/80 text-white transition-all md:h-[5rem] md:w-[5rem] ${
+                    videoSelected ? "border-black" : "border-black/10 hover:border-black/30"
+                  }`}
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -423,10 +480,12 @@ export default function ProductDetailClient({
                   <span className="font-(family-name:--font-body) text-[2.25rem] leading-none text-black sm:text-[2.55rem]">
                     ₹{salePrice}
                   </span>
-                  <span className="relative mb-1 pb-0.5 font-(family-name:--font-body) text-lg text-black/38">
-                    ₹{regularPrice}
-                    <span className="absolute left-0 top-1/2 w-full border-t border-black/30" />
-                  </span>
+                  {regularPrice !== salePrice && (
+                    <span className="relative mb-1 pb-0.5 font-(family-name:--font-body) text-lg text-black/38">
+                      ₹{regularPrice}
+                      <span className="absolute left-0 top-1/2 w-full border-t border-black/30" />
+                    </span>
+                  )}
                 </div>
               )}
             </div>

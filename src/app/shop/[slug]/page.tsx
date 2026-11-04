@@ -60,17 +60,19 @@ function ProductCard({
           <div className="mt-4 flex items-end gap-2">
             {fromPrice !== null ? (
               <span className="font-(family-name:--font-body) text-[1.35rem] leading-none text-[#181411]">
-                From ₹{fromPrice.toLocaleString("en-IN")}
+                ₹{fromPrice.toLocaleString("en-IN")}
               </span>
             ) : (
               <>
                 <span className="font-(family-name:--font-body) text-[1.35rem] leading-none text-[#181411]">
                   ₹{salePrice}
                 </span>
-                <span className="relative mb-0.5 pb-0.5 font-(family-name:--font-body) text-[0.92rem] text-black/40">
-                  ₹{regularPrice}
-                  <span className="absolute left-0 top-1/2 w-full border-t border-black/30" />
-                </span>
+                {regularPrice !== salePrice && (
+                  <span className="relative mb-0.5 pb-0.5 font-(family-name:--font-body) text-[0.92rem] text-black/40">
+                    ₹{regularPrice}
+                    <span className="absolute left-0 top-1/2 w-full border-t border-black/30" />
+                  </span>
+                )}
               </>
             )}
           </div>

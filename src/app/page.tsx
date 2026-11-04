@@ -18,8 +18,8 @@ export default function HomePage() {
       <About />
       {/* <Surfaces /> */}
       <LiveEvents />
-      <EmailSignup />
       <Instagram />
+      <EmailSignup />
     </main>
   );
 }

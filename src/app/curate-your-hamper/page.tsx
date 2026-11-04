@@ -15,7 +15,6 @@ const CURATION_IDEAS: { label: string; slug: string }[] = [
   { label: "The Bridesmaid Edit", slug: "for-your-bridesmaids" },
   { label: "For Two", slug: "for-couples" },
   { label: "The Corporate Edit", slug: "for-corporate" },
-  { label: "The Baby Shower Edit", slug: "for-a-babyshower-event" },
 ];
 
 // TODO: replace with the real enquiry inbox (the spec showed a Gmail address).
@@ -50,14 +49,15 @@ export default function CurateYourHamperPage() {
     <main className="min-h-screen">
       {/* 1 — Hero */}
       <Reveal as="section" className="border-b border-black/10 bg-[#f7f2ea]">
-        <div className="mx-auto max-w-4xl px-6 py-16 text-center sm:px-8 md:py-24">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-14 sm:px-8 md:grid-cols-2 md:gap-14 md:py-20">
+          <div className="text-center md:text-left">
           <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.32em] text-black/45">
             Gifting
           </p>
           <h1 className="mt-4 font-(family-name:--font-body) text-[2.5rem] leading-[1.05] text-black md:text-[3.6rem] lg:text-[4rem]">
             Curate Your Hamper
           </h1>
-          <p className="mx-auto mt-6 max-w-xl font-(family-name:--font-body) text-[1.05rem] leading-8 text-black/72 md:text-[1.15rem]">
+          <p className="mx-auto mt-6 max-w-xl md:mx-0 font-(family-name:--font-body) text-[1.05rem] leading-8 text-black/72 md:text-[1.15rem]">
             Build something personal from our collection.
           </p>
           <div className="mt-9">
@@ -68,6 +68,14 @@ export default function CurateYourHamperPage() {
               Start with an idea
             </Link>
           </div>
+          </div>
+          <div className="mx-auto w-full max-w-sm overflow-hidden shadow-[0px_18px_40px_rgba(0,0,0,0.16)] md:max-w-none">
+            <img
+              src="/curate-hamper-hero.webp"
+              alt="Gift boxes wrapped in black paper with navy ribbon and handwritten tags"
+              className="block h-auto w-full object-cover"
+            />
+          </div>
         </div>
       </Reveal>
 
@@ -75,14 +83,14 @@ export default function CurateYourHamperPage() {
         {/* 2 — Curation ideas */}
         <Reveal as="section" id="curation-ideas" className="scroll-mt-28 pt-14 md:pt-20">
           <SectionHeading eyebrow="Curation ideas" title="Need a little inspiration?" />
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
             {CURATION_IDEAS.map((idea) => {
               const collection = getCollectionBySlug(idea.slug);
               return (
                 <Link
                   key={idea.slug}
                   href={`/shop/${idea.slug}`}
-                  className="lift-card group flex flex-col overflow-hidden border border-[#d8d1c7] bg-[#fffdf9]"
+                  className="lift-card group flex w-[calc(50%-0.5rem)] flex-col overflow-hidden border border-[#d8d1c7] bg-[#fffdf9] md:w-[calc((100%-3rem)/3)]"
                 >
                   <div className="aspect-[4/5] overflow-hidden bg-[#f3ede2]">
                     {collection?.image ? (
