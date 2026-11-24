@@ -869,7 +869,7 @@ const CARD_HOLDER: ProductOptionSchema = {
 
 // ---------------------------------------------------------------------------
 // PRODUCT 12 — Personalised Calligraphed Place Cards (set-priced: 6–30 pieces)
-// Serves up to 30, minimum 6. The set-size selector (Set of 6/12/18/24/30) is
+// Serves up to 30, minimum 5 (sets of 5). The set-size selector is
 // rendered by the product page from the pricing rule, so this schema carries no
 // quantity field.
 // ---------------------------------------------------------------------------
@@ -922,20 +922,11 @@ const PLACE_CARDS: ProductOptionSchema = {
       },
     },
     {
-      // TODO: replace placeholder with the real calligraphy style options
-      // (pending from client).
-      kind: "radio",
-      id: "calligraphy_style",
-      label: "Calligraphy Style",
-      help: "Choose your preferred calligraphy style.",
-      required: true,
-      options: choices("Styles coming soon"),
-    },
-    {
-      kind: "note",
+      kind: "textarea",
       id: "personalisation",
       label: "Personalisation",
       help: "Add names, numbers, last names, initials, or any special text you'd like hand-calligraphed.",
+      required: false,
     },
     {
       kind: "textarea",
@@ -1392,6 +1383,54 @@ const RING_CEREMONY_SET: ProductOptionSchema = {
   ],
 };
 
+// ---------------------------------------------------------------------------
+// PRODUCT 20 — Personalised Engraved Tin Box (bulk orders accepted)
+// ---------------------------------------------------------------------------
+const TIN_BOX: ProductOptionSchema = {
+  type: "tin-box",
+  title: "Personalised Engraved Tin Box",
+  options: [
+    {
+      kind: "radio",
+      id: "box_type",
+      label: "Choose Your Box Type",
+      help: "Select how you'd like your tin to be personalised and presented.",
+      required: true,
+      options: choices("Jewellery Keeper (Box only)", "Wedding Bidai Kesar Box (Box only)"),
+    },
+    { kind: "quantity", id: "quantity", label: "Quantity", min: 1 },
+    {
+      kind: "radio",
+      id: "tin_colour",
+      label: "Tin Colour",
+      help: "Select your preferred finish.",
+      required: true,
+      options: choices("Black", "Silver (if available)"),
+    },
+    {
+      kind: "textarea",
+      id: "custom_engraving",
+      label: "Custom Engraving",
+      help: "Enter a name, initials, last name, date, or any special text you'd like engraved on your tin.",
+      required: true,
+    },
+    {
+      kind: "note",
+      id: "personalisation_ideas",
+      label: "Personalisation Ideas",
+      help: "The jewellery keeper comes with a fish symbol along with the initial of your name. Some ideas for your bidai kesar boxes:",
+      items: ["Name", "Initial", "Prefix", "Last Name", "Date", "Custom Text"],
+    },
+    {
+      kind: "textarea",
+      id: "special_request",
+      label: "Special Request",
+      help: "Share any special requests, occasion details, preferred lettering style, design references or other ideas you'd like us to consider while creating your personalised tin.",
+      required: false,
+    },
+  ],
+};
+
 export const PRODUCT_OPTION_SCHEMAS: Record<string, ProductOptionSchema> = {
   frame: FRAME,
   "letter-glass-box": LETTER_GLASS_BOX,
@@ -1412,6 +1451,7 @@ export const PRODUCT_OPTION_SCHEMAS: Record<string, ProductOptionSchema> = {
   "welcome-signage": WELCOME_SIGNAGE,
   "mirror-welcome-signage": MIRROR_WELCOME_SIGNAGE,
   "ring-ceremony-set": RING_CEREMONY_SET,
+  "tin-box": TIN_BOX,
 };
 
 // Fallback: map a product's WooCommerce category name to a schema type when the

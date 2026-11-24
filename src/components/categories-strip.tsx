@@ -4,28 +4,10 @@ import Reveal from "@/components/reveal";
 
 const categories = [
   {
-    name: "Cake knife & server",
-    label: "Cake knife &\nserver",
-    image: "/categories/cake.webp",
-    href: "/products/personalised-cake-knife-server-set",
-  },
-  {
-    name: "Wine glass",
-    label: "Wine glass",
-    image: "/categories/wine-glass.webp",
-    href: "/products/personalised-wine-glass",
-  },
-  {
     name: "Compact mirror",
     label: "Compact\nmirror",
     image: "/categories/compact-mirror.png",
     href: "/products/personalised-compact-mirror",
-  },
-  {
-    name: "Letter",
-    label: "Letter",
-    image: "/categories/letter.webp",
-    href: "/products/handwritten-letter-in-an-engraved-glass-box",
   },
   {
     name: "Signage",
@@ -34,22 +16,10 @@ const categories = [
     href: "/products/handpainted-signage",
   },
   {
-    name: "Personalised frame",
-    label: "Personalised\nframe",
-    image: "/categories/personalised-frame.webp",
-    href: "/products/personalised-frame",
-  },
-  {
     name: "Hamper",
     label: "Hamper",
     image: "/categories/personalised-gifting.webp",
     href: "/curate-your-hamper",
-  },
-  {
-    name: "Table details",
-    label: "Table\ndetails",
-    image: "/categories/placecards.webp",
-    href: "/products/calligraphed-place-cards",
   },
 ] as const;
 
@@ -75,7 +45,7 @@ function CategoryCards({ duplicate = false }: { duplicate?: boolean }) {
               height={280}
               sizes="(min-width: 1280px) 136px, (min-width: 640px) 124px, 112px"
               className="media-soft h-full w-full object-contain p-0.5 drop-shadow-[0_8px_14px_rgba(0,0,0,0.07)]"
-              priority={category.name === "Cake knife & server" && !duplicate}
+              priority={category.name === "Compact mirror" && !duplicate}
             />
           </div>
           <p className="mt-2 max-w-[12ch] whitespace-pre-line text-center font-(family-name:--font-body) text-sm leading-[1.02] tracking-[0.02em] text-black/60 uppercase ">

@@ -27,6 +27,7 @@ const MATERIAL_BY_SCHEMA_TYPE: Record<string, "linen" | "metal" | "glass"> = {
   signage: "linen",
   "compact-mirror": "metal",
   "card-holder": "metal",
+  "tin-box": "metal",
   cutlery: "metal",
   "wine-glass": "glass",
   "ring-box": "glass",
@@ -57,6 +58,8 @@ const PRODUCT_DETAILS_BY_SCHEMA_TYPE: Record<string, string> = {
     "A handpainted linen tote in Dark Blue, Black, or Ivory, with your choice of calligraphy text and an optional handpainted illustration.",
   "card-holder":
     "Available in Gold or Silver, with your personalisation engraved in your choice of fill.",
+  "tin-box":
+    "An engraved tin box in Black or Silver, available as a Jewellery Keeper or a Wedding Bidai Kesar Box, with your personalisation engraved on the lid.",
   "place-cards":
     "Available as Folded, Doily, or Ribbon style place cards, in a range of colours to match your table setting.",
   napkins:

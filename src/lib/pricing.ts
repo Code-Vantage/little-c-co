@@ -134,13 +134,9 @@ export const PRICING_RULES: Record<string, PricingRule> = {
   },
   "calligraphed-place-cards": {
     kind: "set",
-    setSize: 6,
-    maxSets: 5,
-    tiers: [
-      { minSets: 1, maxSets: 1, perSet: 900 },
-      { minSets: 2, maxSets: 3, perSet: 870 },
-      { minSets: 4, maxSets: null, perSet: 834 },
-    ],
+    setSize: 5,
+    maxSets: 6, // 6 sets of 5 = 30 place cards
+    tiers: [{ minSets: 1, maxSets: null, perSet: 799 }],
   },
   "engraved-personalised-cutlery": {
     kind: "set",

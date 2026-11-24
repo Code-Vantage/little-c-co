@@ -479,7 +479,7 @@ SPECIAL REQUEST [Textbox]
 PRODUCT 12
 
 PERSONALISED CALLIGRAPHED PLACE CARDS (Bulk Orders Accepted)
-(Serves 30 people only. Set bulk limits. Minimum order for 6 people.)
+(Serves 30 people only. Set bulk limits. Minimum order for 5 people.)
 A beautiful finishing touch to any table, each place card is individually calligraphed to add a thoughtful and personal detail to your celebration. Perfect for intimate gatherings, dinner parties, and special occasions.
 
 QUANTITY
@@ -505,10 +505,6 @@ Ribbon
 • Blue
 • Black
 • Special Request
-
-CALLIGRAPHY STYLE
-Choose your preferred calligraphy style.
-(Options to be added.)
 
 PERSONALISATION [Textbox]
 (Add names, numbers, last names, initials, or any special text you'd like hand-calligraphed.)
@@ -785,3 +781,31 @@ PLEASE NOTE
 * Personalisation can be different for each ring box.
 * Pricing includes the selected engraving finish and personalisation.
 * Each piece is individually engraved and finished by hand.
+
+--------------------------------------------------------------------------------------------------
+
+PRODUCT 20
+
+PERSONALISED ENGRAVED TIN BOX (Bulk Orders Accepted)
+A little box with more than one purpose. Thoughtfully engraved and designed to be used in different ways, from keeping little jewellery essentials to serving as a personalised kesar box for wedding bidais. A practical little detail, made to mean more.
+
+CHOOSE YOUR BOX TYPE
+Select how you'd like your tin to be personalised and presented.
+* Jewellery Keeper (Box only)
+* Wedding Bidai Kesar Box (Box only)
+
+QUANTITY
+
+TIN COLOUR
+Select your preferred finish.
+* Black
+* Silver (if available)
+
+CUSTOM ENGRAVING [Textbox]
+(Enter a name, initials, last name, date, or any special text you'd like engraved on your tin.)
+
+PERSONALISATION IDEAS
+The jewellery keeper comes with a fish symbol along with initial of your name. Some ideas for your bidai kesar boxes: Name, Initial, Prefix, Last Name, Date, Custom Text
+
+SPECIAL REQUEST [Textbox]
+(Share any special requests, occasion details, preferred lettering style, design references or other ideas you'd like us to consider while creating your personalised tin.)
